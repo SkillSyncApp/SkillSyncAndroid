@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".LogIn">
+
+    <ImageView
+        android:id="@+id/login_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/log_in_icon" />
+
+    <LinearLayout
+        android:id="@+id/login_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/sign_you_in_title"
+            style="@style/AppTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="68dp"
+            android:gravity="center_horizontal|top"
+            android:text="@string/lets_log_in_title"
+            android:textAppearance="@style/log_in_text"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/sign_you_in_description"
+            style="@style/AppTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="68dp"
+            android:gravity="center_horizontal|top"
+            android:text="@string/sign_in_description_text"
+            android:textAppearance="@style/sign_in_description"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="458dp"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/email_group"
+            layout="@layout/custom_input_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/password_group"
+            layout="@layout/custom_input_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:id="@+id/login_group_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal">
+
+            <Button
+                android:id="@+id/log_in_button"
+                style="@style/AppTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="40sp"
+                android:layout_weight="1"
+                android:background="@drawable/log_in_btn"
+                android:text="@string/log_in"
+                android:textAppearance="@style/log_in_button"
+                android:layout_marginTop="100sp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

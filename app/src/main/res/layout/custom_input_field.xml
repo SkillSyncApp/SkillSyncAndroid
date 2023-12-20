@@ -1,0 +1,41 @@
+<!-- res/layout/custom_edit_text_group.xml -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100sp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/edit_text_group"
+        android:layout_width="match_parent"
+        android:layout_marginHorizontal="10sp"
+        android:layout_height="100sp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/edit_text_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:gravity="top"
+            style="@style/AppTextStyle"/>
+
+        <EditText
+            android:id="@+id/edit_text_field"
+            android:layout_width="match_parent"
+            android:layout_height="57dp"
+            android:background="@null"
+            android:gravity="top"
+            android:inputType="textEmailAddress"
+            android:textAppearance="@style/default_email"
+            android:autofillHints=""
+            style="@style/AppTextStyle"/>
+
+        <View
+            android:id="@+id/edit_text_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="27dp"
+            android:background="#D9D9D9" />
+    </LinearLayout>
+</LinearLayout>
