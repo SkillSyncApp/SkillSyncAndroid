@@ -1,11 +1,12 @@
-package com.example.skillsync
+package com.android.skillsync
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.android.skillsync.R
 
-class LogIn : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_log_in)
+        setContentView(R.layout.activity_main)
     }
 }

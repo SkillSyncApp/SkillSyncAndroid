@@ -1,4 +1,4 @@
-package com.example.skillsync
+package com.android.skillsync
 
 import org.junit.Test
 

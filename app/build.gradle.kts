@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.skillsync"
+    namespace = "com.android.skillsync"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.skillsync"
+        applicationId = "com.android.skillsync"
         minSdk = 25
         targetSdk = 34
         versionCode = 1
