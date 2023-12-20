@@ -4,4 +4,10 @@
     <string name="lets_log_in_title">Lets sign you in.</string>
     <string name="sign_in_description_text">Sign in with your data that have entered during your registration</string>
     <string name="email">Email</string>
+
+    <string name="welcome_title">Welcome to</string>
+    <string name="skillSync">SkillSync</string>
+    <string name="description_start_page">Discover and join Israeli projects for a taste of cutting-edge innovation and collaborative teamwork.</string>
+    <string name="sign_up">Sign up</string>
+    <string name="Sign_in">Sign in</string>
 </resources>
