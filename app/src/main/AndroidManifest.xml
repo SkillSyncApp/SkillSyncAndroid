@@ -12,14 +12,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SkillSync"
         tools:targetApi="31">
+        <!-- TODO - REMOVE EXPORTED true - just for testing -->
         <activity
-            android:name="com.android.skillsync.LogIn"
-            android:exported="false">
-        </activity>
+            android:name=".NewPostActivity"
+            android:exported="true" />
         <activity
-            android:name="com.android.skillsync.MainActivity"
+            android:name=".LogIn"
+            android:exported="false"/>
+        <activity
+            android:name=".MainActivity"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

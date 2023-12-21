@@ -10,4 +10,11 @@
     <string name="description_start_page">Discover and join Israeli projects for a taste of cutting-edge innovation and collaborative teamwork.</string>
     <string name="sign_up">Sign up</string>
     <string name="Sign_in">Sign in</string>
+
+    <string name="post_new_project_title">Post a new project</string>
+    <string name="post_new_project_text">Add the information about the project that you want to create</string>
+    <string name="post">Post</string>
+    <string name="title_activity_new_post_screen">newPostScreen</string>
+    <string name="title_activity_main_screen">MainScreen</string>
+    <string name="post_image">post_image</string>
 </resources>
