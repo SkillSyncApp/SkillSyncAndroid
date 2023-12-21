@@ -110,6 +110,7 @@
                 android:layout_height="50dp"
                 android:background="@drawable/dark_blue_btn"
                 android:text="@string/sign_up"
+                android:gravity="center"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
