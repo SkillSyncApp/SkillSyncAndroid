@@ -15,6 +15,8 @@ class MainActivity : AppCompatActivity() {
 
         logInButton = findViewById(R.id.button_sign_in)
         logInButton?.setOnClickListener {
+//          if you want to run a specific scree, change LogIn to your class
+//          val intent = Intent(this, LogIn::class.java)
             val intent = Intent(this, LogIn::class.java)
             startActivity(intent)
         }
