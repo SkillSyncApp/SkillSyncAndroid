@@ -17,4 +17,7 @@
     <string name="title_activity_new_post_screen">newPostScreen</string>
     <string name="title_activity_main_screen">MainScreen</string>
     <string name="post_image">post_image</string>
+
+    <string name="develop_group">Develop Group</string>
+    <string name="collage_of_management">Collage Of Management</string>
 </resources>

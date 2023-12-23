@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.android.skillsync.models.GroupMember
 
 class GroupMemberAdapter(private val membersList: List<GroupMember>)
     : RecyclerView.Adapter<GroupMemberAdapter.GroupMemberHolder>() {

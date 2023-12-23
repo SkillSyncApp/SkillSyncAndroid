@@ -13,15 +13,17 @@
         android:theme="@style/Theme.SkillSync"
         tools:targetApi="31">
         <activity
-            android:name=".GroupProfile"
+            android:name=".SignIn"
             android:exported="false" />
-        <!-- TODO - REMOVE EXPORTED true - just for testing -->
+        <activity
+            android:name=".SignUpCompany"
+            android:exported="false" />
+        <activity
+            android:name=".GroupProfile"
+            android:exported="true" /> <!-- TODO - REMOVE EXPORTED true - just for testing -->
         <activity
             android:name=".NewPostActivity"
             android:exported="true" />
-        <activity
-            android:name=".LogIn"
-            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

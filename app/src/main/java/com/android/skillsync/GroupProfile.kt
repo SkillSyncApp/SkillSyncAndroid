@@ -4,13 +4,12 @@ import android.graphics.RenderEffect
 import android.graphics.Shader
 import android.os.Build
 import android.os.Bundle
-import android.view.View
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.android.skillsync.models.GroupMember
 
 
 class GroupProfile : AppCompatActivity() {
