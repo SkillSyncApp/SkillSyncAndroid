@@ -23,28 +23,30 @@ class SignIn : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_in)
 
-        // set up dynamic labels text fields
+        setUpDynamicTextFields()
+        signInFirebase()
+    }
+
+    private fun setUpDynamicTextFields() {
         emailLayout = findViewById(R.id.email_group)
         passwordLayout = findViewById(R.id.password_group)
 
         if (emailLayout != null && passwordLayout != null) {
-            emailLabel = emailLayout?.findViewById(R.id.edit_text_label)
-            passwordLabel = passwordLayout?.findViewById(R.id.edit_text_label)
+            emailLabel = emailLayout!!.findViewById(R.id.edit_text_label)
+            passwordLabel = passwordLayout!!.findViewById(R.id.edit_text_label)
 
             emailLabel!!.text = "Email"
             passwordLabel!!.text = "Password" // check
         }
-        logIn()
-
     }
 
-    private fun logIn(){
+    private fun signInFirebase(){
         binding  = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         firebaseAuth = FirebaseAuth.getInstance()
 
-        binding.logInButton.setOnClickListener{
+        binding.signInButton.setOnClickListener{
             val email = binding.emailGroup.editTextField.text.toString()
             val password = binding.passwordGroup.editTextField.text.toString()
             if(email.isNotEmpty() && password.isNotEmpty())
