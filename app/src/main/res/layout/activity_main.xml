@@ -120,7 +120,7 @@
                 android:layout_width="150dp"
                 android:layout_height="50dp"
                 android:background="#00FFFFFF"
-                android:text="@string/log_in"
+                android:text="@string/sign_in"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

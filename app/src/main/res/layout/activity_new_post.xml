@@ -50,7 +50,7 @@
 
     <include
         android:id="@+id/project_name_group"
-        layout="@layout/custom_input_field"
+        layout="@layout/custom_input_field_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="52dp"
@@ -61,7 +61,7 @@
 
     <include
         android:id="@+id/project_deadline_group"
-        layout="@layout/custom_input_field"
+        layout="@layout/custom_input_field_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="88dp"
@@ -72,7 +72,7 @@
 
     <include
         android:id="@+id/project_description_group"
-        layout="@layout/custom_input_field"
+        layout="@layout/custom_input_field_email"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="88dp"

@@ -7,7 +7,7 @@
     android:padding="16dp">
 
     <ImageView
-        android:id="@+id/login_image"
+        android:id="@+id/sign_in_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -26,7 +26,7 @@
         android:text="@string/lets_log_in_title"
         android:textAppearance="@style/log_in_text"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/login_image"
+        app:layout_constraintTop_toBottomOf="@id/sign_in_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -39,13 +39,13 @@
         android:text="@string/sign_in_description_text"
         android:textAppearance="@style/sign_in_description"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/sign_you_in_title"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/sign_you_in_title" />
 
     <include
         android:id="@+id/email_group"
-        layout="@layout/custom_input_field"
+        layout="@layout/custom_input_field_email"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
@@ -56,24 +56,25 @@
 
     <include
         android:id="@+id/password_group"
-        layout="@layout/custom_input_field"
+        layout="@layout/custom_input_field_password"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="52dp"
+        android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/email_group" />
 
     <Button
-        android:id="@+id/log_in_button"
+        android:id="@+id/sign_in_button"
         style="@style/AppTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="80dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/log_in_btn"
-        android:text="@string/log_in"
+        android:text="@string/sign_in"
         android:textAppearance="@style/log_in_button"
         app:layout_constraintBottom_toBottomOf="parent"
         android:gravity="center"
