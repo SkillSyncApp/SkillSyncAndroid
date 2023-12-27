@@ -18,6 +18,8 @@ import com.android.skillsync.models.UserType
 import com.android.skillsync.services.PlacesApiCall
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.firestore
 
 class SignUpCompany : AppCompatActivity() {
@@ -81,17 +83,32 @@ class SignUpCompany : AppCompatActivity() {
 
     fun createCompany(companyId:String, companyName: String) {
         val database = Firebase.firestore
-        val intent = Intent(this, SignIn:: class.java)
+        val intent = Intent(this, SignIn::class.java)
 
         val companyEntity = Comapny(companyName)
 
         val userType = UserType(Type.COMPANY)
         database.collection("usersType").document(companyId).set(userType).addOnSuccessListener {
-            database.collection("companies").document(companyId).set(companyEntity).addOnSuccessListener {
-                startActivity(intent) //TODO
+            val companyRef = database.collection("companies").document(companyId)
+            companyRef.set(companyEntity).addOnSuccessListener {
+                companyRef.addSnapshotListener { snapshot, e ->
+                    logCompanyNameFromDB(snapshot, e)
+                    startActivity(intent) //maybe change it
+                }
+            }.addOnFailureListener {
+                Log.d("ERROR", "fail to create company to app")
             }
-        }.addOnFailureListener{
-            Log.d("failed", "fail")
+        }
+    }
+
+    fun logCompanyNameFromDB(snapshot: DocumentSnapshot?, e:  FirebaseFirestoreException?) {
+        if (e != null) Log.d("ERROR", "Listen failed.", e)
+
+        if (snapshot != null && snapshot.exists()) {
+            val companyName = snapshot.getString("name")
+            Log.d("SUCCESS to create company", "Company Name: $companyName")
+        } else {
+            Log.d("ERROR", "Company snapshot is null or does not exist.")
         }
     }
 

@@ -37,7 +37,7 @@ class GroupProfile : AppCompatActivity() {
     private fun init() {
         groupMembersRecyclerView = findViewById(R.id.groupMembersRecyclerView);
         groupMembersRecyclerView.setHasFixedSize(true);
-        groupMembersRecyclerView?.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
+        groupMembersRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
         membersList = ArrayList();
 
         addMembersToList();
