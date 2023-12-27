@@ -56,23 +56,7 @@ class SignUpCompany : AppCompatActivity() {
     fun addAutoSuggestionsCompaniesList() {
         val autoCompany: AutoCompleteTextView = findViewById(R.id.companySuggestion)
 
-        val listSuggestionsCompanies = ArrayList<String>()
-        listSuggestionsCompanies.add("wix")
-        listSuggestionsCompanies.add("monday")
-        listSuggestionsCompanies.add("mongo")
-        listSuggestionsCompanies.add("Mota Group")
-        listSuggestionsCompanies.add("mobile app")
-        listSuggestionsCompanies.add("bbb")
-        listSuggestionsCompanies.add("burgers")
-        listSuggestionsCompanies.add("playtika")
-        listSuggestionsCompanies.add("facebook")
-        listSuggestionsCompanies.add("microsoft")
-        listSuggestionsCompanies.add("unity")
-        listSuggestionsCompanies.add("google")
-        listSuggestionsCompanies.add("amazon")
-        listSuggestionsCompanies.add("apple")
-
-        locationsAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, listSuggestionsCompanies)
+        locationsAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, ArrayList())
 
         autoCompany.setAdapter(locationsAdapter)
         autoCompany.setOnItemClickListener{ adapterView, view, i, l ->

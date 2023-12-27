@@ -18,16 +18,11 @@ class MainActivity : AppCompatActivity() {
         signUpButton = findViewById(R.id.button_sign_up)
 
         signInButton?.setOnClickListener {
-//          if you want to run a specific scree, change LogIn to your class
-//          val intent = Intent(this, SignIn::class.java)
             val intent = Intent(this, SignIn::class.java)
             startActivity(intent)
         }
 
-
         signUpButton?.setOnClickListener {
-//          if you want to run a specific scree, change LogIn to your class
-//          val intent = Intent(this, SignIn::class.java)
             val intent = Intent(this, SignUpCompany::class.java)
             startActivity(intent)
         }
