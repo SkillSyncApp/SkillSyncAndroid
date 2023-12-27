@@ -36,7 +36,7 @@ class SignIn : AppCompatActivity() {
             passwordLabel = passwordLayout!!.findViewById(R.id.edit_text_label)
 
             emailLabel!!.text = "Email"
-            passwordLabel!!.text = "Password" // check
+            passwordLabel!!.text = "Password" // TODO fix bug
         }
     }
 
