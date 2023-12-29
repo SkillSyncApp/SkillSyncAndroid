@@ -20,4 +20,12 @@
 
     <string name="develop_group">Develop Group</string>
     <string name="collage_of_management">Collage Of Management</string>
+    <string name="forget_password">Forget Password?</string>
+    <string name="sign_out">Sign out</string>
+    <string name="dont_have_an_account">Dont have an account?</string>
+    <string name="register">Register</string>
+    <string name="forget_password_title">Forget Password.</string>
+    <string name="instructions_forget_password">Enter your email address to initiate the password recovery process. We\'ll email you password reset instructions.</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="back_to_sign_in">Back to Sign in</string>
 </resources>

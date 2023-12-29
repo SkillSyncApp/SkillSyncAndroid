@@ -6,15 +6,18 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.android.skillsync.databinding.ActivitySignInBinding
 import com.google.firebase.auth.FirebaseAuth
 
 class SignIn : AppCompatActivity() {
-    var emailLayout: View? = null
-    var passwordLayout: View? = null
+    private var emailLayout: View? = null
+    private var passwordLayout: View? = null
 
-    var emailLabel: TextView? = null
-    var passwordLabel: TextView? = null
+    private var emailLabel: TextView? = null
+    private var passwordLabel: TextView? = null
+    private var forgetPassword: TextView? = null
+    private var signUpView: ConstraintLayout? = null
 
     private lateinit var binding: ActivitySignInBinding
     private lateinit var firebaseAuth: FirebaseAuth
@@ -25,6 +28,34 @@ class SignIn : AppCompatActivity() {
 
         setUpDynamicTextFields()
         signInFirebase()
+        setEventsListeners()
+    }
+
+    // remember user
+    override fun onStart() {
+        super.onStart()
+        val user = firebaseAuth.currentUser
+
+        if(user != null) {
+            val intent = Intent(this,NewPostActivity::class.java)
+            intent.putExtra("userEmail", user.email)
+            startActivity(intent)
+            finish()
+        }
+    }
+    
+    private fun setEventsListeners() {
+        forgetPassword = findViewById(R.id.forget_password_link)
+        forgetPassword?.setOnClickListener {
+            val intent = Intent(this, ForgetPassword::class.java)
+            startActivity(intent)
+        }
+
+        signUpView = findViewById(R.id.register_group)
+        signUpView?.setOnClickListener {
+            val intent = Intent(this, SignUpCompany::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun setUpDynamicTextFields() {
@@ -55,9 +86,7 @@ class SignIn : AppCompatActivity() {
                         val intent = Intent(this, NewPostActivity:: class.java)
                         intent.putExtra("userEmail", email)
                         startActivity(intent)
-                    }else{
-                        Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
-                    }
+                    } else Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
                 }
         }
     }

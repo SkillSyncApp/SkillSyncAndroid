@@ -55,8 +55,7 @@ class SignUpCompany : AppCompatActivity() {
         }
     }
 
-
-    // remember my user
+    // remember user
     override fun onStart() {
         super.onStart()
         val user = firebaseAuth.currentUser
@@ -115,12 +114,13 @@ class SignUpCompany : AppCompatActivity() {
         }
     }
 
+    // TODO remove
     fun logCompanyNameFromDB(snapshot: DocumentSnapshot?, e:  FirebaseFirestoreException?) {
         if (e != null) Log.d("ERROR", "Listen failed.", e)
 
         if (snapshot != null && snapshot.exists()) {
             val companyName = snapshot.getString("name")
-            Log.d("SUCCESS to create company", "Company Name: $companyName")
+            Log.d("SUCCESS", "Company Name: $companyName")
         } else {
             Log.d("ERROR", "Company snapshot is null or does not exist.")
         }
