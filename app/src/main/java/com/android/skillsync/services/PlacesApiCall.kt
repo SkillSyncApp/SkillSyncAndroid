@@ -28,7 +28,7 @@ class PlacesApiCall {
         call.enqueue(object: Callback<PlacesResponse> {
             override fun onResponse(response: Response<PlacesResponse>, retrofit: Retrofit?) {
                 val res: PlacesResponse = response.body()
-                Log.d("Succes", res.toString())
+                Log.d("Success", res.toString())
                 callback(res.places)
             }
 
