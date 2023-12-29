@@ -55,6 +55,20 @@ class SignUpCompany : AppCompatActivity() {
         }
     }
 
+
+    // remember my user
+    override fun onStart() {
+        super.onStart()
+        val user = firebaseAuth.currentUser
+
+        if(user != null) {
+            val intent = Intent(this,NewPostActivity::class.java)
+            intent.putExtra("userEmail", user.email)
+            startActivity(intent)
+            finish()
+        }
+    }
+
     fun addAutoSuggestionsCompaniesList() {
         val autoCompany: AutoCompleteTextView = findViewById(R.id.companySuggestion)
 
