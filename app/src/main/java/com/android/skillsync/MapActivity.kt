@@ -19,13 +19,19 @@ import org.osmdroid.views.overlay.ItemizedIconOverlay
 import org.osmdroid.views.overlay.OverlayItem
 import android.Manifest
 import android.widget.Toast
+import androidx.recyclerview.widget.RecyclerView
+import com.android.skillsync.models.ComapnyPost
+import com.google.android.material.carousel.CarouselLayoutManager
+import java.util.ArrayList
 
 class MapActivity : AppCompatActivity(), LocationListener {
 
-    private lateinit var aMapView: MapView
-    private lateinit var locationManager: LocationManager
-    private lateinit var binding: ActivityMapViewBinding
-    private val locationPermissionCode = 2
+    private lateinit var aMapView: MapView;
+    private lateinit var locationManager: LocationManager;
+    private lateinit var binding: ActivityMapViewBinding;
+    private val locationPermissionCode = 2;
+    private lateinit var postsList:ArrayList<ComapnyPost>;
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,8 +43,28 @@ class MapActivity : AppCompatActivity(), LocationListener {
         // Initialize the map view
         initializeMapView()
 
+        // show posts on map
+        init()
+
         // Check and request location permissions if needed
         checkLocationPermissions()
+    }
+
+    private fun init() {
+        val carouselRecyclerView: RecyclerView = findViewById(R.id.carousel_recycler_view)
+        val layoutManager = CarouselLayoutManager()
+        carouselRecyclerView.layoutManager = layoutManager
+
+        postsList = ArrayList();
+        addPosts()
+        val adapter = CarouselAdapter(postsList)
+        carouselRecyclerView.adapter = adapter
+    }
+
+    private fun addPosts() {
+        postsList.add(ComapnyPost("wix", "new project in wix life"))
+        postsList.add(ComapnyPost("moon active", "want to learn how to be a great designer? join us"))
+
     }
 
     private fun initializeMapView() {
@@ -140,9 +166,7 @@ class MapActivity : AppCompatActivity(), LocationListener {
             locationPermissionCode -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     requestLocationUpdates()
-                } else {
-                    Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show()
-                }
+                } else Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show()
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
