@@ -55,4 +55,5 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.squareup.retrofit2:retrofit:2.6.2")
     implementation("com.squareup.retrofit:converter-gson:2.0.0-beta2")
+    implementation("org.osmdroid:osmdroid-android:6.1.17")
 }
