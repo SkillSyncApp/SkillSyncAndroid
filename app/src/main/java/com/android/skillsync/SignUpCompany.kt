@@ -61,7 +61,7 @@ class SignUpCompany : AppCompatActivity() {
         val user = firebaseAuth.currentUser
 
         if(user != null) {
-            val intent = Intent(this,NewPostActivity::class.java)
+            val intent = Intent(this, MapActivity::class.java)
             intent.putExtra("userEmail", user.email)
             startActivity(intent)
             finish()
