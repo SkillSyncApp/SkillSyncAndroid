@@ -9,7 +9,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.android.skillsync.models.GroupMember
+import com.android.skillsync.models.Group
 
 
 class GroupProfile : AppCompatActivity() {
@@ -17,7 +17,7 @@ class GroupProfile : AppCompatActivity() {
     private var profileImageBackgroundElement: ImageView? = null;
 
     private lateinit var groupMembersRecyclerView: RecyclerView;
-    private lateinit var membersList:ArrayList<GroupMember>;
+    private lateinit var membersList:ArrayList<Group>;
     private lateinit var groupMemberAdapter: GroupMemberAdapter;
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -47,8 +47,8 @@ class GroupProfile : AppCompatActivity() {
     }
 
     private fun addMembersToList(){
-        membersList.add(GroupMember("Amit"));
-        membersList.add(GroupMember("Hadar"));
-        membersList.add(GroupMember("Nofar"));
+        membersList.add(Group("Amit"));
+        membersList.add(Group("Hadar"));
+        membersList.add(Group("Nofar"));
     }
 }
