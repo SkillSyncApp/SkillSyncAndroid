@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".SignUpGroup">
+
+    <TextView
+        android:id="@+id/new_post_title"
+        style="@style/AppTextStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal|top"
+        android:text="@string/sign_up_group_title"
+        android:textAppearance="@style/log_in_text"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/new_post_sub_title"
+        style="@style/AppTextStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal|top"
+        android:text="@string/sign_up_group_sub_title"
+        android:textAppearance="@style/sign_in_description"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/new_post_title" />
+<!--Start Body-->
+    <TextView
+        android:id="@+id/do_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textAppearance="@style/sign_up_edit_text_title"
+        android:text="@string/email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/new_post_sub_title" />
+
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:padding="15dp"
+        android:fontFamily="@font/poppins"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        android:background="@drawable/et_sign_up"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/do_email" />
+
+    <TextView
+        android:id="@+id/do_team_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:textAppearance="@style/sign_up_edit_text_title"
+        android:text="@string/team_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/email" />
+
+    <EditText
+        android:id="@+id/team_name"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:padding="15dp"
+        android:inputType="textPersonName"
+        android:fontFamily="@font/poppins"
+        android:background="@drawable/et_sign_up"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/do_team_name" />
+
+    <TextView
+        android:id="@+id/do_institution"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:textAppearance="@style/sign_up_edit_text_title"
+        android:text="@string/team_institution"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/team_name" />
+
+    <EditText
+        android:id="@+id/et_institution"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:padding="15dp"
+        android:fontFamily="@font/poppins"
+        android:background="@drawable/et_sign_up"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/do_institution" />
+
+    <TextView
+        android:id="@+id/do_team_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="@string/team_description"
+        android:textAppearance="@style/sign_up_edit_text_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_institution" />
+
+    <EditText
+        android:id="@+id/et_team_description"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:padding="15dp"
+        android:fontFamily="@font/poppins"
+        android:background="@drawable/et_sign_up"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/do_team_description" />
+
+    <TextView
+        android:id="@+id/do_members_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="@string/team_members_name"
+        android:textAppearance="@style/sign_up_edit_text_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_team_description" />
+
+    <EditText
+        android:id="@+id/et_members_name"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:padding="15dp"
+        android:fontFamily="@font/poppins"
+        android:background="@drawable/et_sign_up"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/do_members_name" />
+    <TextView
+        android:id="@+id/do_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="@string/password"
+        android:textAppearance="@style/sign_up_edit_text_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_members_name" />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:padding="15dp"
+        android:fontFamily="@font/poppins"
+        android:background="@drawable/et_sign_up"
+        android:textSize="15sp"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/do_password" />
+
+
+    <Button
+        android:id="@+id/sign_up_btn"
+        style="@style/AppTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="80dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/submit_form_btn"
+        android:gravity="center"
+        android:text="@string/sign_up"
+        android:textAppearance="@style/log_in_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
