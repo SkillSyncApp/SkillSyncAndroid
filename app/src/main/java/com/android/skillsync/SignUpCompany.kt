@@ -13,8 +13,10 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.android.skillsync.databinding.ActivitySignUpCompanyBinding
 import com.android.skillsync.models.Comapny
+import com.android.skillsync.models.CompanyLocation
 import com.android.skillsync.models.Type
 import com.android.skillsync.models.UserType
+import com.android.skillsync.models.serper.Place
 import com.android.skillsync.services.PlacesApiCall
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -27,6 +29,9 @@ class SignUpCompany : AppCompatActivity() {
     private lateinit var binding:ActivitySignUpCompanyBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var locationsAdapter: ArrayAdapter<String>
+    private lateinit var placesSuggestions: Array<Place>
+
+    private lateinit var companyLocation: CompanyLocation;
 
     @RequiresApi(Build.VERSION_CODES.O_MR1)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,19 +40,20 @@ class SignUpCompany : AppCompatActivity() {
         binding  = ActivitySignUpCompanyBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        addAutoSuggestionsCompaniesList()
+        initLocationsAutoComplete()
 
         firebaseAuth = FirebaseAuth.getInstance()
 
         binding.signUpCompany.setOnClickListener{
-            val companyName = binding.companySuggestion.text.toString()
+            val companyName = binding.companyName.text.toString()
             val email = binding.email.text.toString()
             val password = binding.password.text.toString()
+            val companyLocation = companyLocation;
             if((companyName.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()))
                 firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener{
                 if(it.isSuccessful){
                     val companyId = it.result.user?.uid!!
-                    createCompany(companyId, companyName)
+                    createCompany(companyId, companyName, companyLocation)
                 }else{
                     Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
                 }
@@ -68,14 +74,15 @@ class SignUpCompany : AppCompatActivity() {
         }
     }
 
-    fun addAutoSuggestionsCompaniesList() {
+    private fun initLocationsAutoComplete() {
         val autoCompany: AutoCompleteTextView = findViewById(R.id.companySuggestion)
 
         locationsAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, ArrayList())
 
         autoCompany.setAdapter(locationsAdapter)
         autoCompany.setOnItemClickListener{ adapterView, view, i, l ->
-            Toast.makeText(this, adapterView.getItemAtPosition(i).toString(), Toast.LENGTH_LONG).show()
+            val selectedPlace = placesSuggestions[i];
+            companyLocation = CompanyLocation(selectedPlace.address, selectedPlace.longitude, selectedPlace.latitude);
         }
 
         autoCompany.addTextChangedListener(object: TextWatcher {
@@ -87,18 +94,16 @@ class SignUpCompany : AppCompatActivity() {
                     }
                 }
             }
-
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
         })
     }
 
-    fun createCompany(companyId:String, companyName: String) {
+    private fun createCompany(companyId:String, companyName: String, companyLocation: CompanyLocation) {
         val database = Firebase.firestore
         val intent = Intent(this, SignIn::class.java)
 
-        val companyEntity = Comapny(companyName)
+        val companyEntity = Comapny(companyName, companyLocation);
 
         val userType = UserType(Type.COMPANY)
         database.collection("usersType").document(companyId).set(userType).addOnSuccessListener {
@@ -115,7 +120,7 @@ class SignUpCompany : AppCompatActivity() {
     }
 
     // TODO remove
-    fun logCompanyNameFromDB(snapshot: DocumentSnapshot?, e:  FirebaseFirestoreException?) {
+    private fun logCompanyNameFromDB(snapshot: DocumentSnapshot?, e:  FirebaseFirestoreException?) {
         if (e != null) Log.d("ERROR", "Listen failed.", e)
 
         if (snapshot != null && snapshot.exists()) {
@@ -129,8 +134,11 @@ class SignUpCompany : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O_MR1)
     fun searchPlaces(query: String) {
         PlacesApiCall().getPlacesByQuery(this, query) { places ->
+            placesSuggestions = places
+
+            // Set places results as auto complete suggestions
             locationsAdapter.clear()
-            places?.forEach { locationsAdapter.add(it.title.plus(" | ").plus(it.address)) }
+            places?.forEach { locationsAdapter.add(it.title.plus(" - ").plus(it.address)) }
             locationsAdapter.notifyDataSetChanged()
         }
     }

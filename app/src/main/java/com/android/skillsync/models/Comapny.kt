@@ -3,4 +3,4 @@ package com.android.skillsync.models
 import com.google.firebase.database.IgnoreExtraProperties
 
 @IgnoreExtraProperties
-data class Comapny(val name: String)
+data class Comapny(val name: String, val location: CompanyLocation)
