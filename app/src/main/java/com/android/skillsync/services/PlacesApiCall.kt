@@ -13,12 +13,13 @@ import retrofit.Retrofit
 private const val BASE_URL =
     "https://google.serper.dev/"
 class PlacesApiCall {
-    fun getPlacesByQuery(context: Context, query: String, callback: (Array<Place>?) -> Unit) {
+    fun getPlacesByQuery(context: Context, query: String, callback: (Array<Place>) -> Unit) {
         val retrofit: Retrofit = Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(
             GsonConverterFactory.create()).build()
 
         val apiService: PlacesApiService = retrofit.create<PlacesApiService>(PlacesApiService::class.java)
 
+        // Set Israel as origin
         val placesRequestBody = mapOf(
             "q" to query,
             "gl" to "il"
