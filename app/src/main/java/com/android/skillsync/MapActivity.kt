@@ -1,5 +1,6 @@
 package com.android.skillsync
 
+import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
@@ -7,18 +8,22 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.android.skillsync.databinding.ActivityMapViewBinding
+import com.android.skillsync.models.CompanyLocation
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.firestore
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.ItemizedIconOverlay
 import org.osmdroid.views.overlay.OverlayItem
-import android.Manifest
-import android.widget.Toast
 
 class MapActivity : AppCompatActivity(), LocationListener {
 
@@ -126,9 +131,7 @@ class MapActivity : AppCompatActivity(), LocationListener {
         aMapView.controller.setCenter(geoPoint)
         addMarker(geoPoint, "I Am Here!", "OSMDroid Marker")
 
-        // add hardcoded markers - TODO GET LOCATIONS FROM API
-        val hardcodedGeoPoint = GeoPoint(31.9591, 33.8061)
-        addMarker(hardcodedGeoPoint, "I Am Here!", "OSMDroid Marker")
+        addLocationsMarks()
     }
 
     override fun onRequestPermissionsResult(
@@ -146,5 +149,59 @@ class MapActivity : AppCompatActivity(), LocationListener {
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    private fun addLocationsMarks() {
+        val database = Firebase.firestore
+        val companiesReference = database.collection("companies")
+        fetchAllCompanies(companiesReference)
+    }
+
+    private fun fetchAllCompanies(companiesReference: CollectionReference) {
+        companiesReference.get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    val companyId = document.id
+                    fetchLocationsForCompany(companiesReference, companyId)
+                }
+            }.addOnFailureListener { exception ->
+                Log.e("Firestore", "Error getting company documents: $exception")
+            }
+    }
+
+    private fun fetchLocationsForCompany(companiesReference: CollectionReference, companyId: String) {
+        val locationsCollection = companiesReference.document(companyId)
+
+        locationsCollection.get()
+            .addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    val data = documentSnapshot.data?.get("location") as? Map<*, *>
+                    if (data != null) {
+                        val address = data["address"] as? String ?: "Unknown Address"
+                        val latitude = (data["latitude"] as Double).toFloat()
+                        val longitude = (data["longitude"] as Double).toFloat()
+
+                        val locationData = CompanyLocation(address,longitude, latitude)
+                            processLocationDocument(locationData)
+                        } else Log.e("Firestore", "Error getting location documents")
+                } else Log.e("Firestore", "Error getting location documents")
+
+            }
+            .addOnFailureListener { locationException ->
+                // Handle failures for fetching locations
+                Log.e("Firestore", "Error getting location documents: $locationException")
+            }
+    }
+
+    private fun processLocationDocument(locationDocument: CompanyLocation) {
+        val latitude = locationDocument.latitude.toDouble()
+        val longitude = locationDocument.longitude.toDouble()
+        val address = locationDocument.address
+
+
+        val geoPoint = GeoPoint(latitude, longitude)
+
+        // Add a marker for each location
+        addMarker(geoPoint, address, "OSMDroid Marker")
     }
 }
