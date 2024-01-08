@@ -12,7 +12,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.android.skillsync.databinding.ActivitySignUpCompanyBinding
-import com.android.skillsync.models.Comapny
+import com.android.skillsync.models.Company
 import com.android.skillsync.models.CompanyLocation
 import com.android.skillsync.models.Type
 import com.android.skillsync.models.UserType
@@ -103,7 +103,7 @@ class SignUpCompany : AppCompatActivity() {
         val database = Firebase.firestore
         val intent = Intent(this, SignIn::class.java)
 
-        val companyEntity = Comapny(companyName, companyLocation);
+        val companyEntity = Company(companyName, companyLocation);
 
         val userType = UserType(Type.COMPANY)
         database.collection("usersType").document(companyId).set(userType).addOnSuccessListener {

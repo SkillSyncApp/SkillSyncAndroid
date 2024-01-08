@@ -97,7 +97,7 @@
         app:layout_constraintTop_toBottomOf="@id/team_name" />
 
     <EditText
-        android:id="@+id/et_institution"
+        android:id="@+id/institution"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:padding="15dp"
@@ -118,10 +118,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_institution" />
+        app:layout_constraintTop_toBottomOf="@id/institution" />
 
     <EditText
-        android:id="@+id/et_team_description"
+        android:id="@+id/team_description"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:padding="15dp"
@@ -142,10 +142,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_team_description" />
+        app:layout_constraintTop_toBottomOf="@id/team_description" />
 
     <EditText
-        android:id="@+id/et_members_name"
+        android:id="@+id/members_name"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:padding="15dp"
@@ -165,7 +165,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_members_name" />
+        app:layout_constraintTop_toBottomOf="@id/members_name" />
 
     <EditText
         android:id="@+id/password"

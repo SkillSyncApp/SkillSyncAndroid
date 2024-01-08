@@ -31,7 +31,10 @@
             android:exported="false" />
         <activity
             android:name=".SignUpCompany"
-            android:exported="false" />
+            android:exported="true" />
+        <activity
+            android:name=".SignUpGroup"
+            android:exported="true" /><!-- TODO - REMOVE EXPORTED true - just for testing -->
         <activity
             android:name=".GroupProfile"
             android:exported="true" /> <!-- TODO - REMOVE EXPORTED true - just for testing -->

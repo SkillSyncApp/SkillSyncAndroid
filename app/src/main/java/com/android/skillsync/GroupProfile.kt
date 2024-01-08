@@ -47,8 +47,8 @@ class GroupProfile : AppCompatActivity() {
     }
 
     private fun addMembersToList(){
-        membersList.add(Group("Amit"));
-        membersList.add(Group("Hadar"));
-        membersList.add(Group("Nofar"));
+        membersList.add(Group("Amit",null,null,null));
+        membersList.add(Group("Hadar",null,null,null));
+        membersList.add(Group("Nofar",null,null,null));
     }
 }

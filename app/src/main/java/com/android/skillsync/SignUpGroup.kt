@@ -27,7 +27,7 @@ class SignUpGroup : AppCompatActivity() {
 
     private lateinit var binding:ActivitySignUpGroupBinding
     private lateinit var firebaseAuth: FirebaseAuth
-    private lateinit var locationsAdapter: ArrayAdapter<String>
+  //  private lateinit var locationsAdapter: ArrayAdapter<String>
 
     @RequiresApi(Build.VERSION_CODES.O_MR1)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,11 +44,16 @@ class SignUpGroup : AppCompatActivity() {
             val groupName = binding.teamName.text.toString()
             val email = binding.email.text.toString()
             val password = binding.password.text.toString()
+            val institution = binding.institution.text.toString()
+            val teamDescription = binding.teamDescription.text.toString()
+            val teamMembers = binding.membersName.text.toString()
+
             if((groupName.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()))
                 firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener{
                 if(it.isSuccessful){
                     val groupId = it.result.user?.uid!!
-                    createGroup(groupId, groupName)
+                    createGroup(groupId, groupName,institution,teamDescription,teamMembers)
+
                 }else{
                     Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
                 }
@@ -70,11 +75,11 @@ class SignUpGroup : AppCompatActivity() {
     }
 
 
-    fun createGroup(groupId:String, groupName: String) {
+    fun createGroup(groupId:String, groupName: String, institution: String, teamDescription: String,teamMembers:String){
         val database = Firebase.firestore
         val intent = Intent(this, SignIn::class.java)
 
-        val groupEntity = Group(groupName)
+        val groupEntity = Group(groupName,institution,teamDescription,teamMembers)
 
         val userType = UserType(Type.GROUP)
         database.collection("usersType").document(groupId).set(userType).addOnSuccessListener {
@@ -102,12 +107,12 @@ class SignUpGroup : AppCompatActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O_MR1)
-    fun searchPlaces(query: String) {
-        PlacesApiCall().getPlacesByQuery(this, query) { places ->
-            locationsAdapter.clear()
-            places?.forEach { locationsAdapter.add(it.title.plus(" | ").plus(it.address)) }
-            locationsAdapter.notifyDataSetChanged()
-        }
-    }
+//    @RequiresApi(Build.VERSION_CODES.O_MR1)
+//    fun searchPlaces(query: String) {
+//        PlacesApiCall().getPlacesByQuery(this, query) { places ->
+//            locationsAdapter.clear()
+//            places?.forEach { locationsAdapter.add(it.title.plus(" | ").plus(it.address)) }
+//            locationsAdapter.notifyDataSetChanged()
+//        }
+//    }
 }
