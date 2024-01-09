@@ -213,7 +213,6 @@ class MapViewFragment : Fragment(), LocationListener {
         val longitude = locationDocument.location.longitude
         val address = locationDocument.address
 
-
         val geoPoint = GeoPoint(latitude, longitude)
 
         // Add a marker for each location
