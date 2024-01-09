@@ -10,14 +10,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.skillsync.models.Group
-
+import com.android.skillsync.models.GroupMember
+import kotlin.random.Random
 
 class GroupProfile : AppCompatActivity() {
 
     private var profileImageBackgroundElement: ImageView? = null;
 
     private lateinit var groupMembersRecyclerView: RecyclerView;
-    private lateinit var membersList:ArrayList<Group>;
+    private lateinit var membersList:ArrayList<GroupMember>;
     private lateinit var groupMemberAdapter: GroupMemberAdapter;
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -47,8 +48,10 @@ class GroupProfile : AppCompatActivity() {
     }
 
     private fun addMembersToList(){
-        membersList.add(Group("Amit",null,null,null));
-        membersList.add(Group("Hadar",null,null,null));
-        membersList.add(Group("Nofar",null,null,null));
+        val group = Group(Random.nextLong(), "SkillSync@gmail.com","Skill Sync","College of Management","Some info",listOf("Amit", "Nofar", "Hadar"))
+        for (memberName in group.memberNames) {
+            val user = GroupMember(memberName)
+            membersList.add(user)
+        }
     }
 }

@@ -3,12 +3,8 @@ package com.android.skillsync
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -18,7 +14,6 @@ import com.android.skillsync.databinding.ActivitySignUpGroupBinding
 import com.android.skillsync.models.Group
 import com.android.skillsync.models.Type
 import com.android.skillsync.models.UserType
-import com.android.skillsync.services.PlacesApiCall
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
@@ -65,10 +60,11 @@ class SignUpGroup : AppCompatActivity() {
                 firebaseAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener {
                         if (it.isSuccessful) {
-                            val groupId = it.result.user?.uid!!
+                            val groupId = it.result.user?.uid!!.toLong()
                             createGroup(
                                 groupId,
                                 groupName,
+                                email,
                                 institution,
                                 teamDescription,
                                 teamMembers
@@ -102,6 +98,7 @@ class SignUpGroup : AppCompatActivity() {
 
         return validations.all { it }
     }
+
     private fun isValidString(input: String, field: String): Boolean {
         val pattern = Regex("^[a-zA-Z,\\. ]+\$")
         val isLengthValid = input.length >= 4
@@ -129,6 +126,7 @@ class SignUpGroup : AppCompatActivity() {
     private fun isValidPassword(password: String, field: String): Boolean {
         return (password.length >= 6) || showError(field)
     }
+
     // remember user
     override fun onStart() {
         super.onStart()
@@ -142,22 +140,17 @@ class SignUpGroup : AppCompatActivity() {
         }
     }
 
-
-    fun createGroup(
-        groupId: String,
-        groupName: String,
-        institution: String,
-        teamDescription: String,
-        teamMembers: String
-    ) {
+    fun createGroup(groupId: Long, groupName: String, email: String, institution: String, teamDescription: String, teamMembers: String) {
         val database = Firebase.firestore
         val intent = Intent(this, SignIn::class.java)
 
-        val groupEntity = Group(groupName, institution, teamDescription, teamMembers)
+        val groupIdString = groupId.toString()
+
+        val groupEntity = Group(groupId, email, groupName, institution, teamDescription, teamMembers.split(','))
 
         val userType = UserType(Type.GROUP)
-        database.collection("usersType").document(groupId).set(userType).addOnSuccessListener {
-            val groupRef = database.collection("groups").document(groupId)
+        database.collection("usersType").document(groupIdString).set(userType).addOnSuccessListener {
+            val groupRef = database.collection("groups").document(groupIdString)
             groupRef.set(groupEntity).addOnSuccessListener {
                 groupRef.addSnapshotListener { snapshot, e ->
                     logGroupNameFromDB(snapshot, e)
@@ -198,13 +191,4 @@ class SignUpGroup : AppCompatActivity() {
             editTextField.hint = getString(it)
         }
     }
-//    @RequiresApi(Build.VERSION_CODES.O_MR1)
-//    fun searchPlaces(query: String) {
-//        PlacesApiCall().getPlacesByQuery(this, query) { places ->
-//            locationsAdapter.clear()
-//            places?.forEach { locationsAdapter.add(it.title.plus(" | ").plus(it.address)) }
-//            locationsAdapter.notifyDataSetChanged()
-//        }
-//    }
-
 }

@@ -40,7 +40,6 @@ class SignUpCompany : AppCompatActivity() {
         binding  = ActivitySignUpCompanyBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initLocationsAutoComplete()
 
         firebaseAuth = FirebaseAuth.getInstance()
 
@@ -52,8 +51,9 @@ class SignUpCompany : AppCompatActivity() {
             if((companyName.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()))
                 firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener{
                 if(it.isSuccessful){
-                    val companyId = it.result.user?.uid!!
-                    createCompany(companyId, companyName, companyLocation)
+                    val companyId = it.result.user?.uid!!.toLong()
+                    initLocationsAutoComplete(companyId)
+                    createCompany(companyId, companyName, email, companyLocation)
                 }else{
                     Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
                 }
@@ -74,7 +74,7 @@ class SignUpCompany : AppCompatActivity() {
         }
     }
 
-    private fun initLocationsAutoComplete() {
+    private fun initLocationsAutoComplete(companyId: Long) {
         val autoCompany: AutoCompleteTextView = findViewById(R.id.companySuggestion)
 
         locationsAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, ArrayList())
@@ -82,7 +82,7 @@ class SignUpCompany : AppCompatActivity() {
         autoCompany.setAdapter(locationsAdapter)
         autoCompany.setOnItemClickListener{ adapterView, view, i, l ->
             val selectedPlace = placesSuggestions[i];
-            companyLocation = CompanyLocation(selectedPlace.address, selectedPlace.longitude, selectedPlace.latitude);
+            companyLocation = CompanyLocation(companyId, selectedPlace.address, selectedPlace.longitude, selectedPlace.latitude);
         }
 
         autoCompany.addTextChangedListener(object: TextWatcher {
@@ -99,15 +99,17 @@ class SignUpCompany : AppCompatActivity() {
         })
     }
 
-    private fun createCompany(companyId:String, companyName: String, companyLocation: CompanyLocation) {
+    private fun createCompany(companyId:Long, name: String, email: String, location: CompanyLocation) {
         val database = Firebase.firestore
         val intent = Intent(this, SignIn::class.java)
 
-        val companyEntity = Company(companyName, companyLocation);
+        val companyIdString = companyId.toString()
+
+        val companyEntity = Company(companyId, name, "", email, location.companyId); // TODO SET LOGO AS DEFAULT.
 
         val userType = UserType(Type.COMPANY)
-        database.collection("usersType").document(companyId).set(userType).addOnSuccessListener {
-            val companyRef = database.collection("companies").document(companyId)
+        database.collection("usersType").document(companyIdString).set(userType).addOnSuccessListener {
+            val companyRef = database.collection("companies").document(companyIdString)
             companyRef.set(companyEntity).addOnSuccessListener {
                 companyRef.addSnapshotListener { snapshot, e ->
                     logCompanyNameFromDB(snapshot, e)
@@ -138,7 +140,7 @@ class SignUpCompany : AppCompatActivity() {
 
             // Set places results as auto complete suggestions
             locationsAdapter.clear()
-            places?.forEach { locationsAdapter.add(it.title.plus(" - ").plus(it.address)) }
+            places.forEach { locationsAdapter.add(it.title.plus(" - ").plus(it.address)) }
             locationsAdapter.notifyDataSetChanged()
         }
     }

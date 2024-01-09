@@ -4,4 +4,5 @@ enum class Type {
     GROUP,
     COMPANY
 }
+
 data class UserType(val type: Type);
