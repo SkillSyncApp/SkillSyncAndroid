@@ -33,9 +33,14 @@
 
     <string name="sign_up_group_title">Get Started</string>
     <string name="sign_up_group_sub_title">By creating a free account</string>
-    <string name="team_name">Team Name</string>
-    <string name="team_institution">Institution</string>
-    <string name="team_description">Tell us about you</string>
-    <string name="team_members_name">Enter teams members name</string>
+    <string name="team_email_title">Team Email</string>
+
+    <string name="team_name_title">Team Name</string>
+    <string name="team_institution_title">Institution</string>
+    <string name="team_description_title">Tell us about you</string>
+    <string name="team_members_name_title">Enter teams members name</string>
+    <string name="password_title">Password</string>
+
+
     <string name="password">Password</string>
 </resources>

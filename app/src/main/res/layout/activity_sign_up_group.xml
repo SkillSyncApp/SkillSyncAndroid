@@ -33,152 +33,71 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/new_post_title" />
 <!--Start Body-->
-    <TextView
-        android:id="@+id/do_email"
-        android:layout_width="wrap_content"
+    <include
+        android:id="@+id/email_group"
+        layout="@layout/custom_input_field_text"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:textAppearance="@style/sign_up_edit_text_title"
-        android:text="@string/email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/new_post_sub_title" />
 
-    <EditText
-        android:id="@+id/email"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:padding="15dp"
-        android:fontFamily="@font/poppins"
-        android:ems="10"
-        android:inputType="textEmailAddress"
-        android:background="@drawable/et_sign_up"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/do_email" />
-
-    <TextView
-        android:id="@+id/do_team_name"
-        android:layout_width="wrap_content"
+    <include
+        android:id="@+id/team_name_group"
+        layout="@layout/custom_input_field_text"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:textAppearance="@style/sign_up_edit_text_title"
-        android:text="@string/team_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/email" />
+        app:layout_constraintTop_toBottomOf="@id/email_group" />
 
-    <EditText
-        android:id="@+id/team_name"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:padding="15dp"
-        android:inputType="textPersonName"
-        android:fontFamily="@font/poppins"
-        android:background="@drawable/et_sign_up"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/do_team_name" />
-
-    <TextView
-        android:id="@+id/do_institution"
-        android:layout_width="wrap_content"
+    <include
+        android:id="@+id/institution_group"
+        layout="@layout/custom_input_field_text"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:textAppearance="@style/sign_up_edit_text_title"
-        android:text="@string/team_institution"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/team_name" />
+        app:layout_constraintTop_toBottomOf="@id/team_name_group" />
 
-    <EditText
-        android:id="@+id/institution"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:padding="15dp"
-        android:fontFamily="@font/poppins"
-        android:background="@drawable/et_sign_up"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/do_institution" />
-
-    <TextView
-        android:id="@+id/do_team_description"
-        android:layout_width="wrap_content"
+    <include
+        android:id="@+id/team_description_group"
+        layout="@layout/custom_input_field_text"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:text="@string/team_description"
-        android:textAppearance="@style/sign_up_edit_text_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/institution" />
+        app:layout_constraintTop_toBottomOf="@id/institution_group" />
 
-    <EditText
-        android:id="@+id/team_description"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:padding="15dp"
-        android:fontFamily="@font/poppins"
-        android:background="@drawable/et_sign_up"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/do_team_description" />
-
-    <TextView
-        android:id="@+id/do_members_name"
-        android:layout_width="wrap_content"
+    <include
+        android:id="@+id/members_group"
+        layout="@layout/custom_input_field_text"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:text="@string/team_members_name"
-        android:textAppearance="@style/sign_up_edit_text_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/team_description" />
+        app:layout_constraintTop_toBottomOf="@id/team_description_group" />
 
-    <EditText
-        android:id="@+id/members_name"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:padding="15dp"
-        android:fontFamily="@font/poppins"
-        android:background="@drawable/et_sign_up"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/do_members_name" />
-    <TextView
-        android:id="@+id/do_password"
-        android:layout_width="wrap_content"
+    <include
+        android:id="@+id/password_group"
+        layout="@layout/custom_input_field_password"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:text="@string/password"
-        android:textAppearance="@style/sign_up_edit_text_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/members_name" />
-
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:padding="15dp"
-        android:fontFamily="@font/poppins"
-        android:background="@drawable/et_sign_up"
-        android:textSize="15sp"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/do_password" />
+        app:layout_constraintTop_toBottomOf="@id/members_group" />
 
 
     <Button
@@ -187,14 +106,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="80dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="32dp"
         android:background="@drawable/submit_form_btn"
         android:gravity="center"
         android:text="@string/sign_up"
         android:textAppearance="@style/log_in_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password" />
+        app:layout_constraintTop_toBottomOf="@+id/password_group" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
