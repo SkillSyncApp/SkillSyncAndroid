@@ -6,8 +6,11 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -26,38 +29,39 @@ import com.google.firebase.firestore.firestore
 
 class SignUpCompany : AppCompatActivity() {
 
-    private lateinit var binding:ActivitySignUpCompanyBinding
+    private lateinit var binding: ActivitySignUpCompanyBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var locationsAdapter: ArrayAdapter<String>
     private lateinit var placesSuggestions: Array<Place>
-
     private lateinit var companyLocation: CompanyLocation;
 
     @RequiresApi(Build.VERSION_CODES.O_MR1)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding  = ActivitySignUpCompanyBinding.inflate(layoutInflater)
+        binding = ActivitySignUpCompanyBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         initLocationsAutoComplete()
-
         firebaseAuth = FirebaseAuth.getInstance()
 
-        binding.signUpCompany.setOnClickListener{
-            val companyName = binding.companyName.text.toString()
-            val email = binding.email.text.toString()
-            val password = binding.password.text.toString()
+        setHintForEditText(R.id.email_group, null, R.string.email)
+        setHintForEditText(R.id.password_group, null, R.string.password_title)
+        setHintForEditText(R.id.company_name_group, null, R.string.company_name_title)
+        setHintForEditText(R.id.password_group, null, R.string.password_title)
+
+        binding.signUpCompany.setOnClickListener {
+            val companyName = binding.companyNameGroup.editTextField.text.toString()
+            val email = binding.emailGroup.editTextField.text.toString()
+            val password = binding.passwordGroup.editTextField.text.toString()
             val companyLocation = companyLocation;
-            if((companyName.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()))
-                firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener{
-                if(it.isSuccessful){
-                    val companyId = it.result.user?.uid!!
-                    createCompany(companyId, companyName, companyLocation)
-                }else{
-                    Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
+            if ((companyName.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()))
+                firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        val companyId = it.result.user?.uid!!
+                        createCompany(companyId, companyName, companyLocation)
+                    } else {
+                        Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
+                    }
                 }
-            }
         }
     }
 
@@ -66,7 +70,7 @@ class SignUpCompany : AppCompatActivity() {
         super.onStart()
         val user = firebaseAuth.currentUser
 
-        if(user != null) {
+        if (user != null) {
             val intent = Intent(this, MapActivity::class.java)
             intent.putExtra("userEmail", user.email)
             startActivity(intent)
@@ -77,15 +81,20 @@ class SignUpCompany : AppCompatActivity() {
     private fun initLocationsAutoComplete() {
         val autoCompany: AutoCompleteTextView = findViewById(R.id.companySuggestion)
 
-        locationsAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, ArrayList())
+        locationsAdapter =
+            ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, ArrayList())
 
         autoCompany.setAdapter(locationsAdapter)
-        autoCompany.setOnItemClickListener{ adapterView, view, i, l ->
+        autoCompany.setOnItemClickListener { adapterView, view, i, l ->
             val selectedPlace = placesSuggestions[i];
-            companyLocation = CompanyLocation(selectedPlace.address, selectedPlace.longitude, selectedPlace.latitude);
+            companyLocation = CompanyLocation(
+                selectedPlace.address,
+                selectedPlace.longitude,
+                selectedPlace.latitude
+            );
         }
 
-        autoCompany.addTextChangedListener(object: TextWatcher {
+        autoCompany.addTextChangedListener(object : TextWatcher {
             @RequiresApi(Build.VERSION_CODES.O_MR1)
             override fun afterTextChanged(s: Editable?) {
                 if (s != null) {
@@ -94,12 +103,17 @@ class SignUpCompany : AppCompatActivity() {
                     }
                 }
             }
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
     }
 
-    private fun createCompany(companyId:String, companyName: String, companyLocation: CompanyLocation) {
+    private fun createCompany(
+        companyId: String,
+        companyName: String,
+        companyLocation: CompanyLocation
+    ) {
         val database = Firebase.firestore
         val intent = Intent(this, SignIn::class.java)
 
@@ -120,7 +134,7 @@ class SignUpCompany : AppCompatActivity() {
     }
 
     // TODO remove
-    private fun logCompanyNameFromDB(snapshot: DocumentSnapshot?, e:  FirebaseFirestoreException?) {
+    private fun logCompanyNameFromDB(snapshot: DocumentSnapshot?, e: FirebaseFirestoreException?) {
         if (e != null) Log.d("ERROR", "Listen failed.", e)
 
         if (snapshot != null && snapshot.exists()) {
@@ -140,6 +154,25 @@ class SignUpCompany : AppCompatActivity() {
             locationsAdapter.clear()
             places?.forEach { locationsAdapter.add(it.title.plus(" - ").plus(it.address)) }
             locationsAdapter.notifyDataSetChanged()
+        }
+    }
+
+
+    private fun setHintForEditText(
+        editTextGroupId: Int,
+        hintResourceId: Int?,
+        inputTitleResourceId: Int?
+    ) {
+        val editTextGroup = findViewById<View>(editTextGroupId)
+        val editTextLabel = editTextGroup.findViewById<TextView>(R.id.edit_text_label)
+        val editTextField = editTextGroup.findViewById<EditText>(R.id.edit_text_field)
+
+        inputTitleResourceId?.let {
+            editTextLabel.text = getString(it)
+        }
+
+        hintResourceId?.let {
+            editTextField.hint = getString(it)
         }
     }
 }

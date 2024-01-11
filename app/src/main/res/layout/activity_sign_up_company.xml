@@ -4,65 +4,60 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
     tools:context=".SignUpCompany">
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+        android:id="@+id/new_post_title"
+        style="@style/AppTextStyle"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:fontFamily="@font/poppins"
-        android:text="Get Started"
-        android:textAlignment="center"
-        android:textColor="@color/purple_700"
-        android:textSize="34sp"
+        android:gravity="center_horizontal|top"
+        android:text="@string/sign_up_group_title"
+        android:textAppearance="@style/log_in_text"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
+        android:id="@+id/new_post_sub_title"
+        style="@style/AppTextStyle"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-10dp"
-        android:alpha="0.6"
-        android:text="create a free account"
+        android:gravity="center_horizontal|top"
+        android:text="@string/sign_up_group_sub_title"
+        android:textAppearance="@style/sign_in_description"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        tools:text="create a free account" />
+        app:layout_constraintTop_toBottomOf="@id/new_post_title" />
+    <!--Start Body-->
 
-    <EditText
-        android:id="@+id/companyName"
-        android:layout_width="320dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="50dp"
-        android:ems="10"
-        android:hint="Company Name"
-        android:inputType="text"
-        android:background="@drawable/rounded_box"
-        android:backgroundTint="#E8E8E8"
-        android:paddingLeft="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/email"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-    <EditText
-        android:id="@+id/email"
-        android:layout_width="320dp"
-        android:layout_height="39dp"
-        android:layout_marginTop="28dp"
-        android:ems="10"
-        android:hint="Email"
-        android:inputType="textEmailAddress"
-        android:background="@drawable/rounded_box"
-        android:backgroundTint="#E8E8E8"
-        android:paddingLeft="20dp"
+    <include
+        android:id="@+id/company_name_group"
+        layout="@layout/custom_input_field_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/companyName" />
+        app:layout_constraintTop_toBottomOf="@id/new_post_sub_title" />
+
+
+    <include
+        android:id="@+id/email_group"
+        layout="@layout/custom_input_field_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/company_name_group" />
+
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/input_suggestions"
@@ -75,48 +70,45 @@
         app:boxStrokeWidth="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email">
+        app:layout_constraintTop_toBottomOf="@+id/email_group">
 
         <AutoCompleteTextView
             android:id="@+id/companySuggestion"
             android:layout_width="match_parent"
             android:layout_height="39dp"
             android:hint="Address.."
-            app:layout_constraintTop_toBottomOf="@+id/email"
+            app:layout_constraintTop_toBottomOf="@+id/email_group"
             tools:layout_editor_absoluteX="5dp">
 
         </AutoCompleteTextView>
 
     </com.google.android.material.textfield.TextInputLayout>
-
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="320dp"
+    <include
+        android:id="@+id/password_group"
+        layout="@layout/custom_input_field_password"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:layout_marginBottom="192dp"
-        android:background="@drawable/rounded_box"
-        android:backgroundTint="#E8E8E8"
-        android:ems="10"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:paddingLeft="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/sign_up_company"
+        android:layout_marginTop="15dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input_suggestions" />
+        app:layout_constraintTop_toBottomOf="@id/input_suggestions" />
 
     <Button
         android:id="@+id/sign_up_company"
+        style="@style/AppTextStyle"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginBottom="44dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="80dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/submit_form_btn"
+        android:gravity="center"
         android:text="@string/sign_up"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textAppearance="@style/log_in_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password_group" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

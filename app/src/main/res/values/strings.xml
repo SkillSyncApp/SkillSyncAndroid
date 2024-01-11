@@ -41,6 +41,7 @@
     <string name="team_members_name_title">Enter teams members name</string>
     <string name="password_title">Password</string>
 
+    <string name="company_name_title">Company Name</string>
 
     <string name="password">Password</string>
 </resources>
