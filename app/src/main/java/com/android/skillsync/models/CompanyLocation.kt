@@ -1,3 +1,5 @@
 package com.android.skillsync.models
 
-data class CompanyLocation(val address: String, val longitude: Float, val latitude: Float)
+import com.google.firebase.firestore.GeoPoint
+
+data class CompanyLocation(val address: String, val location: GeoPoint)

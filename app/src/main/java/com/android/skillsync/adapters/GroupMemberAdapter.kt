@@ -1,10 +1,11 @@
-package com.android.skillsync
+package com.android.skillsync.adapters
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.android.skillsync.R
 import com.android.skillsync.models.Group
 
 class GroupMemberAdapter(private val membersList: List<Group>)
