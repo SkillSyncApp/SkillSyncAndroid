@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".SignUpGroup">
+    tools:context=".SignUpCompanyFragment">
 
     <TextView
         android:id="@+id/new_post_title"
@@ -32,7 +32,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/new_post_title" />
-<!--Start Body-->
+    <!--Start Body-->
+
+
+    <include
+        android:id="@+id/company_name_group"
+        layout="@layout/custom_input_field_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/new_post_sub_title" />
+
+
     <include
         android:id="@+id/email_group"
         layout="@layout/custom_input_field_text"
@@ -42,52 +56,33 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/new_post_sub_title" />
+        app:layout_constraintTop_toBottomOf="@id/company_name_group" />
 
-    <include
-        android:id="@+id/team_name_group"
-        layout="@layout/custom_input_field_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_suggestions"
+        android:layout_width="320dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/rounded_box"
+        android:backgroundTint="#E8E8E8"
+        android:paddingLeft="20dp"
+        app:boxStrokeWidth="0dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/email_group" />
+        app:layout_constraintTop_toBottomOf="@+id/email_group">
 
-    <include
-        android:id="@+id/institution_group"
-        layout="@layout/custom_input_field_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/team_name_group" />
+        <AutoCompleteTextView
+            android:id="@+id/companySuggestion"
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            android:hint="Address.."
+            app:layout_constraintTop_toBottomOf="@+id/email_group"
+            tools:layout_editor_absoluteX="5dp">
 
-    <include
-        android:id="@+id/team_description_group"
-        layout="@layout/custom_input_field_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/institution_group" />
+        </AutoCompleteTextView>
 
-    <include
-        android:id="@+id/members_group"
-        layout="@layout/custom_input_field_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/team_description_group" />
-
+    </com.google.android.material.textfield.TextInputLayout>
     <include
         android:id="@+id/password_group"
         layout="@layout/custom_input_field_password"
@@ -97,11 +92,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/members_group" />
-
+        app:layout_constraintTop_toBottomOf="@id/input_suggestions" />
 
     <Button
-        android:id="@+id/sign_up_btn"
+        android:id="@+id/sign_up_company_btn"
         style="@style/AppTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -111,9 +105,9 @@
         android:gravity="center"
         android:text="@string/sign_up"
         android:textAppearance="@style/log_in_button"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password_group" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

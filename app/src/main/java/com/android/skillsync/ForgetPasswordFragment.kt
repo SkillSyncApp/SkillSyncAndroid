@@ -1,20 +1,26 @@
 package com.android.skillsync
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import com.android.skillsync.databinding.ActivityForgetPasswordBinding
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
+import com.android.skillsync.databinding.FragmentForgetPasswordBinding
 import com.google.firebase.auth.FirebaseAuth
 
-class ForgetPassword : AppCompatActivity() {
+class ForgetPasswordFragment : Fragment() {
 
-    lateinit var forgetPasswordBinding: ActivityForgetPasswordBinding
+    private var _binding: FragmentForgetPasswordBinding? = null
+    private val binding get() = _binding!!
+
+    private lateinit var view: View
     private var backToSignIn: TextView? = null
     private var resetPassword: Button? = null
     private var email: TextView? = null
@@ -22,35 +28,34 @@ class ForgetPassword : AppCompatActivity() {
 
 
     var auth: FirebaseAuth = FirebaseAuth.getInstance()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
 
-        forgetPasswordBinding = ActivityForgetPasswordBinding.inflate(layoutInflater)
-        val view = forgetPasswordBinding.root
-        setContentView(view)
+        _binding = FragmentForgetPasswordBinding.inflate(layoutInflater, container, false)
+        view = binding.root
 
-        addEventListeners()
+        setEventListeners(view)
 
-        forgetPasswordBinding.resetPassword.setOnClickListener {
-            resetPassword()
-        }
+        return view
     }
 
     private fun resetPassword() {
-        val email = forgetPasswordBinding.emailGroup.editTextField.text.toString()
+        val emailGroup = view.findViewById<ConstraintLayout>(R.id.email_group)
+        val email = emailGroup?.findViewById<TextView>(R.id.edit_text_field)?.text.toString()
 
         auth.sendPasswordResetEmail(email).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 Toast.makeText(
-                    applicationContext,
+                    context?.applicationContext,
                     "We sent a password reset email to your email address",
                     Toast.LENGTH_SHORT
                 ).show()
-                finish()
             } else {
                 // Handle reset password failure
                 Toast.makeText(
-                    applicationContext,
+                    context?.applicationContext,
                     "Failed to send password reset email",
                     Toast.LENGTH_SHORT
                 ).show()
@@ -58,14 +63,18 @@ class ForgetPassword : AppCompatActivity() {
         }
     }
 
-    private fun addEventListeners() {
-        resetPassword = findViewById(R.id.reset_password)
-        backToSignIn = findViewById(R.id.back_to_sign_in)
-        emailLayout = findViewById(R.id.email_group)
+    private fun setEventListeners(view: View) {
+        resetPassword = view.findViewById(R.id.reset_password)
+        backToSignIn = view.findViewById(R.id.back_to_sign_in)
+        emailLayout = view.findViewById(R.id.email_group)
+
+        resetPassword?.setOnClickListener {
+            resetPassword()
+        }
 
         backToSignIn?.setOnClickListener {
-            val intent = Intent(this, SignIn::class.java)
-            startActivity(intent)
+            Navigation.findNavController(it)
+                .navigate(R.id.action_forgetPasswordFragment_to_signInFragment)
         }
 
         if (emailLayout != null) {
@@ -103,3 +112,4 @@ class ForgetPassword : AppCompatActivity() {
         }
     }
 }
+

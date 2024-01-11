@@ -9,11 +9,15 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.android.skillsync.databinding.ActivityMapViewBinding
+import androidx.fragment.app.Fragment
+import com.android.skillsync.databinding.FragmentMapViewBinding
 import com.android.skillsync.models.CompanyLocation
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.CollectionReference
@@ -25,34 +29,42 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.ItemizedIconOverlay
 import org.osmdroid.views.overlay.OverlayItem
 
-class MapActivity : AppCompatActivity(), LocationListener {
+class MapViewFragment : Fragment(), LocationListener {
 
     private lateinit var aMapView: MapView
     private lateinit var locationManager: LocationManager
-    private lateinit var binding: ActivityMapViewBinding
-    private val locationPermissionCode = 2
+    private lateinit var view: View
+    private val LOCATIONS_PERMISSIONS_CODE = 2
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private var _binding: FragmentMapViewBinding? = null
 
-        // Use View Binding for cleaner UI code
-        binding = ActivityMapViewBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    private val binding get() = _binding!!
 
-        // Initialize the map view
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentMapViewBinding.inflate(layoutInflater, container, false)
+        view = binding.root
+
         initializeMapView()
-
-        // Check and request location permissions if needed
         checkLocationPermissions()
+
+        return view
     }
 
     private fun initializeMapView() {
-        aMapView = binding.map
+        aMapView = binding.root.findViewById(R.id.map)
         aMapView.setTileSource(TileSourceFactory.MAPNIK)
         aMapView.controller.setZoom(17.0)
 
         // Load map configuration
-        Configuration.getInstance().load(applicationContext, getSharedPreferences("locations", MODE_PRIVATE))
+        Configuration.getInstance().load(
+            context?.applicationContext, context?.getSharedPreferences(
+                "locations",
+                AppCompatActivity.MODE_PRIVATE
+            )
+        )
     }
 
     private fun checkLocationPermissions() {
@@ -62,31 +74,29 @@ class MapActivity : AppCompatActivity(), LocationListener {
 
     private fun isLocationPermissionGranted(): Boolean {
         return (ContextCompat.checkSelfPermission(
-            this,
+            requireContext(),
             Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED)
     }
 
     private fun requestLocationPermissions() {
         ActivityCompat.requestPermissions(
-            this,
+            requireActivity(),
             arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-            locationPermissionCode
+            LOCATIONS_PERMISSIONS_CODE
         )
     }
 
     private fun addMarker(geoPoint: GeoPoint, title: String, snippet: String) {
-        val markerIcon: Drawable? = ContextCompat.getDrawable(this, R.drawable.map_pin_icon)
+        val markerIcon: Drawable? =
+            ContextCompat.getDrawable(requireContext(), R.drawable.map_pin_icon)
 
-        // Create an OverlayItem with the marker's GeoPoint, title, and snippet
         val overlayItem = OverlayItem(title, snippet, geoPoint)
-
-        // Set the marker icon
         overlayItem.setMarker(markerIcon)
 
         // Create an ItemizedIconOverlay and add the OverlayItem to it
         val itemizedIconOverlay = ItemizedIconOverlay<OverlayItem>(
-            applicationContext,
+            context?.applicationContext,
             listOf(overlayItem),
             null
         )
@@ -96,15 +106,15 @@ class MapActivity : AppCompatActivity(), LocationListener {
     }
 
     private fun requestLocationUpdates() {
-        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        locationManager = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
         // Check if GPS permission is granted
-            // Request location updates
+        // Request location updates
         if (ActivityCompat.checkSelfPermission(
-                this,
+                requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this,
+                requireContext(),
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
@@ -126,7 +136,6 @@ class MapActivity : AppCompatActivity(), LocationListener {
     }
 
     override fun onLocationChanged(location: Location) {
-        // Handle the updated location
         val geoPoint = GeoPoint(location.latitude, location.longitude)
         aMapView.controller.setCenter(geoPoint)
         addMarker(geoPoint, "I Am Here!", "OSMDroid Marker")
@@ -140,12 +149,11 @@ class MapActivity : AppCompatActivity(), LocationListener {
         grantResults: IntArray
     ) {
         when (requestCode) {
-            locationPermissionCode -> {
+            LOCATIONS_PERMISSIONS_CODE -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     requestLocationUpdates()
-                } else {
-                    Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show()
-                }
+                } else Toast.makeText(context, "Location permission denied", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -169,7 +177,10 @@ class MapActivity : AppCompatActivity(), LocationListener {
             }
     }
 
-    private fun fetchLocationsForCompany(companiesReference: CollectionReference, companyId: String) {
+    private fun fetchLocationsForCompany(
+        companiesReference: CollectionReference,
+        companyId: String
+    ) {
         val locationsCollection = companiesReference.document(companyId)
 
         locationsCollection.get()
@@ -178,24 +189,28 @@ class MapActivity : AppCompatActivity(), LocationListener {
                     val data = documentSnapshot.data?.get("location") as? Map<*, *>
                     if (data != null) {
                         val address = data["address"] as? String ?: "Unknown Address"
-                        val latitude = (data["latitude"] as Double).toFloat()
-                        val longitude = (data["longitude"] as Double).toFloat()
+                        val latitude =
+                            (data["location"] as com.google.firebase.firestore.GeoPoint).latitude
+                        val longitude =
+                            (data["location"] as com.google.firebase.firestore.GeoPoint).longitude
 
-                        val locationData = CompanyLocation(address,longitude, latitude)
-                            processLocationDocument(locationData)
-                        } else Log.e("Firestore", "Error getting location documents")
+                        val locationData = CompanyLocation(
+                            address,
+                            com.google.firebase.firestore.GeoPoint(latitude, longitude)
+                        )
+                        processLocationDocument(locationData)
+                    } else Log.e("Firestore", "Error getting location documents")
                 } else Log.e("Firestore", "Error getting location documents")
 
             }
             .addOnFailureListener { locationException ->
-                // Handle failures for fetching locations
                 Log.e("Firestore", "Error getting location documents: $locationException")
             }
     }
 
     private fun processLocationDocument(locationDocument: CompanyLocation) {
-        val latitude = locationDocument.latitude.toDouble()
-        val longitude = locationDocument.longitude.toDouble()
+        val latitude = locationDocument.location.latitude
+        val longitude = locationDocument.location.longitude
         val address = locationDocument.address
 
 

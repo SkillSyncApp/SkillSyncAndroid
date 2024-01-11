@@ -44,4 +44,12 @@
     <string name="company_name_title">Company Name</string>
 
     <string name="password">Password</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="address">Address..</string>
+    <string name="company_name">Company Name</string>
+    <string name="create_a_free_account">create a free account</string>
+    <string name="get_started">Get Started</string>
+    <string name="i_m_a_group">I\'m a group</string>
+    <string name="i_m_a_company">I\'m a company</string>
 </resources>

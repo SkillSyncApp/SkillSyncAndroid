@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/startPageFragment">
+
+    <fragment
+        android:id="@+id/startPageFragment"
+        android:name="com.android.skillsync.StartPageFragment"
+        android:label="fragment_start_page"
+        tools:layout="@layout/fragment_start_page">
+        <action
+            android:id="@+id/action_startPageFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
+        <action
+            android:id="@+id/action_startPageFragment_to_pickUserTypeFragment"
+            app:destination="@id/pickUserTypeFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/forgetPasswordFragment"
+        android:name="com.android.skillsync.ForgetPasswordFragment"
+        android:label="fragment_forget_password"
+        tools:layout="@layout/fragment_forget_password" >
+        <action
+            android:id="@+id/action_forgetPasswordFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/signInFragment"
+        android:name="com.android.skillsync.SignInFragment"
+        android:label="fragment_sign_in"
+        tools:layout="@layout/fragment_sign_in" >
+        <action
+            android:id="@+id/action_signInFragment_to_forgetPasswordFragment"
+            app:destination="@id/forgetPasswordFragment" />
+        <action
+            android:id="@+id/action_signInFragment_to_mapViewFragment"
+            app:destination="@id/mapViewFragment" />
+        <action
+            android:id="@+id/action_signInFragment_to_pickUserTypeFragment"
+            app:destination="@id/pickUserTypeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/groupProfileFragment"
+        android:name="com.android.skillsync.GroupProfileFragment"
+        android:label="fragment_group_profile"
+        tools:layout="@layout/fragment_group_profile" />
+    <fragment
+        android:id="@+id/signUpCompanyFragment"
+        android:name="com.android.skillsync.SignUpCompanyFragment"
+        android:label="fragment_sign_up_company"
+        tools:layout="@layout/fragment_sign_up_company">
+        <action
+            android:id="@+id/action_signUpCompanyFragment_to_mapViewFragment"
+            app:destination="@id/mapViewFragment" />
+        <action
+            android:id="@+id/action_signUpCompanyFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newPostFragment"
+        android:name="com.android.skillsync.NewPostFragment"
+        android:label="fragment_new_post"
+        tools:layout="@layout/fragment_new_post" />
+    <fragment
+        android:id="@+id/mapViewFragment"
+        android:name="com.android.skillsync.MapViewFragment"
+        android:label="fragment_map_view"
+        tools:layout="@layout/fragment_map_view" />
+    <fragment
+        android:id="@+id/pickUserTypeFragment"
+        android:name="com.android.skillsync.PickUserTypeFragment"
+        android:label="fragment_pick_user_type"
+        tools:layout="@layout/fragment_pick_user_type" >
+        <action
+            android:id="@+id/action_pickUserTypeFragment_to_signUpCompanyFragment"
+            app:destination="@id/signUpCompanyFragment" />
+        <action
+            android:id="@+id/action_pickUserTypeFragment_to_signUpGroupFragment"
+            app:destination="@id/signUpGroupFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUpGroupFragment"
+        android:name="com.android.skillsync.SignUpGroupFragment"
+        android:label="SignUpGroupFragment" >
+        <action
+            android:id="@+id/action_signUpGroupFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
+    </fragment>
+</navigation>
