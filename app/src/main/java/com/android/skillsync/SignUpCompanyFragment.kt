@@ -18,7 +18,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.android.skillsync.databinding.FragmentSignUpCompanyBinding
-import com.android.skillsync.models.Company
+import com.android.skillsync.models.Comapny.FirebaseCompany
 import com.android.skillsync.models.CompanyLocation
 import com.android.skillsync.models.Type
 import com.android.skillsync.models.UserType
@@ -134,7 +134,7 @@ class SignUpCompanyFragment : Fragment() {
             firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
                 if (it.isSuccessful) {
                     val companyId = it.result.user?.uid!!
-                    createCompany(companyId, companyName, companyLocation)
+                    createCompany(companyId, companyName, email, companyLocation)
                 } else Toast.makeText(context, it.exception.toString(), Toast.LENGTH_SHORT).show()
             }
         }
@@ -150,10 +150,11 @@ class SignUpCompanyFragment : Fragment() {
     private fun createCompany(
         companyId: String,
         companyName: String,
+        companyEmail: String,
         companyLocation: CompanyLocation
     ) {
         val database = Firebase.firestore
-        val companyEntity = Company(companyName, companyLocation);
+        val companyEntity = FirebaseCompany(companyName, "", companyEmail, companyLocation)
 
         val userType = UserType(Type.COMPANY)
         database.collection("usersType").document(companyId).set(userType).addOnSuccessListener {
@@ -187,7 +188,7 @@ class SignUpCompanyFragment : Fragment() {
                 placesSuggestions = places
 
                 // Set places results as auto complete suggestions
-//                locationsAdapter.clear()
+                locationsAdapter.clear()
                 places.forEach { locationsAdapter.add(it.title.plus(" - ").plus(it.address)) }
                 locationsAdapter.notifyDataSetChanged()
             }
@@ -198,7 +199,7 @@ class SignUpCompanyFragment : Fragment() {
         editTextGroupId: Int,
         hintResourceId: Int?,
         inputTitleResourceId: Int?
-    ) { // QUESTION - WHY DO WE NEED IT hintResourceId?
+    ) { // QUESTION - WHY DO WE NEED hintResourceId?
         val editTextGroup = binding.root.findViewById<View>(editTextGroupId)
         val editTextLabel = editTextGroup?.findViewById<TextView>(R.id.edit_text_label)
         val editTextField = editTextGroup?.findViewById<EditText>(R.id.edit_text_field)

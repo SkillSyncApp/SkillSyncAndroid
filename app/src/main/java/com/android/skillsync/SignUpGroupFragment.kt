@@ -9,11 +9,10 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.android.skillsync.databinding.FragmentSignUpGroupBinding
-import com.android.skillsync.models.Group
+import com.android.skillsync.models.Group.FirebaseGroup
 import com.android.skillsync.models.Type
 import com.android.skillsync.models.UserType
 import com.google.firebase.Firebase
@@ -85,6 +84,7 @@ class SignUpGroupFragment : Fragment() {
                             val groupId = it.result.user?.uid!!
                             createGroup(
                                 groupId,
+                                email,
                                 groupName,
                                 institution,
                                 teamDescription,
@@ -125,7 +125,7 @@ class SignUpGroupFragment : Fragment() {
     }
 
     private fun isValidStringDesc(input: String, field: String): Boolean { // TODO - FIELD here always get same value...
-        val pattern = Regex("^[a-zA-Z,\\. ']+\$")
+        val pattern = Regex("^[a-zA-Z0-9,\\. ']+\$")
         return pattern.matches(input) || showError(field)
     }
 
@@ -144,7 +144,7 @@ class SignUpGroupFragment : Fragment() {
     private fun isValidEmail(
         email: String,
         field: String
-    ): Boolean { // TODO - FIELD here always get same value...
+    ): Boolean { // TODO - FIELD always get same value...
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() || showError(field)
     }
 
@@ -168,6 +168,7 @@ class SignUpGroupFragment : Fragment() {
 
     fun createGroup(
         groupId: String,
+        groupEmail: String,
         groupName: String,
         institution: String,
         teamDescription: String,
@@ -175,7 +176,7 @@ class SignUpGroupFragment : Fragment() {
     ) {
         val database = Firebase.firestore
 
-        val groupEntity = Group(groupName, institution, teamDescription, teamMembers)
+        val groupEntity = FirebaseGroup(groupEmail, groupName, institution, teamDescription, teamMembers.split(','))
 
         val userType = UserType(Type.GROUP)
         database.collection("usersType").document(groupId).set(userType).addOnSuccessListener {
@@ -214,10 +215,6 @@ class SignUpGroupFragment : Fragment() {
 
         inputTitleResourceId?.let {
             editTextLabel?.text = getString(it)
-        }
-
-        hintResourceId?.let {
-            editTextField?.hint = getString(it)
         }
     }
 }
