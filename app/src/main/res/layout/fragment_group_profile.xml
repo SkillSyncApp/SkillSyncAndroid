@@ -47,6 +47,12 @@
             android:layout_height="110dp"
             android:background="@drawable/collage_logo"
             android:orientation="vertical"/>
+
+            <ImageView
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:background="@drawable/collage_logo"
+                android:orientation="vertical"/>
         </androidx.cardview.widget.CardView>
 
         <androidx.constraintlayout.widget.ConstraintLayout

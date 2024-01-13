@@ -6,12 +6,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.android.skillsync.R
-import com.android.skillsync.models.Group
+import com.android.skillsync.models.Group.FirebaseGroup
 
-class GroupMemberAdapter(private val membersList: List<Group>)
+class GroupMemberAdapter(private val membersList: List<FirebaseGroup>)
     : RecyclerView.Adapter<GroupMemberAdapter.GroupMemberHolder>() {
 
-    class GroupMemberHolder(itemView:View): RecyclerView.ViewHolder(itemView) {
+    class GroupMemberHolder(itemView:View): RecyclerView.ViewHolder(itemView) { // check if we need to split to a different file - check tal github
         val memberNameLabel: TextView = itemView.findViewById(R.id.userName);
     }
 

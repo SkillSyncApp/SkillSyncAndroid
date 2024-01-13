@@ -13,14 +13,14 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.skillsync.adapters.GroupMemberAdapter
-import com.android.skillsync.models.Group
+import com.android.skillsync.models.Group.FirebaseGroup
 
 class GroupProfileFragment : Fragment() {
 
     private var profileImageBackgroundElement: ImageView? = null;
 
     private lateinit var groupMembersRecyclerView: RecyclerView;
-    private lateinit var membersList: ArrayList<Group>;
+    private lateinit var membersList: ArrayList<FirebaseGroup>;
     private lateinit var groupMemberAdapter: GroupMemberAdapter;
     private lateinit var view: View
 
@@ -48,7 +48,8 @@ class GroupProfileFragment : Fragment() {
     private fun init() {
         groupMembersRecyclerView = view.findViewById(R.id.groupMembersRecyclerView) ?: return
         groupMembersRecyclerView.setHasFixedSize(true);
-        groupMembersRecyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false);
+        groupMembersRecyclerView.layoutManager =
+            LinearLayoutManager(context, RecyclerView.HORIZONTAL, false);
         membersList = ArrayList();
 
         addMembersToList();
@@ -58,8 +59,14 @@ class GroupProfileFragment : Fragment() {
     }
 
     private fun addMembersToList() {
-        membersList.add(Group("Amit", null, null, null));
-        membersList.add(Group("Hadar", null, null, null));
-        membersList.add(Group("Nofar", null, null, null));
+        membersList.add(
+            FirebaseGroup(
+                "skillSync",
+                "SkillSync@gmail.com",
+                "College of managment",
+                "we are three talented developers",
+                listOf("Hadar", "Amit", "Nofar")
+            )
+        );
     }
 }
