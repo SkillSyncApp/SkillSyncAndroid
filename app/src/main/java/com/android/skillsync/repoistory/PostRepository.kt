@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import com.android.skillsync.dao.PostDao
 import com.android.skillsync.models.Post.Post
 
-class PostRepository (private val postDao: PostDao) {
+class PostRepository(private val postDao: PostDao) {
     val posts: LiveData<List<Post>> = postDao.getAllPosts()
 
     @WorkerThread
