@@ -20,6 +20,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.firestore
+import androidx.core.content.ContextCompat
+import com.android.skillsync.databinding.CustomInputFieldPasswordBinding
+import com.android.skillsync.databinding.CustomInputFieldTextBinding
 
 class SignUpGroupFragment : Fragment() {
 
@@ -62,12 +65,12 @@ class SignUpGroupFragment : Fragment() {
         signUpBtn = view.findViewById(R.id.sign_up_group_btn)
 
         signUpBtn.setOnClickListener {
-            val email = binding.emailGroup.editTextField.text.toString()
-            val password = binding.passwordGroup.editTextField.text.toString()
-            val groupName = binding.teamNameGroup.editTextField.text.toString()
-            val institution = binding.institutionGroup.editTextField.text.toString()
-            val teamDescription = binding.teamDescriptionGroup.editTextField.text.toString()
-            val teamMembers = binding.membersGroup.editTextField.text.toString()
+            val email = binding.emailGroup//.editTextField.text.toString()
+            val password = binding.passwordGroup//.editTextField.text.toString()
+            val groupName = binding.teamNameGroup//.editTextField.text.toString()
+            val institution = binding.institutionGroup//.editTextField.text.toString()
+            val teamDescription = binding.teamDescriptionGroup//.editTextField.text.toString()
+            val teamMembers = binding.membersGroup//.editTextField.text.toString()
 
             if (isValidInputs(
                     email,
@@ -78,81 +81,172 @@ class SignUpGroupFragment : Fragment() {
                     teamMembers
                 )
             ) {
-                firebaseAuth.createUserWithEmailAndPassword(email, password)
+                firebaseAuth.createUserWithEmailAndPassword(
+                    email.editTextField.text.toString(), password.editTextField.text.toString()
+                )
                     .addOnCompleteListener {
                         if (it.isSuccessful) {
                             val groupId = it.result.user?.uid!!
                             createGroup(
                                 groupId,
-                                email,
-                                groupName,
-                                institution,
-                                teamDescription,
-                                teamMembers
+                                email.editTextField.text.toString(),
+                                groupName.editTextField.text.toString(),
+                                institution.editTextField.text.toString(),
+                                teamDescription.editTextField.text.toString(),
+                                teamMembers.editTextField.text.toString()
                             )
-                        } else Toast.makeText(context, it.exception.toString(), Toast.LENGTH_SHORT)
-                            .show()
+                        } else {
+                            Toast.makeText(
+                                context, it.exception.toString(),
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                        }
                     }
-            } else {
-//                Toast.makeText(
-//                    this,
-//                    "Invalid input. Please check your entries.",
-//                    Toast.LENGTH_SHORT
-//                ).show()
             }
         }
     }
 
-    private fun isValidInputs(vararg inputs: String): Boolean {
+    private fun isValidInputs(
+        email: CustomInputFieldTextBinding,
+        password: CustomInputFieldPasswordBinding,
+        teamName: CustomInputFieldTextBinding,
+        institution: CustomInputFieldTextBinding,
+        teamDescription: CustomInputFieldTextBinding,
+        teamMembers: CustomInputFieldTextBinding,
+    ): Boolean {
         fieldErrorShown = false
 
+        val isStrValid: (String) -> Boolean = { input ->
+            val pattern = Regex("^[a-zA-Z0-9,\\. ]+\$")
+            val isLengthValid = input.length >= 4
+            pattern.matches(input) && isLengthValid
+        }
+        val isEmailValid: (String) -> Boolean = { email ->
+            android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+        }
+        val isPassValid: (String) -> Boolean = { password ->
+            password.length >= 6
+            /*
+                        val minLength = 8
+                        val hasUpperCase = password.any { it.isUpperCase() }
+                        val hasLowerCase = password.any { it.isLowerCase() }
+                        val hasDigit = password.any { it.isDigit() }
+                        val hasSpecialChar = password.any { it.isLetterOrDigit().not() }
+
+                        password.length >= minLength &&
+                                hasUpperCase &&
+                                hasLowerCase &&
+                                hasDigit &&
+                                hasSpecialChar
+             */
+        }
+
         val validations = listOf(
-            isValidEmail(inputs[0], "Your email"),
-            isValidPassword(inputs[1], "Your password"),
-            isValidString(inputs[2], "Your team name"),
-            isValidString(inputs[3], "Your institution"),
-            isValidStringDesc(inputs[4], "The summary about your group"),
-            isValidString(inputs[5], "Your team member input")
+            fieldValidation(email, isEmailValid),
+            passwordValidation(password, isPassValid),
+            fieldValidation(teamName, isStrValid),
+            fieldValidation(institution, isStrValid),
+            fieldValidation(teamDescription, isStrValid),
+            fieldValidation(teamMembers, isStrValid)
         )
 
         return validations.all { it }
     }
 
-    private fun isValidString(input: String, field: String): Boolean {
-        val pattern = Regex("^[a-zA-Z,\\. ]+\$")
-        val isLengthValid = input.length >= 4
-        return (pattern.matches(input) && isLengthValid) || showError(field)
-    }
-
-    private fun isValidStringDesc(input: String, field: String): Boolean { // TODO - FIELD here always get same value...
-        val pattern = Regex("^[a-zA-Z0-9,\\. ']+\$")
-        return pattern.matches(input) || showError(field)
-    }
-
-    private fun showError(field: String): Boolean {
-        if (!fieldErrorShown) {
-            Toast.makeText(
-                context,
-                "$field is invalid. Please check your entry.",
-                Toast.LENGTH_SHORT
-            ).show()
-            fieldErrorShown = true
-        }
-        return false
-    }
-
-    private fun isValidEmail(
-        email: String,
-        field: String
-    ): Boolean { // TODO - FIELD always get same value...
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() || showError(field)
-    }
-
-    private fun isValidPassword(
-        password: String,
-        field: String // TODO - FIELD here always get same value...
+    private fun fieldValidation(
+        inputGroup: CustomInputFieldTextBinding,
+        validationCondition: (String) -> Boolean
     ): Boolean {
-        return (password.length >= 6) || showError(field)
+        val input = inputGroup.editTextField.text.toString()
+        val isValid: Boolean
+
+        if (input.isEmpty()) {
+            showBlankError(inputGroup)
+            isValid = false
+        } else if (validationCondition(input)) {
+            showValidInput(inputGroup)
+            isValid = true
+        } else {
+            showTextError(inputGroup)
+            isValid = false
+        }
+        return isValid
+    }
+
+    private fun passwordValidation(
+        inputGroup: CustomInputFieldPasswordBinding,
+        validationCondition: (String) -> Boolean
+    ): Boolean {
+        val input = inputGroup.editTextField.text.toString()
+        val isValid: Boolean
+
+        if (input.isEmpty()) {
+            //showBlankError(inputGroup)
+            isValid = false
+        } else if (validationCondition(input)) {
+            //  showValidInput(inputGroup)
+            isValid = true
+        } else {
+            //  showTextError(inputGroup)
+            isValid = false
+        }
+        return isValid
+    }
+
+    private fun showBlankError(inputGroup: CustomInputFieldTextBinding) {
+        inputGroup.errorMessage?.visibility = View.INVISIBLE
+        inputGroup.editTextLine.setBackgroundColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.red
+            )
+        )
+        inputGroup.editTextLabel.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.red
+            )
+        )
+    }
+
+    private fun showValidInput(inputGroup: CustomInputFieldTextBinding) {
+        inputGroup.errorMessage?.visibility = View.INVISIBLE
+        inputGroup.editTextLine.setBackgroundColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.Light_Gray
+            )
+        )
+        inputGroup.editTextLabel.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.Dark_Gray
+            )
+        )
+    }
+
+    private fun showTextError(inputGroup: CustomInputFieldTextBinding) {
+        if (inputGroup.editTextLabel.text.equals(R.string.team_description_title)) {
+            inputGroup.errorMessage?.text = "Invalid group description"
+        }
+        if (inputGroup.editTextLabel.text.equals(R.string.team_members_name_title)) {
+            inputGroup.errorMessage?.text = "Invalid group members name"
+        }
+        inputGroup.errorMessage?.text = "Invalid ${inputGroup.editTextLabel.text.toString()}"
+        inputGroup.errorMessage?.visibility = View.VISIBLE
+        inputGroup.editTextLine.setBackgroundColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.red
+            )
+        )
+        inputGroup.editTextLabel.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.Dark_Gray
+            )
+        )
     }
 
     // remember user
@@ -176,7 +270,13 @@ class SignUpGroupFragment : Fragment() {
     ) {
         val database = Firebase.firestore
 
-        val groupEntity = FirebaseGroup(groupEmail, groupName, institution, teamDescription, teamMembers.split(','))
+        val groupEntity = FirebaseGroup(
+            groupEmail,
+            groupName,
+            institution,
+            teamDescription,
+            teamMembers.split(',')
+        )
 
         val userType = UserType(Type.GROUP)
         database.collection("usersType").document(groupId).set(userType).addOnSuccessListener {
