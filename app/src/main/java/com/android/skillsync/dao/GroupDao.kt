@@ -26,7 +26,7 @@ interface GroupDao {
     @Update
     suspend fun update(group: Group)
 
-    @Query("SELECT name FROM `Group` WHERE id =:id")
+    @Query("SELECT name FROM `group` WHERE id =:id")
     suspend fun getGroupName(id: String): String
 
     @Query("SELECT email FROM `group` WHERE id =:id")
