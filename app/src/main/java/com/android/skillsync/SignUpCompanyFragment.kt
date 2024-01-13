@@ -15,8 +15,11 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
+import com.android.skillsync.databinding.CustomInputFieldPasswordBinding
+import com.android.skillsync.databinding.CustomInputFieldTextBinding
 import com.android.skillsync.databinding.FragmentSignUpCompanyBinding
 import com.android.skillsync.models.Comapny.FirebaseCompany
 import com.android.skillsync.models.CompanyLocation
@@ -37,6 +40,7 @@ class SignUpCompanyFragment : Fragment() {
     private lateinit var placesSuggestions: Array<Place>
 
     private lateinit var companyLocation: CompanyLocation;
+    private var fieldErrorShown = false
 
     private var _binding: FragmentSignUpCompanyBinding? = null
     private val binding get() = _binding!!
@@ -117,7 +121,6 @@ class SignUpCompanyFragment : Fragment() {
                     if (s.isNotEmpty()) searchPlaces(s.toString())
                 }
             }
-
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
@@ -127,17 +130,210 @@ class SignUpCompanyFragment : Fragment() {
         signUpCompany = view.findViewById(R.id.sign_up_company_btn)
 
         signUpCompany.setOnClickListener {
-            val companyName = binding.companyNameGroup.editTextField.text.toString()
-            val email = binding.emailGroup.editTextField.text.toString()
-            val password = binding.passwordGroup.editTextField.text.toString()
-            val companyLocation = companyLocation;
-            firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    val companyId = it.result.user?.uid!!
-                    createCompany(companyId, companyName, email, companyLocation)
-                } else Toast.makeText(context, it.exception.toString(), Toast.LENGTH_SHORT).show()
+            val companyName = binding.companyNameGroup//.editTextField.text.toString()
+            val email = binding.emailGroup//.editTextField.text.toString()
+            val password = binding.passwordGroup//.editTextField.text.toString()
+
+            if (isValidInputs(
+                    email,
+                    password,
+                    companyName,
+                    companyName.editTextField.text
+                )
+            ) {
+                val companyLocation = companyLocation;
+                firebaseAuth.createUserWithEmailAndPassword(
+                    email.editTextField.text.toString(), password.editTextField.text.toString()
+                )
+                    .addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            val companyId = it.result.user?.uid!!
+                            createCompany(
+                                companyId,
+                                companyName.editTextField.text.toString(),
+                                email.editTextField.text.toString(),
+                                companyLocation
+                            )
+                        } else {
+                            Toast.makeText(
+                                context, it.exception.toString(),
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                        }
+                    }
             }
         }
+    }
+
+    private fun isValidInputs(
+        email: CustomInputFieldTextBinding,
+        password: CustomInputFieldPasswordBinding,
+        companyName: CustomInputFieldTextBinding,
+        companyLocation: Editable
+    ): Boolean {
+        fieldErrorShown = false
+
+        val isStrValid: (String) -> Boolean = { input ->
+            val pattern = Regex("^[a-zA-Z0-9,\\. ]+\$")
+            val isLengthValid = input.length >= 4
+            pattern.matches(input) && isLengthValid
+        }
+        val isEmailValid: (String) -> Boolean = { email ->
+            android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+        }
+        val isPassValid: (String) -> Boolean = { password ->
+            password.length >= 6
+            /*
+                        val minLength = 8
+                        val hasUpperCase = password.any { it.isUpperCase() }
+                        val hasLowerCase = password.any { it.isLowerCase() }
+                        val hasDigit = password.any { it.isDigit() }
+                        val hasSpecialChar = password.any { it.isLetterOrDigit().not() }
+
+                        password.length >= minLength &&
+                                hasUpperCase &&
+                                hasLowerCase &&
+                                hasDigit &&
+                                hasSpecialChar
+             */
+        }
+
+        val validations = listOf(
+            fieldValidation(email, isEmailValid),
+            passwordValidation(password, isPassValid),
+            fieldValidation(companyName, isStrValid),
+            addressValidation(companyLocation)
+        )
+
+        return validations.all { it }
+
+    }
+
+    private fun addressValidation(input: Editable): Boolean {
+        val isValid: Boolean
+        if (input.isEmpty()) {
+            Log.i("YourTag", "Address is empty")
+            binding.addEditTextLine.setBackgroundColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.red
+                )
+            )
+            binding.inputSuggestions.setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.red
+                )
+            )
+            isValid = false
+        } else {
+            Log.i("YourTag", "Address is valid ")
+
+            binding.addEditTextLine.setBackgroundColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.Light_Gray
+                )
+            )
+            binding.inputSuggestions.setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.Dark_Gray
+                )
+            )
+            isValid = true
+        }
+        return isValid
+    }
+
+    private fun fieldValidation(
+        inputGroup: CustomInputFieldTextBinding,
+        validationCondition: (String) -> Boolean
+    ): Boolean {
+        val input = inputGroup.editTextField.text.toString()
+        val isValid: Boolean
+
+        if (input.isEmpty()) {
+            showBlankError(inputGroup)
+            isValid = false
+        } else if (validationCondition(input)) {
+            showValidInput(inputGroup)
+            isValid = true
+        } else {
+            showTextError(inputGroup)
+            isValid = false
+        }
+        return isValid
+    }
+
+    private fun passwordValidation(
+        inputGroup: CustomInputFieldPasswordBinding,
+        validationCondition: (String) -> Boolean
+    ): Boolean {
+        val input = inputGroup.editTextField.text.toString()
+        val isValid: Boolean
+
+        if (input.isEmpty()) {
+            //showBlankError(inputGroup)
+            isValid = false
+        } else if (validationCondition(input)) {
+            //  showValidInput(inputGroup)
+            isValid = true
+        } else {
+            //  showTextError(inputGroup)
+            isValid = false
+        }
+        return isValid
+    }
+
+    private fun showBlankError(inputGroup: CustomInputFieldTextBinding) {
+        inputGroup.errorMessage?.visibility = View.INVISIBLE
+        inputGroup.editTextLine.setBackgroundColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.red
+            )
+        )
+        inputGroup.editTextLabel.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.red
+            )
+        )
+    }
+
+    private fun showValidInput(inputGroup: CustomInputFieldTextBinding) {
+        inputGroup.errorMessage?.visibility = View.INVISIBLE
+        inputGroup.editTextLine.setBackgroundColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.Light_Gray
+            )
+        )
+        inputGroup.editTextLabel.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.Dark_Gray
+            )
+        )
+    }
+
+    private fun showTextError(inputGroup: CustomInputFieldTextBinding) {
+        inputGroup.errorMessage?.text = "Invalid ${inputGroup.editTextLabel.text.toString()}"
+        inputGroup.errorMessage?.visibility = View.VISIBLE
+        inputGroup.editTextLine.setBackgroundColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.red
+            )
+        )
+        inputGroup.editTextLabel.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.Dark_Gray
+            )
+        )
     }
 
     private fun setHints() {
