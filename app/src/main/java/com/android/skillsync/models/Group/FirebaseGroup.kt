@@ -6,4 +6,5 @@ data class FirebaseGroup(
     val institution: String,
     val teamDescription: String,
     val memberNames: List<String>,
+//    val lastUpdated: Long
 )

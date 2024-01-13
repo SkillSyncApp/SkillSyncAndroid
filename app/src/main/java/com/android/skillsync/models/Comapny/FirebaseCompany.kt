@@ -6,5 +6,6 @@ data class FirebaseCompany(
     val name: String,
     val logo: String,
     val emailAddress: String,
-    val location: CompanyLocation
+    val location: CompanyLocation,
+//    val lastUpdated: Long
 )

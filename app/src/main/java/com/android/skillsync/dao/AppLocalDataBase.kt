@@ -6,13 +6,13 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.android.skillsync.models.Comapny.Company
 import com.android.skillsync.models.Post.Post
-import kotlinx.coroutines.CoroutineScope
-
 
 @Database(entities = [Post::class, Company::class], version = 1)
 abstract class AppLocalDbRepository : RoomDatabase() {
     abstract fun getPostDao(): PostDao
     abstract fun getCompanyDao(): CompanyDao
+
+    abstract fun getGroupDao(): GroupDao
 }
 
 object AppLocalDatabase {
