@@ -4,10 +4,14 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.android.skillsync.models.Comapny.Company
+import com.android.skillsync.models.Group.Group
+import com.android.skillsync.models.Group.ListStringConverter
 import com.android.skillsync.models.Post.Post
 
-@Database(entities = [Post::class, Company::class], version = 1)
+@TypeConverters(ListStringConverter::class)
+@Database(entities = [Post::class, Company::class, Group:: class], version = 1)
 abstract class AppLocalDbRepository : RoomDatabase() {
     abstract fun getPostDao(): PostDao
     abstract fun getCompanyDao(): CompanyDao

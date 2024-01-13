@@ -26,7 +26,6 @@ class ForgetPasswordFragment : Fragment() {
     private var email: TextView? = null
     private var emailLayout: View? = null
 
-
     var auth: FirebaseAuth = FirebaseAuth.getInstance()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
