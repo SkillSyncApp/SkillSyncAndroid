@@ -53,6 +53,9 @@
     <string name="company_name">Company Name</string>
     <string name="create_a_free_account">create a free account</string>
     <string name="get_started">Get Started</string>
-    <string name="i_m_a_group">I\'m a group</string>
-    <string name="i_m_a_company">I\'m a company</string>
+    <string name="i_m_a_group">Students Group</string>
+    <string name="i_m_a_company">Company</string>
+
+    <string name="sign_up_as">Sign up as</string>
+
 </resources>

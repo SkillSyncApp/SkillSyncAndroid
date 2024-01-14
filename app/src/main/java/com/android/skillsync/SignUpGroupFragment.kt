@@ -149,6 +149,7 @@ class SignUpGroupFragment : Fragment() {
             fieldValidation(institution, isStrValid),
             fieldValidation(teamDescription, isStrValid),
             fieldValidation(teamMembers, isStrValid)
+            /*TODO - do validations for password */
         )
 
         return validations.all { it }
