@@ -183,6 +183,8 @@ class SignUpCompanyFragment : Fragment() {
             android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
         }
         val isPassValid: (String) -> Boolean = { password ->
+            /*TODO - do validations for password */
+
             password.length >= 6
             /*
                         val minLength = 8
@@ -268,6 +270,7 @@ class SignUpCompanyFragment : Fragment() {
     }
 
     private fun passwordValidation(
+        /*TODO - do validations for password */
         inputGroup: CustomInputFieldPasswordBinding,
         validationCondition: (String) -> Boolean
     ): Boolean {

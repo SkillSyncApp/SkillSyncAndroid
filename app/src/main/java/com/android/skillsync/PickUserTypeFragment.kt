@@ -5,13 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import androidx.cardview.widget.CardView
 import androidx.navigation.Navigation
 
 class PickUserTypeFragment : Fragment() {
 
-    var signUpAsCompany: Button? = null
-    var signUpAsGroup: Button? = null
+    private lateinit var companyCard: CardView
+    private lateinit var studentCard: CardView
 
     private lateinit var view: View
 
@@ -27,14 +27,14 @@ class PickUserTypeFragment : Fragment() {
     }
 
     private fun setEventListeners() {
-        signUpAsCompany = view.findViewById(R.id.sign_up_company)
-        signUpAsGroup = view.findViewById(R.id.sign_up_group)
+        companyCard = view.findViewById(R.id.company_card)
+        studentCard = view.findViewById(R.id.student_card)
 
-        signUpAsCompany?.setOnClickListener{
+        companyCard.setOnClickListener {
             Navigation.findNavController(it).navigate(R.id.action_pickUserTypeFragment_to_signUpCompanyFragment)
         }
 
-        signUpAsGroup?.setOnClickListener{
+        studentCard.setOnClickListener {
             Navigation.findNavController(it).navigate(R.id.action_pickUserTypeFragment_to_signUpGroupFragment)
         }
     }
