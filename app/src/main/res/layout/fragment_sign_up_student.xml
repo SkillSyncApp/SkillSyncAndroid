@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignUpGroupFragment">
+    tools:context=".SignUpStudentFragment">
 
     <TextView
-        android:id="@+id/new_post_title"
+        android:id="@+id/sign_up_student_title"
         style="@style/AppTextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -34,8 +34,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/new_post_title" />
+        app:layout_constraintTop_toBottomOf="@id/sign_up_student_title" />
     <!--Start Body-->
+
+    <include
+        android:id="@+id/name_student_group"
+        layout="@layout/custom_input_field_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/new_post_sub_title"/>
 
     <include
         android:id="@+id/email_group"
@@ -46,40 +57,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/new_post_sub_title" />
-
-    <include
-        android:id="@+id/password_group"
-        layout="@layout/custom_input_field_password"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/members_group" />
-
-    <include
-        android:id="@+id/team_description_group"
-        layout="@layout/custom_input_field_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/institution_group" />
-
-    <include
-        android:id="@+id/members_group"
-        layout="@layout/custom_input_field_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/team_description_group" />
+        app:layout_constraintTop_toBottomOf="@id/name_student_group" />
 
     <include
         android:id="@+id/institution_group"
@@ -90,10 +68,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/team_name_group" />
+        app:layout_constraintTop_toBottomOf="@id/email_group" />
 
     <include
-        android:id="@+id/team_name_group"
+        android:id="@+id/bio_student_group"
         layout="@layout/custom_input_field_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -101,15 +79,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/email_group" />
+        app:layout_constraintTop_toBottomOf="@id/institution_group" />
+
+    <include
+        android:id="@+id/password_group"
+        layout="@layout/custom_input_field_password"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bio_student_group"/>
 
     <Button
-        android:id="@+id/sign_up_group_btn"
+        android:id="@+id/sign_up_student_btn"
         style="@style/AppTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="80dp"
-        android:layout_marginTop="0dp"
         android:background="@drawable/submit_form_btn"
         android:gravity="center"
         android:text="@string/sign_up"
@@ -117,5 +105,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password_group" />
+        app:layout_constraintTop_toBottomOf="@+id/password_group"
+        app:layout_constraintVertical_bias="0.805" />
+
+    <ImageView
+        android:id="@+id/studentImage"
+        android:layout_width="119dp"
+        android:layout_height="104dp"
+        android:src="@drawable/student_icon"
+        app:layout_constraintBottom_toTopOf="@+id/sign_up_student_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password_group"
+        android:contentDescription="@string/user_image" />
 </androidx.constraintlayout.widget.ConstraintLayout>

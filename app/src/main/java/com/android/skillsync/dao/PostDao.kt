@@ -31,7 +31,4 @@ interface PostDao {
 
     @Query("SELECT logo FROM Company WHERE id =:id")
     fun getCompanyUrlLogo(id: String): String
-
-    @Query("SELECT emailAddress FROM Company WHERE id =:id")
-    fun getCompanyAddress(id: String): String
 }

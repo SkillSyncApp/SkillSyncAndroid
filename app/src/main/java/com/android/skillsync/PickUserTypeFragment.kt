@@ -30,12 +30,13 @@ class PickUserTypeFragment : Fragment() {
         companyCard = view.findViewById(R.id.company_card)
         studentCard = view.findViewById(R.id.student_card)
 
+        // TODO from navigation
         companyCard.setOnClickListener {
             Navigation.findNavController(it).navigate(R.id.action_pickUserTypeFragment_to_signUpCompanyFragment)
         }
 
         studentCard.setOnClickListener {
-            Navigation.findNavController(it).navigate(R.id.action_pickUserTypeFragment_to_signUpGroupFragment)
+            Navigation.findNavController(it).navigate(R.id.action_pickUserTypeFragment_to_signUpStudentFragment)
         }
     }
 }

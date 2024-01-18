@@ -8,7 +8,6 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,9 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.android.skillsync.databinding.FragmentMapViewBinding
 import com.android.skillsync.models.CompanyLocation
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.firestore
+import com.android.skillsync.repoistory.Company.FireStoreCompanyRepository
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
@@ -94,7 +91,6 @@ class MapViewFragment : Fragment(), LocationListener {
         val overlayItem = OverlayItem(title, snippet, geoPoint)
         overlayItem.setMarker(markerIcon)
 
-        // Create an ItemizedIconOverlay and add the OverlayItem to it
         val itemizedIconOverlay = ItemizedIconOverlay<OverlayItem>(
             context?.applicationContext,
             listOf(overlayItem),
@@ -140,7 +136,13 @@ class MapViewFragment : Fragment(), LocationListener {
         aMapView.controller.setCenter(geoPoint)
         addMarker(geoPoint, "I Am Here!", "OSMDroid Marker")
 
-        addLocationsMarks()
+        val companyLocationCallback: (CompanyLocation) -> Unit = { companyLocation ->
+            val aLatitude = companyLocation.location.latitude
+            val aLongitude = companyLocation.location.longitude
+            addMarker(GeoPoint(aLatitude, aLongitude), "Company Marker", "Company Marker")
+        }
+
+//        firebaseRepository.setCompaniesOnMap(companyLocationCallback)
     }
 
     override fun onRequestPermissionsResult(
@@ -159,64 +161,8 @@ class MapViewFragment : Fragment(), LocationListener {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
-    private fun addLocationsMarks() {
-        val database = Firebase.firestore
-        val companiesReference = database.collection("companies")
-        fetchAllCompanies(companiesReference)
-    }
-
-    private fun fetchAllCompanies(companiesReference: CollectionReference) {
-        companiesReference.get()
-            .addOnSuccessListener { documents ->
-                for (document in documents) {
-                    val companyId = document.id
-                    fetchLocationsForCompany(companiesReference, companyId)
-                }
-            }.addOnFailureListener { exception ->
-                Log.e("Firestore", "Error getting company documents: $exception")
-            }
-    }
-
-    private fun fetchLocationsForCompany(
-        companiesReference: CollectionReference,
-        companyId: String
-    ) {
-        val locationsCollection = companiesReference.document(companyId)
-
-        locationsCollection.get()
-            .addOnSuccessListener { documentSnapshot ->
-                if (documentSnapshot.exists()) {
-                    val data = documentSnapshot.data?.get("location") as? Map<*, *>
-                    if (data != null) {
-                        val address = data["address"] as? String ?: "Unknown Address"
-                        val latitude =
-                            (data["location"] as com.google.firebase.firestore.GeoPoint).latitude
-                        val longitude =
-                            (data["location"] as com.google.firebase.firestore.GeoPoint).longitude
-
-                        val locationData = CompanyLocation(
-                            address,
-                            com.google.firebase.firestore.GeoPoint(latitude, longitude)
-                        )
-                        processLocationDocument(locationData)
-                    } else Log.e("Firestore", "Error getting location documents")
-                } else Log.e("Firestore", "Error getting location documents")
-
-            }
-            .addOnFailureListener { locationException ->
-                Log.e("Firestore", "Error getting location documents: $locationException")
-            }
-    }
-
-    private fun processLocationDocument(locationDocument: CompanyLocation) {
-        val latitude = locationDocument.location.latitude
-        val longitude = locationDocument.location.longitude
-        val address = locationDocument.address
-
-
-        val geoPoint = GeoPoint(latitude, longitude)
-
-        // Add a marker for each location
-        addMarker(geoPoint, address, "OSMDroid Marker")
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

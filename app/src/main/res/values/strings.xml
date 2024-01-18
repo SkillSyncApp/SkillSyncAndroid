@@ -33,29 +33,33 @@
 
     <string name="sign_up_group_title">Get Started</string>
     <string name="sign_up_group_sub_title">By creating a free account</string>
-    <string name="team_email_title">Team Email</string>
+    <string name="user_email_title">User Email</string>
 
     <string name="team_name_title">Team Name</string>
     <string name="team_institution_title">Institution</string>
-    <string name="team_description_title">Tell us about you</string>
+    <string name="student_description_title">Tell us about you</string>
     <string name="team_members_name_title">Enter teams members name</string>
     <string name="password_title">Password</string>
     <string name="company_name_title">Company Name</string>
+    <string name="bio_title">Bio</string>
 
     <string name="blank_error">Cannot be blank</string>
     <string name="email_error">Write a valid email address</string>
 
 
     <string name="password">Password</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="address">Address</string>
-    <string name="company_name">Company Name</string>
     <string name="create_a_free_account">create a free account</string>
     <string name="get_started">Get Started</string>
     <string name="i_m_a_group">Students Group</string>
     <string name="i_m_a_company">Company</string>
+    <string name="company_email_title">Email</string>
+
 
     <string name="sign_up_as">Sign up as</string>
+    <string name="user_image">User image</string>
+    <string name="name">Name</string>
 
 </resources>

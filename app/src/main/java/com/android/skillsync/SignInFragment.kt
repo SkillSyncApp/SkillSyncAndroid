@@ -1,17 +1,18 @@
 package com.android.skillsync
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
+import com.android.skillsync.Navigations.navigate
 import com.android.skillsync.databinding.FragmentSignInBinding
-import com.google.firebase.auth.FirebaseAuth
-
+import com.android.skillsync.helpers.DialogHelper
+import com.android.skillsync.repoistory.Auth.FireStoreAuthRepository
 
 class SignInFragment : Fragment() {
     private var emailLayout: View? = null
@@ -24,7 +25,10 @@ class SignInFragment : Fragment() {
     private var register: ConstraintLayout? = null
 
     private lateinit var binding: FragmentSignInBinding
-    private lateinit var firebaseAuth: FirebaseAuth
+
+    private val fireStoreAuthRepository: FireStoreAuthRepository = FireStoreAuthRepository()
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,19 +43,7 @@ class SignInFragment : Fragment() {
         return view
     }
 
-    // remember user
-    override fun onStart() {
-        super.onStart()
-        val user = firebaseAuth.currentUser
-
-        if (user != null) {
-        // Question - from sign up -> we navigate to sign in. Meaning user != null and then it will navigate to map.
-        // Is that what we want?
-
-         val navController = Navigation.findNavController(requireView())
-          navController.navigate(R.id.action_signInFragment_to_mapViewFragment)
-        }
-    }
+    // TODO remember user
 
     private fun setEventsListeners() {
         forgetPassword = view.findViewById(R.id.forget_password_link)
@@ -67,6 +59,7 @@ class SignInFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setUpDynamicTextFields() {
         emailLayout = view.findViewById(R.id.email_group)
         passwordLayout = view.findViewById(R.id.password_group)
@@ -79,20 +72,22 @@ class SignInFragment : Fragment() {
     }
 
     private fun signInFirebase() {
-        firebaseAuth = FirebaseAuth.getInstance()
-
         binding.signInButton.setOnClickListener {
+
             val email = binding.emailGroup.editTextField.text.toString()
             val password = binding.passwordGroup.editTextField.text.toString()
             if (email.isNotEmpty() && password.isNotEmpty()) {
-                firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        Navigation.findNavController(view)
-                            .navigate(R.id.action_signInFragment_to_mapViewFragment)
-                    } else Toast.makeText(context, it.exception.toString(), Toast.LENGTH_SHORT)
-                        .show()
-                }
+                fireStoreAuthRepository.signInUser(email, password, onSuccess, onError)
             }
         }
+    }
+
+    private val onSuccess: () -> Unit = {
+        view.navigate(R.id.action_signInFragment_to_mapViewFragment)
+    }
+
+    private val onError: (String?) -> Unit = {
+        val dialogHelper = DialogHelper(requireContext(), it)
+        dialogHelper.showErrorDialog()
     }
 }

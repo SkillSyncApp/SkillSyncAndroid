@@ -5,36 +5,34 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.android.skillsync.Converters.Converters
+import com.android.skillsync.base.MyApplication
 import com.android.skillsync.models.Comapny.Company
-import com.android.skillsync.models.Group.Group
-import com.android.skillsync.models.Group.ListStringConverter
 import com.android.skillsync.models.Post.Post
+import com.android.skillsync.models.Student.Student
 
-@TypeConverters(ListStringConverter::class)
-@Database(entities = [Post::class, Company::class, Group:: class], version = 1)
+@TypeConverters(Converters::class)
+@Database(entities = [Post::class, Company::class, Student:: class], version = 1)
 abstract class AppLocalDbRepository : RoomDatabase() {
     abstract fun getPostDao(): PostDao
     abstract fun getCompanyDao(): CompanyDao
 
-    abstract fun getGroupDao(): GroupDao
+    abstract fun getStudentDao(): StudentDao
 }
 
 object AppLocalDatabase {
 
-    private var instance: AppLocalDbRepository? = null
+    val db: AppLocalDbRepository by lazy {
 
-    fun getInstance(context: Context): AppLocalDbRepository {
-            return instance ?: synchronized(this) {
-                instance ?: buildDatabase(context).also { instance = it }
-            }
-        }
+        val context = MyApplication.Globals.appContext
+            ?: throw IllegalStateException("Application context not available")
 
-        private fun buildDatabase(context: Context): AppLocalDbRepository {
-            return Room.databaseBuilder(
-                context.applicationContext,
-                AppLocalDbRepository::class.java,
-                "SkillSyncDatabase"
-            )
-                .build()
-        }
+        Room.databaseBuilder(
+            context,
+            AppLocalDbRepository::class.java,
+            "SkillSyncDatabase.db"
+        )
+            .fallbackToDestructiveMigration()
+            .build()
+    }
 }

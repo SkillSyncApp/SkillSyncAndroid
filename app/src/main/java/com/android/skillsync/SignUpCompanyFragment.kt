@@ -1,5 +1,6 @@
 package com.android.skillsync
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
@@ -11,42 +12,44 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation
+import com.android.skillsync.Navigations.navigate
+import com.android.skillsync.ViewModel.CompanyViewModel
 import com.android.skillsync.databinding.CustomInputFieldPasswordBinding
 import com.android.skillsync.databinding.CustomInputFieldTextBinding
 import com.android.skillsync.databinding.FragmentSignUpCompanyBinding
-import com.android.skillsync.models.Comapny.FirebaseCompany
+import com.android.skillsync.helpers.DialogHelper
+import com.android.skillsync.helpers.DynamicTextHelper
+import com.android.skillsync.helpers.ImageHelper
+import com.android.skillsync.models.Comapny.Company
 import com.android.skillsync.models.CompanyLocation
-import com.android.skillsync.models.Type
-import com.android.skillsync.models.UserType
 import com.android.skillsync.models.serper.Place
 import com.android.skillsync.services.PlacesApiCall
-import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestoreException
+import com.firebase.geofire.core.GeoHash
 import com.google.firebase.firestore.GeoPoint
-import com.google.firebase.firestore.firestore
 
 class SignUpCompanyFragment : Fragment() {
-    private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var locationsAdapter: ArrayAdapter<String>
     private lateinit var placesSuggestions: Array<Place>
+    private lateinit var imageView: ImageView
+    private lateinit var company: Company
+    private lateinit var view: View
+    private lateinit var signUpCompany: Button
+    private lateinit var dynamicTextHelper: DynamicTextHelper
+    private lateinit var companyViewModel: CompanyViewModel
+    private lateinit var imageHelper: ImageHelper
 
-    private lateinit var companyLocation: CompanyLocation;
-    private var fieldErrorShown = false
 
     private var _binding: FragmentSignUpCompanyBinding? = null
     private val binding get() = _binding!!
-
-    private lateinit var view: View
-    private lateinit var signUpCompany: Button
+    private var companyLocation: CompanyLocation = CompanyLocation(
+        "Unknown",
+        GeoPoint(0.0, 0.0),
+        GeoHash(0.0, 0.0)
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,13 +58,8 @@ class SignUpCompanyFragment : Fragment() {
 
         _binding = FragmentSignUpCompanyBinding.inflate(layoutInflater, container, false)
         view = binding.root
-
-        firebaseAuth = FirebaseAuth.getInstance()
-
-        // TODO REMOVE - JUST TO TEST SIGN IN PAGE
-        val firebaseAuth = FirebaseAuth.getInstance()
-        // Sign out the current user
-        firebaseAuth.signOut()
+        companyViewModel = CompanyViewModel()
+        dynamicTextHelper = DynamicTextHelper(view)
 
         initLocationsAutoComplete()
 
@@ -71,29 +69,9 @@ class SignUpCompanyFragment : Fragment() {
         return view
     }
 
-    // remember user
-    override fun onStart() {
-        super.onStart()
-        val user = firebaseAuth.currentUser
-
-        if (user != null) {
-            // you can pass arguments by define in nav graph
-            //<argument
-            //android:name="myArg"
-            //app:argType="integer"
-            //android:defaultValue="1" />
-            // ActionStartFragmentToSecondFragment action =
-            //StartFragmentDirections.actionStartFragmentToSecondFragment("123456");
-            //btn.setOnClickListener(Navigation.createNavigateOnClickListener(action));
-
-            // TODO REMOVE - JUST TO TEST SIGN IN PAGE
-//            val firebaseAuth = FirebaseAuth.getInstance()
-            // Sign out the current user
-//            firebaseAuth.signOut()
-
-            Navigation.findNavController(binding.root)
-                .navigate(R.id.action_signUpCompanyFragment_to_mapViewFragment)
-        }
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     private fun initLocationsAutoComplete() {
@@ -106,77 +84,106 @@ class SignUpCompanyFragment : Fragment() {
         )
 
         autoCompany?.setAdapter(locationsAdapter)
-        autoCompany?.setOnItemClickListener { adapterView, view, i, l ->
+        autoCompany?.setOnItemClickListener { _, _, i, _ ->
             val selectedPlace = placesSuggestions[i];
+            val latitude = selectedPlace.latitude.toDouble()
+            val longitude = selectedPlace.longitude.toDouble()
+
             companyLocation = CompanyLocation(
                 selectedPlace.address,
-                GeoPoint(selectedPlace.latitude.toDouble(), selectedPlace.longitude.toDouble())
-            );
+                GeoPoint(latitude, longitude),
+                GeoHash(latitude, longitude)
+            )
         }
 
         autoCompany?.addTextChangedListener(object : TextWatcher {
             @RequiresApi(Build.VERSION_CODES.O_MR1)
             override fun afterTextChanged(s: Editable?) {
-                if (s != null) {
-                    if (s.isNotEmpty()) searchPlaces(s.toString())
+                if (!s.isNullOrEmpty()) {
+                    searchPlaces(s.toString())
                 }
             }
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
     }
 
+    private val onError: (String?) -> Unit = {
+        val dialogHelper = DialogHelper(requireContext(), it)
+        dialogHelper.showErrorDialog()
+    }
+
+    private val onSuccess: () -> Unit = {
+        companyViewModel.addCompany(company)
+        view.navigate(R.id.action_signUpCompanyFragment_to_signInFragment)
+    }
+
     private fun setEventListeners() {
         signUpCompany = view.findViewById(R.id.sign_up_company_btn)
+        imageView = view.findViewById(R.id.logo_company)
+
+        imageHelper = ImageHelper(this, imageView)
+        imageHelper.setImageViewClickListener()
 
         signUpCompany.setOnClickListener {
-            val companyName = binding.companyNameGroup//.editTextField.text.toString()
-            val email = binding.emailGroup//.editTextField.text.toString()
-            val password = binding.passwordGroup//.editTextField.text.toString()
+            val companyNameGroup = binding.companyNameGroup
+            val emailGroup = binding.emailGroup
+            val bioGroup = binding.bioGroup
+            val passwordGroup = binding.passwordGroup
+            val address = binding.companySuggestion.text
+            val logo = imageHelper.getImageUrl() ?: "DEFAULT LOGO" // TODO
 
-            if (isValidInputs(
-                    email,
-                    password,
-                    companyName,
-                    companyName.editTextField.text
+            if (isValidInputs(emailGroup, passwordGroup, companyNameGroup, address)) {
+                val email = emailGroup.editTextField.text.toString()
+                val password = passwordGroup.editTextField.text.toString()
+                val name = companyNameGroup.editTextField.text.toString()
+                val bio = bioGroup.editTextField.text.toString()
+
+                company = Company(
+                    name = name,
+                    email = email,
+                    logo = logo,
+                    location = companyLocation,
+                    bio = bio
                 )
-            ) {
-                val companyLocation = companyLocation;
-                firebaseAuth.createUserWithEmailAndPassword(
-                    email.editTextField.text.toString(), password.editTextField.text.toString()
-                )
-                    .addOnCompleteListener {
-                        if (it.isSuccessful) {
-                            val companyId = it.result.user?.uid!!
-                            createCompany(
-                                companyId,
-                                companyName.editTextField.text.toString(),
-                                email.editTextField.text.toString(),
-                                companyLocation
-                            )
-                        } else {
-                            Toast.makeText(
-                                context, it.exception.toString(),
-                                Toast.LENGTH_SHORT
-                            )
-                                .show()
-                        }
-                    }
+                companyViewModel.createUserAsCompanyOwner(email, password, onSuccess, onError)
             }
         }
     }
 
+    private fun setHints() {
+        dynamicTextHelper.setTextViewText(R.id.company_name_group, R.string.company_name_title)
+        dynamicTextHelper.setTextViewText(R.id.email_group, R.string.company_email_title)
+        dynamicTextHelper.setTextViewText(R.id.password_group, R.string.password_title)
+        dynamicTextHelper.setTextViewText(R.id.bio_group, R.string.bio_title)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O_MR1)
+    fun searchPlaces(query: String) {
+        context?.let {
+            PlacesApiCall().getPlacesByQuery(it, query) { places ->
+                placesSuggestions = places
+
+                locationsAdapter.clear()
+                places.forEach { locationsAdapter.add(it.title.plus(" - ").plus(it.address)) }
+                locationsAdapter.notifyDataSetChanged()
+            }
+        }
+    }
+
+    // TODO remove from fragment - validation helper
     private fun isValidInputs(
         email: CustomInputFieldTextBinding,
         password: CustomInputFieldPasswordBinding,
         companyName: CustomInputFieldTextBinding,
         companyLocation: Editable
     ): Boolean {
-        fieldErrorShown = false
+//        fieldErrorShown = false
 
         val isStrValid: (String) -> Boolean = { input ->
-            val pattern = Regex("^[a-zA-Z0-9,\\. ]+\$")
-            val isLengthValid = input.length >= 4
+            val pattern = Regex("^[a-zA-Z\\. ]+\$")
+            val isLengthValid = input.length >= 3
             pattern.matches(input) && isLengthValid
         }
         val isEmailValid: (String) -> Boolean = { email ->
@@ -187,17 +194,17 @@ class SignUpCompanyFragment : Fragment() {
 
             password.length >= 6
             /*
-                        val minLength = 8
-                        val hasUpperCase = password.any { it.isUpperCase() }
-                        val hasLowerCase = password.any { it.isLowerCase() }
-                        val hasDigit = password.any { it.isDigit() }
-                        val hasSpecialChar = password.any { it.isLetterOrDigit().not() }
+                val minLength = 8
+                val hasUpperCase = password.any { it.isUpperCase() }
+                val hasLowerCase = password.any { it.isLowerCase() }
+                val hasDigit = password.any { it.isDigit() }
+                val hasSpecialChar = password.any { it.isLetterOrDigit().not() }
 
-                        password.length >= minLength &&
-                                hasUpperCase &&
-                                hasLowerCase &&
-                                hasDigit &&
-                                hasSpecialChar
+                password.length >= minLength &&
+                        hasUpperCase &&
+                        hasLowerCase &&
+                        hasDigit &&
+                        hasSpecialChar
              */
         }
 
@@ -209,7 +216,6 @@ class SignUpCompanyFragment : Fragment() {
         )
 
         return validations.all { it }
-
     }
 
     private fun addressValidation(input: Editable): Boolean {
@@ -275,23 +281,18 @@ class SignUpCompanyFragment : Fragment() {
         validationCondition: (String) -> Boolean
     ): Boolean {
         val input = inputGroup.editTextField.text.toString()
-        val isValid: Boolean
 
-        if (input.isEmpty()) {
+        return if (input.isEmpty()) {
             //showBlankError(inputGroup)
-            isValid = false
-        } else if (validationCondition(input)) {
-            //  showValidInput(inputGroup)
-            isValid = true
+            false
         } else {
-            //  showTextError(inputGroup)
-            isValid = false
+            //  showTextError(inputGroup)//  showValidInput(inputGroup)
+            validationCondition(input)
         }
-        return isValid
     }
 
     private fun showBlankError(inputGroup: CustomInputFieldTextBinding) {
-        inputGroup.errorMessage?.visibility = View.INVISIBLE
+        inputGroup.errorMessage.visibility = View.INVISIBLE
         inputGroup.editTextLine.setBackgroundColor(
             ContextCompat.getColor(
                 requireContext(),
@@ -307,7 +308,7 @@ class SignUpCompanyFragment : Fragment() {
     }
 
     private fun showValidInput(inputGroup: CustomInputFieldTextBinding) {
-        inputGroup.errorMessage?.visibility = View.INVISIBLE
+        inputGroup.errorMessage.visibility = View.INVISIBLE
         inputGroup.editTextLine.setBackgroundColor(
             ContextCompat.getColor(
                 requireContext(),
@@ -322,9 +323,10 @@ class SignUpCompanyFragment : Fragment() {
         )
     }
 
+    @SuppressLint("SetTextI18n")
     private fun showTextError(inputGroup: CustomInputFieldTextBinding) {
-        inputGroup.errorMessage?.text = "Invalid ${inputGroup.editTextLabel.text.toString()}"
-        inputGroup.errorMessage?.visibility = View.VISIBLE
+        inputGroup.errorMessage.text = "Invalid " + inputGroup.editTextLabel.text
+        inputGroup.errorMessage.visibility = View.VISIBLE
         inputGroup.editTextLine.setBackgroundColor(
             ContextCompat.getColor(
                 requireContext(),
@@ -337,78 +339,5 @@ class SignUpCompanyFragment : Fragment() {
                 R.color.Dark_Gray
             )
         )
-    }
-
-    private fun setHints() {
-        setHintForEditText(R.id.email_group, null, R.string.email)
-        setHintForEditText(R.id.password_group, null, R.string.password_title)
-        setHintForEditText(R.id.company_name_group, null, R.string.company_name_title)
-        setHintForEditText(R.id.password_group, null, R.string.password_title)
-    }
-
-    private fun createCompany(
-        companyId: String,
-        companyName: String,
-        companyEmail: String,
-        companyLocation: CompanyLocation
-    ) {
-        val database = Firebase.firestore
-        val companyEntity = FirebaseCompany(companyName, "", companyEmail, companyLocation)
-
-        val userType = UserType(Type.COMPANY)
-        database.collection("usersType").document(companyId).set(userType).addOnSuccessListener {
-            val companyRef = database.collection("companies").document(companyId)
-            companyRef.set(companyEntity).addOnSuccessListener {
-                companyRef.addSnapshotListener { snapshot, e ->
-                    logCompanyNameFromDB(snapshot, e)
-                    Navigation.findNavController(binding.root)
-                        .navigate(R.id.action_signUpCompanyFragment_to_signInFragment)
-                }
-            }.addOnFailureListener {
-                Log.d("ERROR", "fail to create company to app")
-            }
-        }
-    }
-
-    // TODO remove
-    private fun logCompanyNameFromDB(snapshot: DocumentSnapshot?, e: FirebaseFirestoreException?) {
-        if (e != null) Log.d("ERROR", "Listen failed.", e)
-
-        if (snapshot != null && snapshot.exists()) {
-            val companyName = snapshot.getString("name")
-            Log.d("SUCCESS", "Company Name: $companyName")
-        } else Log.d("ERROR", "Company snapshot is null or does not exist.")
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O_MR1)
-    fun searchPlaces(query: String) {
-        context?.let {
-            PlacesApiCall().getPlacesByQuery(it, query) { places ->
-                placesSuggestions = places
-
-                // Set places results as auto complete suggestions
-                locationsAdapter.clear()
-                places.forEach { locationsAdapter.add(it.title.plus(" - ").plus(it.address)) }
-                locationsAdapter.notifyDataSetChanged()
-            }
-        }
-    }
-
-    private fun setHintForEditText(
-        editTextGroupId: Int,
-        hintResourceId: Int?,
-        inputTitleResourceId: Int?
-    ) { // QUESTION - WHY DO WE NEED hintResourceId?
-        val editTextGroup = binding.root.findViewById<View>(editTextGroupId)
-        val editTextLabel = editTextGroup?.findViewById<TextView>(R.id.edit_text_label)
-        val editTextField = editTextGroup?.findViewById<EditText>(R.id.edit_text_field)
-
-        inputTitleResourceId?.let {
-            editTextLabel?.text = getString(it)
-        }
-
-        hintResourceId?.let {
-            editTextField?.hint = getString(it)
-        }
     }
 }
