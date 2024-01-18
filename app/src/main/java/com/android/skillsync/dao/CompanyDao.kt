@@ -15,23 +15,20 @@ interface CompanyDao {
     fun getAllCompanies(): LiveData<List<Company>>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend fun insert(company: Company)
+    fun insert(company: Company)
 
     @Delete
-    suspend fun delete(company: Company)
+    fun delete(company: Company)
 
     @Query("DELETE FROM company")
-    suspend fun deleteAllCompanies()
+    fun deleteAllCompanies()
 
     @Update
-    suspend fun update(company: Company)
+    fun update(company: Company)
 
     @Query("SELECT name FROM Company WHERE id =:id")
-    suspend fun getCompanyName(id: String): String
+    fun getCompanyName(id: String): String
 
     @Query("SELECT logo FROM Company WHERE id =:id")
-    suspend fun getCompanyLogo(id: String): String
-
-    @Query("SELECT id FROM Company where name =:companyName LIMIT 1")
-    suspend fun getCompanyId(companyName: String): Long?
+    fun getCompanyLogo(id: String): String
 }

@@ -13,17 +13,16 @@ class CompanyUseCases {
     val fireStoreAuthRepository: FireStoreAuthRepository = FireStoreAuthRepository()
 
     val companiesLiveData: LiveData<List<Company>> get() = localStoreCompanyRepository.companies
-    val firebaseAuth = fireStoreCompanyRepository.firebaseAuth
 
-    suspend fun getAllCompanies() {
+    fun getAllCompanies() {
         val localTimestamp = localStoreCompanyRepository.getLocalTimestamp()
         // fetch the new companies
         fireStoreCompanyRepository.getNewCompanies(localTimestamp)
     }
 
     suspend fun addCompany(company: Company) {
-        localStoreCompanyRepository.insert(company)
-
+        val companyId = fireStoreCompanyRepository.addCompany(company)
+        company.id = companyId
         fireStoreCompanyRepository.addCompany(company)
     }
 

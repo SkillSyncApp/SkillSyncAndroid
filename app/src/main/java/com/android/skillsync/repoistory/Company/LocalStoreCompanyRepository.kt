@@ -12,35 +12,35 @@ class LocalStoreCompanyRepository {
     val companies: LiveData<List<Company>> = companyDao.getAllCompanies()
 
 
-    var localTimestamp: Date = Date(0)
+    var localTimestampProperty: Date = Date(0)
 
     @WorkerThread
-    suspend fun insert(company: Company) {
+    fun insert(company: Company) {
         companyDao.insert(company)
     }
 
     @WorkerThread
-    suspend fun update(company: Company) {
+    fun update(company: Company) {
         companyDao.update(company)
     }
 
     @WorkerThread
-    suspend fun delete(company: Company) {
+    fun delete(company: Company) {
         companyDao.delete(company)
     }
 
     @WorkerThread
-    suspend fun getAllCompanies() {
+    fun getAllCompanies() {
         val currentTimestamp = Date()
         updateLocalTimestamp(currentTimestamp)
         companyDao.getAllCompanies()
     }
 
-    suspend fun getLocalTimestamp(): Date {
-        return localTimestamp
+    fun getLocalTimestamp(): Date {
+        return localTimestampProperty
     }
 
-    suspend fun updateLocalTimestamp(newTimestamp: Date) {
-        localTimestamp = newTimestamp
+    fun updateLocalTimestamp(newTimestamp: Date) {
+        localTimestampProperty = newTimestamp
     }
 }
