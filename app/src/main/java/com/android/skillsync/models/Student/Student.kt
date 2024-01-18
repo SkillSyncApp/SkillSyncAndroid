@@ -2,25 +2,23 @@ package com.android.skillsync.models.Student
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.android.skillsync.models.Post.Post
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ServerTimestamp
-import java.util.Date
-import kotlin.random.Random
+import java.util.UUID
 
 @Entity
 data class Student(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
+    @PrimaryKey
+    var id: String = UUID.randomUUID().toString(), // temp id
     val name: String,
     val email: String,
     val institution: String,
     val image: String,
     val bio: String,
     @ServerTimestamp
-    val createdDate: Timestamp? = null,
+    val createdDate: Timestamp = Timestamp.now(),
     @ServerTimestamp
-    val updatedDate: Timestamp? = null
+    val updatedDate: Timestamp = Timestamp.now(),
 ) {
     companion object {
         private const val NAME_KEY = "name"
@@ -59,8 +57,8 @@ data class Student(
                 INSTITUTION_KEY to institution,
                 IMAGE_KEY to image,
                 BIO_KEY to bio,
-                Post.CREATED_DATE_KEY to (createdDate ?: Timestamp.now()),
-                Post.UPDATED_DATE_KEY to (updatedDate ?: Timestamp.now())
+                CREATED_DATE_KEY to createdDate,
+                UPDATED_DATE_KEY to updatedDate
             )
         }
 }
