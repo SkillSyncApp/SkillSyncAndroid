@@ -3,6 +3,7 @@ package com.android.skillsync.repoistory.Company
 import com.android.skillsync.models.Comapny.Company
 import com.android.skillsync.repoistory.ApiManager
 import com.google.firebase.Timestamp
+import kotlinx.coroutines.tasks.await
 import java.util.Date
 
 class FireStoreCompanyRepository {
@@ -11,12 +12,12 @@ class FireStoreCompanyRepository {
     }
 
     val apiManager = ApiManager()
-    val firebaseAuth = apiManager.firebaseAuth
 
     fun getNewCompanies(since: Date) {
         val sinceTimestamp = Timestamp(since)
 
-        apiManager.db.collection(COMPANIES_COLLECTION_PATH).whereGreaterThanOrEqualTo("updatedDate", sinceTimestamp).get()
+        apiManager.db.collection(COMPANIES_COLLECTION_PATH)
+            .whereGreaterThanOrEqualTo("updatedDate", sinceTimestamp).get()
             .addOnSuccessListener {
 //                onSuccessCallBack()
 
@@ -25,14 +26,12 @@ class FireStoreCompanyRepository {
             }
     }
 
-    fun addCompany(company: Company) {
-        apiManager.db.collection(COMPANIES_COLLECTION_PATH).document(company.id.toString()).set(company.json)
-            .addOnFailureListener {
-//                onSuccessCallBack()
-            }
-            .addOnFailureListener {
-//                onFailureCallBack()
-            }
+    suspend fun addCompany(company: Company): String {
+        val documentReference = apiManager.db.collection(COMPANIES_COLLECTION_PATH)
+            .add(company.json)
+            .await()
+
+        return documentReference.id
     }
 }
 
