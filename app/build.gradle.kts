@@ -57,6 +57,8 @@ dependencies {
     kapt("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
 
+    implementation("com.squareup.picasso:picasso:2.71828")
+
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
@@ -71,4 +73,5 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.6.2")
     implementation("com.squareup.retrofit:converter-gson:2.0.0-beta2")
     implementation("org.osmdroid:osmdroid-android:6.1.17")
+    implementation("com.firebase:geofire-android-common:3.2.0")
 }

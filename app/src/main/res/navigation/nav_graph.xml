@@ -79,15 +79,15 @@
             android:id="@+id/action_pickUserTypeFragment_to_signUpCompanyFragment"
             app:destination="@id/signUpCompanyFragment" />
         <action
-            android:id="@+id/action_pickUserTypeFragment_to_signUpGroupFragment"
-            app:destination="@id/signUpGroupFragment" />
+            android:id="@+id/action_pickUserTypeFragment_to_signUpStudentFragment"
+            app:destination="@id/signUpStudentFragment" />
     </fragment>
     <fragment
-        android:id="@+id/signUpGroupFragment"
-        android:name="com.android.skillsync.SignUpGroupFragment"
-        android:label="SignUpGroupFragment" >
+        android:id="@+id/signUpStudentFragment"
+        android:name="com.android.skillsync.SignUpStudentFragment"
+        android:label="SignUpStudentFragment" >
         <action
-            android:id="@+id/action_signUpGroupFragment_to_signInFragment"
+            android:id="@+id/action_signUpStudentFragment_to_signInFragment"
             app:destination="@id/signInFragment" />
     </fragment>
 </navigation>

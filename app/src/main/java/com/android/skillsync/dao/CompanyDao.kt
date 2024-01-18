@@ -30,8 +30,8 @@ interface CompanyDao {
     suspend fun getCompanyName(id: String): String
 
     @Query("SELECT logo FROM Company WHERE id =:id")
-    suspend fun getCompanyUrlLogo(id: String): String
+    suspend fun getCompanyLogo(id: String): String
 
-    @Query("SELECT emailAddress FROM Company WHERE id =:id")
-    suspend fun getCompanyAddress(id: String): String
+    @Query("SELECT id FROM Company where name =:companyName LIMIT 1")
+    suspend fun getCompanyId(companyName: String): Long?
 }

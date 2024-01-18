@@ -13,14 +13,14 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.skillsync.adapters.GroupMemberAdapter
-import com.android.skillsync.models.Group.FirebaseGroup
+import com.android.skillsync.models.Student.Student
 
 class GroupProfileFragment : Fragment() {
 
     private var profileImageBackgroundElement: ImageView? = null;
 
     private lateinit var groupMembersRecyclerView: RecyclerView;
-    private lateinit var membersList: ArrayList<FirebaseGroup>;
+    private lateinit var membersList: ArrayList<Student>;
     private lateinit var groupMemberAdapter: GroupMemberAdapter;
     private lateinit var view: View
 
@@ -59,14 +59,19 @@ class GroupProfileFragment : Fragment() {
     }
 
     private fun addMembersToList() {
-        membersList.add(
-            FirebaseGroup(
-                "skillSync",
-                "SkillSync@gmail.com",
-                "College of managment",
-                "we are three talented developers",
-                listOf("Hadar", "Amit", "Nofar")
-            )
-        );
+//        Group.fromJSON(
+//            mapOf(
+//                "id" to Random.nextLong(),
+//                "emailAddress" to "SkillSync@gmail.com",
+//                "name" to "skillsync",
+//                "institution" to "College of management",
+//                "teamDescription" to "We are three talented developers",
+//                "memberNames" to listOf("Hadar", "Amit", "Nofar")
+//            )
+//        ).let {
+//            membersList.add(
+//                it
+//            )
+//        };
     }
 }

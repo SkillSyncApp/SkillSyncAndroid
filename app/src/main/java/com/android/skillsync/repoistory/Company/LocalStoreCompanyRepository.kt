@@ -1,13 +1,18 @@
-package com.android.skillsync.repoistory
-
-import com.android.skillsync.dao.CompanyDao
+package com.android.skillsync.repoistory.Company
 
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
+import com.android.skillsync.dao.AppLocalDatabase
 import com.android.skillsync.models.Comapny.Company
+import java.util.Date
 
-class CompanyRepository (private val companyDao: CompanyDao) {
+class LocalStoreCompanyRepository {
+    val appLocalDB = AppLocalDatabase
+    val companyDao = appLocalDB.db.getCompanyDao()
     val companies: LiveData<List<Company>> = companyDao.getAllCompanies()
+
+
+    var localTimestamp: Date = Date(0)
 
     @WorkerThread
     suspend fun insert(company: Company) {
@@ -25,12 +30,17 @@ class CompanyRepository (private val companyDao: CompanyDao) {
     }
 
     @WorkerThread
-    suspend fun deleteAllCompanies() {
-        companyDao.deleteAllCompanies()
+    suspend fun getAllCompanies() {
+        val currentTimestamp = Date()
+        updateLocalTimestamp(currentTimestamp)
+        companyDao.getAllCompanies()
     }
 
-    @WorkerThread
-    suspend fun getAllCompanies() {
-        companyDao.getAllCompanies()
+    suspend fun getLocalTimestamp(): Date {
+        return localTimestamp
+    }
+
+    suspend fun updateLocalTimestamp(newTimestamp: Date) {
+        localTimestamp = newTimestamp
     }
 }

@@ -5,11 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.android.skillsync.models.Post.Post
-import com.android.skillsync.repoistory.PostRepository
+import com.android.skillsync.repoistory.Post.LocalStorePostRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class PostViewModel(private val postRepository: PostRepository): ViewModel() {
+class PostViewModel(private val postRepository: LocalStorePostRepository): ViewModel() {
 
     // LiveData to observe changes in the list of posts
     private val _postsLiveData = postRepository.posts
@@ -35,5 +35,3 @@ class PostViewModel(private val postRepository: PostRepository): ViewModel() {
         postRepository.update(post)
     }
 }
-
-class PostViewModelFactory(private val repository: PostRepository): ViewModelProvider.Factory
