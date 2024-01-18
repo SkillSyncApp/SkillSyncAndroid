@@ -5,7 +5,6 @@ import com.android.skillsync.models.Comapny.Company
 import com.android.skillsync.repoistory.Auth.FireStoreAuthRepository
 import com.android.skillsync.repoistory.Company.FireStoreCompanyRepository
 import com.android.skillsync.repoistory.Company.LocalStoreCompanyRepository
-import kotlin.random.Random
 
 class CompanyUseCases {
     private val localStoreCompanyRepository: LocalStoreCompanyRepository = LocalStoreCompanyRepository()

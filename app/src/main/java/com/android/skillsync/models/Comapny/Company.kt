@@ -12,16 +12,16 @@ import java.util.*
 @Entity
 data class Company(
     @PrimaryKey(autoGenerate = false)
-    var id: String = UUID.randomUUID().toString(),
-    var name: String = "",
-    var email: String = "",
-    var logo: String = "",
-    var bio: String = "",
-    var location: CompanyLocation = CompanyLocation("Unknown", GeoPoint(0.0, 0.0), GeoHash(0.0, 0.0)),
+    var id: String = UUID.randomUUID().toString(), // temp id
+    val name: String,
+    val email: String,
+    val logo: String,
+    val bio: String,
+    val location: CompanyLocation = CompanyLocation("Unknown", GeoPoint(0.0, 0.0), GeoHash(0.0, 0.0)),
     @ServerTimestamp
-    var createdDate: Timestamp = Timestamp.now(),
+    val createdDate: Timestamp = Timestamp.now(),
     @ServerTimestamp
-    var updatedDate: Timestamp = Timestamp.now()
+    val updatedDate: Timestamp = Timestamp.now(),
 ) {
 
     companion object {

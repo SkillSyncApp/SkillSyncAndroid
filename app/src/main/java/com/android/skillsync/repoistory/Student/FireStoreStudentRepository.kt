@@ -1,11 +1,8 @@
 package com.android.skillsync.repoistory.Student
 
-import android.widget.Toast
-import androidx.navigation.Navigation
-import com.android.skillsync.R
 import com.android.skillsync.models.Student.Student
 import com.android.skillsync.repoistory.ApiManager
-import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.tasks.await
 
 class FireStoreStudentRepository {
 
@@ -15,20 +12,23 @@ class FireStoreStudentRepository {
 
     val apiManager = ApiManager()
 
-    fun addStudent(student: Student, /*onSuccessCallBack: () -> Unit, onFailureCallBack: () -> Unit*/){
-        apiManager.db.collection(USERS_COLLECTION_PATH).document(student.id.toString()).set(student.json)
-            .addOnSuccessListener { /*onSuccessCallBack()*/ }
-            .addOnFailureListener {  /*onFailureCallBack()*/ }
+    suspend fun addStudent(student: Student, /*onSuccessCallBack: () -> Unit, onFailureCallBack: () -> Unit*/): String {
+
+        val documentReference = apiManager.db.collection(USERS_COLLECTION_PATH)
+            .add(student.json)
+            .await()
+
+        return documentReference.id
     }
 
     fun updateStudent(student: Student, data: Map<String, Any>, onSuccessCallBack: () -> Unit, onFailureCallBack: () -> Unit){
-        apiManager.db.collection(USERS_COLLECTION_PATH).document(student.id.toString()).update(data)
+        apiManager.db.collection(USERS_COLLECTION_PATH).document(student.id).update(data)
             .addOnSuccessListener { onSuccessCallBack() }
             .addOnFailureListener { onFailureCallBack() }
     }
 
     fun deleteStudent(student: Student, onSuccessCallBack: () -> Unit, onFailureCallBack: () -> Unit){
-        apiManager.db.collection(USERS_COLLECTION_PATH).document(student.id.toString()).delete()
+        apiManager.db.collection(USERS_COLLECTION_PATH).document(student.id).delete()
             .addOnSuccessListener { onSuccessCallBack() }
             .addOnFailureListener { onFailureCallBack() }
     }

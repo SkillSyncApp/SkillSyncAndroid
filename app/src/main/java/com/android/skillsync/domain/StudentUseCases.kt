@@ -15,13 +15,14 @@ class StudentUseCases {
 
     val studentLiveData: LiveData<List<Student>> get() = localStoreStudentRepository.student
 
-    suspend fun getAllStudents() {
-        localStoreStudentRepository.student
+    fun getAllStudents() {
+        studentLiveData
     }
 
     suspend fun addStudent(student: Student) {
+        val studentId = fireStoreStudentRepository.addStudent(student)
+        student.id = studentId
         localStoreStudentRepository.addStudent(student)
-        fireStoreStudentRepository.addStudent(student)
     }
 
     suspend fun update(student: Student) {
