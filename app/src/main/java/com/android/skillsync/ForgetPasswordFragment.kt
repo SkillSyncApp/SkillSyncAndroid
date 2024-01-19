@@ -8,12 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
+import com.android.skillsync.ViewModel.UserAuthViewModel
 import com.android.skillsync.databinding.FragmentForgetPasswordBinding
-import com.google.firebase.auth.FirebaseAuth
+import com.android.skillsync.helpers.DialogHelper
 
 class ForgetPasswordFragment : Fragment() {
 
@@ -21,12 +21,12 @@ class ForgetPasswordFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var view: View
+    private lateinit var userAuthViewModel: UserAuthViewModel
     private var backToSignIn: TextView? = null
     private var resetPassword: Button? = null
     private var email: TextView? = null
     private var emailLayout: View? = null
 
-    var auth: FirebaseAuth = FirebaseAuth.getInstance()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,6 +34,7 @@ class ForgetPasswordFragment : Fragment() {
 
         _binding = FragmentForgetPasswordBinding.inflate(layoutInflater, container, false)
         view = binding.root
+        userAuthViewModel = UserAuthViewModel()
 
         setEventListeners(view)
 
@@ -44,22 +45,17 @@ class ForgetPasswordFragment : Fragment() {
         val emailGroup = view.findViewById<ConstraintLayout>(R.id.email_group)
         val email = emailGroup?.findViewById<TextView>(R.id.edit_text_field)?.text.toString()
 
-        auth.sendPasswordResetEmail(email).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                Toast.makeText(
-                    context?.applicationContext,
-                    "We sent a password reset email to your email address",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
-                // Handle reset password failure
-                Toast.makeText(
-                    context?.applicationContext,
-                    "Failed to send password reset email",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
+        userAuthViewModel.resetPassword(email, onSuccess, onError)
+    }
+
+    private val onSuccess: () -> Unit = {
+        val dialogHelper = DialogHelper("Hey you,", requireContext(), "We send you an email to recover your password. Please follow the instructions.")
+        dialogHelper.showDialogMessage()
+    }
+
+    private val onError: (String?) -> Unit = {
+        val dialogHelper = DialogHelper("Sorry,", requireContext(), it)
+        dialogHelper.showDialogMessage()
     }
 
     private fun setEventListeners(view: View) {

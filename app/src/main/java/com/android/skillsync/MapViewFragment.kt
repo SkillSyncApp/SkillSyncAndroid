@@ -91,13 +91,12 @@ class MapViewFragment : Fragment(), LocationListener {
         val overlayItem = OverlayItem(title, snippet, geoPoint)
         overlayItem.setMarker(markerIcon)
 
-        val itemizedIconOverlay = ItemizedIconOverlay<OverlayItem>(
+        val itemizedIconOverlay = ItemizedIconOverlay(
             context?.applicationContext,
             listOf(overlayItem),
             null
         )
 
-        // Add the ItemizedIconOverlay to the MapView
         aMapView.overlays.add(itemizedIconOverlay)
     }
 

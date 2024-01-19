@@ -10,24 +10,21 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.android.skillsync.Navigations.navigate
+import com.android.skillsync.ViewModel.UserAuthViewModel
 import com.android.skillsync.databinding.FragmentSignInBinding
 import com.android.skillsync.helpers.DialogHelper
-import com.android.skillsync.repoistory.Auth.FireStoreAuthRepository
 
 class SignInFragment : Fragment() {
+    private lateinit var view: View
+    private lateinit var binding: FragmentSignInBinding
+    private lateinit var userAuthViewModel: UserAuthViewModel
+
     private var emailLayout: View? = null
     private var passwordLayout: View? = null
-
-    private lateinit var view: View
     private var emailLabel: TextView? = null
     private var passwordLabel: TextView? = null
     private var forgetPassword: TextView? = null
     private var register: ConstraintLayout? = null
-
-    private lateinit var binding: FragmentSignInBinding
-
-    private val fireStoreAuthRepository: FireStoreAuthRepository = FireStoreAuthRepository()
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,9 +32,10 @@ class SignInFragment : Fragment() {
     ): View {
         binding = FragmentSignInBinding.inflate(layoutInflater, container, false)
         view = binding.root
+        userAuthViewModel = UserAuthViewModel()
 
         setUpDynamicTextFields()
-        signInFirebase()
+        signInUser()
         setEventsListeners()
 
         return view
@@ -46,6 +44,7 @@ class SignInFragment : Fragment() {
     // TODO remember user
 
     private fun setEventsListeners() {
+        //TODO do from navigation
         forgetPassword = view.findViewById(R.id.forget_password_link)
         forgetPassword?.setOnClickListener {
             Navigation.findNavController(it)
@@ -71,13 +70,13 @@ class SignInFragment : Fragment() {
         passwordLabel!!.text = "Password"
     }
 
-    private fun signInFirebase() {
+    private fun signInUser() {
         binding.signInButton.setOnClickListener {
 
             val email = binding.emailGroup.editTextField.text.toString()
             val password = binding.passwordGroup.editTextField.text.toString()
             if (email.isNotEmpty() && password.isNotEmpty()) {
-                fireStoreAuthRepository.signInUser(email, password, onSuccess, onError)
+                userAuthViewModel.signInUser(email, password, onSuccess, onError)
             }
         }
     }
@@ -87,7 +86,7 @@ class SignInFragment : Fragment() {
     }
 
     private val onError: (String?) -> Unit = {
-        val dialogHelper = DialogHelper(requireContext(), it)
-        dialogHelper.showErrorDialog()
+        val dialogHelper = DialogHelper("Sorry," ,requireContext(), it)
+        dialogHelper.showDialogMessage()
     }
 }
