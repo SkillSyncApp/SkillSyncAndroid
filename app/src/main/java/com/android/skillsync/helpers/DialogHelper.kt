@@ -2,14 +2,13 @@ package com.android.skillsync.helpers
 import android.content.Context
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class DialogHelper(private val context: Context, private val error: String?) {
+class DialogHelper(private val title: String, private val context: Context, private val message: String?) {
 
-    fun showErrorDialog() {
+    fun showDialogMessage() {
         MaterialAlertDialogBuilder(context)
-            .setTitle("Error")
-            .setMessage(error)
+            .setTitle(title)
+            .setMessage(message)
             .setPositiveButton("OK") { dialog, _ ->
-                // Handle positive button click if needed
                 dialog.dismiss()
             }
             .show()

@@ -35,7 +35,7 @@ class FireStoreCompanyRepository {
     }
 }
 
-
+//TODO complete it
 //
 //    fun setCompaniesOnMap(callback: (CompanyLocation) -> Unit) {
 //        val companiesReference = firestore.collection(COMPANIES_COLLECTION_PATH)

@@ -110,8 +110,8 @@ class SignUpCompanyFragment : Fragment() {
     }
 
     private val onError: (String?) -> Unit = {
-        val dialogHelper = DialogHelper(requireContext(), it)
-        dialogHelper.showErrorDialog()
+        val dialogHelper = DialogHelper("Sorry", requireContext(), it)
+        dialogHelper.showDialogMessage()
     }
 
     private val onSuccess: () -> Unit = {
