@@ -2,6 +2,7 @@ package com.android.skillsync
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,7 @@ import com.android.skillsync.databinding.FragmentSignUpStudentBinding
 import com.android.skillsync.helpers.DialogHelper
 import com.android.skillsync.helpers.DynamicTextHelper
 import com.android.skillsync.helpers.ImageHelper
+import com.android.skillsync.helpers.ValidationHelper
 import com.android.skillsync.models.Student.Student
 
 class SignUpStudentFragment : Fragment() {
@@ -66,27 +68,36 @@ class SignUpStudentFragment : Fragment() {
         imageHelper = ImageHelper(this, imageView)
         imageHelper.setImageViewClickListener()
 
-        val nameStudentGroup = binding.nameStudentGroup
-        val emailGroup = binding.emailGroup
-        val institutionGroup = binding.institutionGroup
-        val bioGroup = binding.bioStudentGroup
-        val passwordGroup = binding.passwordGroup
-        val image =  imageHelper.getImageUrl() ?: "DEFAULT LOGO" // TODO
+        val image = imageHelper.getImageUrl() ?: "DEFAULT LOGO" // TODO
         studentViewModel = StudentViewModel()
 
         signUpBtn.setOnClickListener {
-            if(isValidInputs(emailGroup, passwordGroup, nameStudentGroup, institutionGroup, bioGroup)) {
-                val name = nameStudentGroup.editTextField.text.toString()
-                val email = emailGroup.editTextField.text.toString()
-                val bio = bioGroup.editTextField.text.toString()
-                val password = passwordGroup.editTextField.text.toString()
-                val institution = institutionGroup.editTextField.text.toString()
+            if (isValidInputs(
+                    binding.emailGroup,
+                    binding.passwordGroup,
+                    binding.nameStudentGroup,
+                    binding.institutionGroup,
+                    binding.bioStudentGroup
+                )
+            ) {
+                val name = binding.nameStudentGroup.editTextField.text.toString()
+                val email = binding.emailGroup.editTextField.text.toString()
+                val bio = binding.bioStudentGroup.editTextField.text.toString()
+                val password = binding.passwordGroup.editTextField.text.toString()
+                val institution = binding.institutionGroup.editTextField.text.toString()
 
-                student = Student(name = name, email = email, institution = institution, image = image, bio = bio)
+                student = Student(
+                    name = name,
+                    email = email,
+                    institution = institution,
+                    image = image,
+                    bio = bio
+                )
 
                 studentViewModel.createUserAsStudent(email, password, onSuccess, onError)
             }
         }
+
     }
 
     private val onError: (String?) -> Unit = {
@@ -104,147 +115,46 @@ class SignUpStudentFragment : Fragment() {
         _binding = null
     }
 
-
-    // TODO remove from fragment - validation helper
-
     private fun isValidInputs(
         email: CustomInputFieldTextBinding,
         password: CustomInputFieldPasswordBinding,
         name: CustomInputFieldTextBinding,
         institution: CustomInputFieldTextBinding,
-        description: CustomInputFieldTextBinding, // TODO - description validation? IMO no need
+        bio: CustomInputFieldTextBinding
     ): Boolean {
-        fieldErrorShown = false
-
-        val isStrValid: (String) -> Boolean = { input ->
-            val pattern = Regex("^[a-zA-Z,\\. ]+\$")
-            val isLengthValid = input.length >= 3
-            pattern.matches(input) && isLengthValid
-        }
-        val isEmailValid: (String) -> Boolean = { email ->
-            android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
-        }
-        val isPassValid: (String) -> Boolean = { password ->
-            password.length >= 6
-            /*
-                        val minLength = 8
-                        val hasUpperCase = password.any { it.isUpperCase() }
-                        val hasLowerCase = password.any { it.isLowerCase() }
-                        val hasDigit = password.any { it.isDigit() }
-                        val hasSpecialChar = password.any { it.isLetterOrDigit().not() }
-
-                        password.length >= minLength &&
-                                hasUpperCase &&
-                                hasLowerCase &&
-                                hasDigit &&
-                                hasSpecialChar
-             */
-        }
-
-        val validations = listOf(
-            fieldValidation(email, isEmailValid),
-            passwordValidation(password, isPassValid),
-            fieldValidation(name, isStrValid),
-            fieldValidation(institution, isStrValid),
-            /*TODO - do validations for password */
+        val validationResults = mutableListOf<Boolean>()
+        validationResults.add(
+            ValidationHelper.isValidEmail(email.editTextField.text.toString()).also { isValid ->
+                ValidationHelper.handleValidationResult(isValid, email, requireContext())
+            }
         )
 
-        return validations.all { it }
-    }
-
-    private fun fieldValidation(
-        inputGroup: CustomInputFieldTextBinding,
-        validationCondition: (String) -> Boolean
-    ): Boolean {
-        val input = inputGroup.editTextField.text.toString()
-
-        val isValid: Boolean = if (input.isEmpty()) {
-            showBlankError(inputGroup)
-            false
-        } else if (validationCondition(input)) {
-            showValidInput(inputGroup)
-            true
-        } else {
-            showTextError(inputGroup)
-            false
-        }
-        return isValid
-    }
-
-    private fun passwordValidation(
-        inputGroup: CustomInputFieldPasswordBinding,
-        validationCondition: (String) -> Boolean
-    ): Boolean {
-        val input = inputGroup.editTextField.text.toString()
-        val isValid: Boolean
-
-        // TODO IF IT STAY LIKE THIS AND COMMENTS ARE REMOVED - NEED TO REFACTOR
-        if (input.isEmpty()) {
-            //showBlankError(inputGroup)
-            isValid = false
-        } else if (validationCondition(input)) {
-            //  showValidInput(inputGroup)
-            isValid = true
-        } else {
-            //  showTextError(inputGroup)
-            isValid = false
-        }
-        return isValid
-    }
-
-    private fun showBlankError(inputGroup: CustomInputFieldTextBinding) {
-        inputGroup.errorMessage.visibility = View.INVISIBLE
-        inputGroup.editTextLine.setBackgroundColor(
-            ContextCompat.getColor(
-                requireContext(),
-                R.color.red
-            )
+        validationResults.add(
+            ValidationHelper.isValidPassword(password.editTextField.text.toString())
+                .also { isValid ->
+                    ValidationHelper.handleValidationResult(isValid, password, requireContext())
+                }
         )
-        inputGroup.editTextLabel.setTextColor(
-            ContextCompat.getColor(
-                requireContext(),
-                R.color.red
-            )
-        )
-    }
 
-    private fun showValidInput(inputGroup: CustomInputFieldTextBinding) {
-        inputGroup.errorMessage.visibility = View.INVISIBLE
-        inputGroup.editTextLine.setBackgroundColor(
-            ContextCompat.getColor(
-                requireContext(),
-                R.color.Light_Gray
-            )
+        validationResults.add(
+            ValidationHelper.isValidString(name.editTextField.text.toString()).also { isValid ->
+                ValidationHelper.handleValidationResult(isValid, name, requireContext())
+            }
         )
-        inputGroup.editTextLabel.setTextColor(
-            ContextCompat.getColor(
-                requireContext(),
-                R.color.Dark_Gray
-            )
-        )
-    }
 
-    @SuppressLint("SetTextI18n")
-    private fun showTextError(inputGroup: CustomInputFieldTextBinding) {
-        if (inputGroup.editTextLabel.text.equals(R.string.student_description_title)) {
-            inputGroup.errorMessage.text = "Invalid group description"
-        }
-        if (inputGroup.editTextLabel.text.equals(R.string.team_members_name_title)) {
-            inputGroup.errorMessage.text = "Invalid group members name"
-        }
-        inputGroup.errorMessage.text = "Invalid ${inputGroup.editTextLabel.text}"
-        inputGroup.errorMessage.visibility = View.VISIBLE
-        inputGroup.editTextLine.setBackgroundColor(
-            ContextCompat.getColor(
-                requireContext(),
-                R.color.red
-            )
+        validationResults.add(
+            ValidationHelper.isValidString(institution.editTextField.text.toString())
+                .also { isValid ->
+                    ValidationHelper.handleValidationResult(isValid, institution, requireContext())
+                }
         )
-        inputGroup.editTextLabel.setTextColor(
-            ContextCompat.getColor(
-                requireContext(),
-                R.color.Dark_Gray
-            )
+
+        validationResults.add(
+            ValidationHelper.isValidString(bio.editTextField.text.toString()).also { isValid ->
+                ValidationHelper.handleValidationResult(isValid, bio, requireContext())
+            }
         )
+
+        return validationResults.all { it }
     }
 }

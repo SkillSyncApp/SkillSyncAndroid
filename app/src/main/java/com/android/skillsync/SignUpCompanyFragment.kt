@@ -24,6 +24,7 @@ import com.android.skillsync.databinding.FragmentSignUpCompanyBinding
 import com.android.skillsync.helpers.DialogHelper
 import com.android.skillsync.helpers.DynamicTextHelper
 import com.android.skillsync.helpers.ImageHelper
+import com.android.skillsync.helpers.ValidationHelper
 import com.android.skillsync.models.Comapny.Company
 import com.android.skillsync.models.CompanyLocation
 import com.android.skillsync.models.serper.Place
@@ -134,7 +135,7 @@ class SignUpCompanyFragment : Fragment() {
             val address = binding.companySuggestion.text
             val logo = imageHelper.getImageUrl() ?: "DEFAULT LOGO" // TODO
 
-            if (isValidInputs(emailGroup, passwordGroup, companyNameGroup, address)) {
+            if (isValidInputs(emailGroup, passwordGroup, companyNameGroup, address,bioGroup)) {
                 val email = emailGroup.editTextField.text.toString()
                 val password = passwordGroup.editTextField.text.toString()
                 val name = companyNameGroup.editTextField.text.toString()
@@ -172,172 +173,52 @@ class SignUpCompanyFragment : Fragment() {
         }
     }
 
-    // TODO remove from fragment - validation helper
     private fun isValidInputs(
         email: CustomInputFieldTextBinding,
         password: CustomInputFieldPasswordBinding,
         companyName: CustomInputFieldTextBinding,
-        companyLocation: Editable
+        companyLocation: Editable,
+        bioGroup: CustomInputFieldTextBinding
     ): Boolean {
-//        fieldErrorShown = false
-
-        val isStrValid: (String) -> Boolean = { input ->
-            val pattern = Regex("^[a-zA-Z\\. ]+\$")
-            val isLengthValid = input.length >= 3
-            pattern.matches(input) && isLengthValid
-        }
-        val isEmailValid: (String) -> Boolean = { email ->
-            android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
-        }
-        val isPassValid: (String) -> Boolean = { password ->
-            /*TODO - do validations for password */
-
-            password.length >= 6
-            /*
-                val minLength = 8
-                val hasUpperCase = password.any { it.isUpperCase() }
-                val hasLowerCase = password.any { it.isLowerCase() }
-                val hasDigit = password.any { it.isDigit() }
-                val hasSpecialChar = password.any { it.isLetterOrDigit().not() }
-
-                password.length >= minLength &&
-                        hasUpperCase &&
-                        hasLowerCase &&
-                        hasDigit &&
-                        hasSpecialChar
-             */
-        }
-
-        val validations = listOf(
-            fieldValidation(email, isEmailValid),
-            passwordValidation(password, isPassValid),
-            fieldValidation(companyName, isStrValid),
-            addressValidation(companyLocation)
+        val validationResults = mutableListOf<Boolean>()
+        validationResults.add(
+            ValidationHelper.isValidEmail(email.editTextField.text.toString()).also { isValid ->
+                ValidationHelper.handleValidationResult(isValid, email, requireContext())
+            }
         )
 
-        return validations.all { it }
-    }
-
-    private fun addressValidation(input: Editable): Boolean {
-        val isValid: Boolean
-        if (input.isEmpty()) {
-            Log.i("YourTag", "Address is empty")
-            binding.addEditTextLine.setBackgroundColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.red
-                )
-            )
-            binding.inputSuggestions.setTextColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.red
-                )
-            )
-            isValid = false
-        } else {
-            Log.i("YourTag", "Address is valid ")
-
-            binding.addEditTextLine.setBackgroundColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.Light_Gray
-                )
-            )
-            binding.inputSuggestions.setTextColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.Dark_Gray
-                )
-            )
-            isValid = true
-        }
-        return isValid
-    }
-
-    private fun fieldValidation(
-        inputGroup: CustomInputFieldTextBinding,
-        validationCondition: (String) -> Boolean
-    ): Boolean {
-        val input = inputGroup.editTextField.text.toString()
-        val isValid: Boolean
-
-        if (input.isEmpty()) {
-            showBlankError(inputGroup)
-            isValid = false
-        } else if (validationCondition(input)) {
-            showValidInput(inputGroup)
-            isValid = true
-        } else {
-            showTextError(inputGroup)
-            isValid = false
-        }
-        return isValid
-    }
-
-    private fun passwordValidation(
-        /*TODO - do validations for password */
-        inputGroup: CustomInputFieldPasswordBinding,
-        validationCondition: (String) -> Boolean
-    ): Boolean {
-        val input = inputGroup.editTextField.text.toString()
-
-        return if (input.isEmpty()) {
-            //showBlankError(inputGroup)
-            false
-        } else {
-            //  showTextError(inputGroup)//  showValidInput(inputGroup)
-            validationCondition(input)
-        }
-    }
-
-    private fun showBlankError(inputGroup: CustomInputFieldTextBinding) {
-        inputGroup.errorMessage.visibility = View.INVISIBLE
-        inputGroup.editTextLine.setBackgroundColor(
-            ContextCompat.getColor(
-                requireContext(),
-                R.color.red
-            )
+        validationResults.add(
+            ValidationHelper.isValidPassword(password.editTextField.text.toString())
+                .also { isValid ->
+                    ValidationHelper.handleValidationResult(isValid, password, requireContext())
+                }
         )
-        inputGroup.editTextLabel.setTextColor(
-            ContextCompat.getColor(
-                requireContext(),
-                R.color.red
-            )
-        )
-    }
 
-    private fun showValidInput(inputGroup: CustomInputFieldTextBinding) {
-        inputGroup.errorMessage.visibility = View.INVISIBLE
-        inputGroup.editTextLine.setBackgroundColor(
-            ContextCompat.getColor(
-                requireContext(),
-                R.color.Light_Gray
-            )
+        validationResults.add(
+            ValidationHelper.isValidString(companyName.editTextField.text.toString())
+                .also { isValid ->
+                    ValidationHelper.handleValidationResult(isValid, companyName, requireContext())
+                }
         )
-        inputGroup.editTextLabel.setTextColor(
-            ContextCompat.getColor(
-                requireContext(),
-                R.color.Dark_Gray
-            )
-        )
-    }
 
-    @SuppressLint("SetTextI18n")
-    private fun showTextError(inputGroup: CustomInputFieldTextBinding) {
-        inputGroup.errorMessage.text = "Invalid " + inputGroup.editTextLabel.text
-        inputGroup.errorMessage.visibility = View.VISIBLE
-        inputGroup.editTextLine.setBackgroundColor(
-            ContextCompat.getColor(
-                requireContext(),
-                R.color.red
-            )
+        validationResults.add(
+            ValidationHelper.isValidString(bioGroup.editTextField.text.toString())
+                .also { isValid ->
+                    ValidationHelper.handleValidationResult(isValid, bioGroup, requireContext())
+                }
         )
-        inputGroup.editTextLabel.setTextColor(
-            ContextCompat.getColor(
-                requireContext(),
-                R.color.Dark_Gray
-            )
+
+        validationResults.add(
+            ValidationHelper.isValidAddress(companyLocation)
+                .also { isValid ->
+                    ValidationHelper.handleValidationResult(
+                        isValid,
+                        binding.addEditTextLine,
+                        binding.inputSuggestions,
+                        requireContext()
+                    )
+                }
         )
+        return validationResults.all { it }
     }
 }
