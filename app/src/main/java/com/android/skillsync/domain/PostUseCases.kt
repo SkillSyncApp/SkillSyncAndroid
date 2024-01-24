@@ -9,7 +9,7 @@ class PostUseCases(
     private val localStorePostRepository: LocalStorePostRepository,
     private val fireStorePostRepository: FireStorePostRepository) {
 
-    val postsLiveData: LiveData<List<Post>> get() = localStorePostRepository.posts
+    val postsLiveData: LiveData<MutableList<Post>> get() = localStorePostRepository.posts
 
     suspend fun getAllPosts() {
         localStorePostRepository.getAllPosts()

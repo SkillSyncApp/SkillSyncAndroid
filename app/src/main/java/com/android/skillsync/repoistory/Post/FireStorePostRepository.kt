@@ -2,7 +2,7 @@ package com.android.skillsync.repoistory.Post
 
 import com.android.skillsync.models.Post.Post
 import com.android.skillsync.repoistory.ApiManager
-import java.time.LocalDateTime
+import com.google.firebase.Timestamp
 
 class FireStorePostRepository {
 
@@ -30,8 +30,8 @@ class FireStorePostRepository {
             .addOnCompleteListener { onFailureCallBack() }
     }
 
-    fun getPosts(postId: String, since: LocalDateTime, onSuccessCallBack: () -> Unit, onFailureCallBack: () -> Unit) {
-        apiManager.db.collection(POSTS_COLLECTION_PATH).whereGreaterThanOrEqualTo(Post.UPDATED_DATE_KEY, since).get()
+    fun getPosts(postId: String, since: Long, onSuccessCallBack: () -> Unit, onFailureCallBack: () -> Unit) {
+        apiManager.db.collection(POSTS_COLLECTION_PATH).whereGreaterThanOrEqualTo(Post.LAST_UPDATED, Timestamp(since, 0)).get()
             .addOnSuccessListener { onSuccessCallBack() }
             .addOnCompleteListener { onFailureCallBack() }
     }

@@ -10,7 +10,7 @@ import com.android.skillsync.repoistory.ApiManager
 class LocalStorePostRepository {
     val appLocalDB = AppLocalDatabase
     val postDao = appLocalDB.db.getPostDao()
-    val posts: LiveData<List<Post>> = postDao.getAllPosts()
+    val posts: LiveData<MutableList<Post>> = postDao.getAllPosts()
 
     @WorkerThread
     suspend fun insert(post: Post) {

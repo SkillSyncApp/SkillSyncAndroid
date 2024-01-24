@@ -1,8 +1,11 @@
 package com.android.skillsync.models.Student
 
+import android.content.Context
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.android.skillsync.base.MyApplication
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ServerTimestamp
 import java.util.UUID
 
@@ -15,19 +18,30 @@ data class Student(
     val institution: String,
     val image: String,
     val bio: String,
-    @ServerTimestamp
-    val createdDate: Timestamp = Timestamp.now(),
-    @ServerTimestamp
-    val updatedDate: Timestamp = Timestamp.now(),
+    var lastUpdated: Long? = null
+
 ) {
     companion object {
-        private const val NAME_KEY = "name"
-        private const val EMAIL_KEY = "email"
-        private const val INSTITUTION_KEY = "institution"
-        private const val IMAGE_KEY = "image"
-        private const val BIO_KEY = "bio"
-        private const val CREATED_DATE_KEY = "createdDate"
-        private const val UPDATED_DATE_KEY = "updatedDate"
+        var lastUpdated: Long
+            get() {
+                return MyApplication.Globals
+                    .appContext?.getSharedPreferences("TAG", Context.MODE_PRIVATE)
+                    ?.getLong(GET_LAST_UPDATED, 0) ?: 0
+            }
+            set(value) {
+                MyApplication.Globals
+                    ?.appContext
+                    ?.getSharedPreferences("TAG", Context.MODE_PRIVATE)?.edit()
+                    ?.putLong(GET_LAST_UPDATED, value)?.apply()
+            }
+
+        const val NAME_KEY = "name"
+        const val EMAIL_KEY = "email"
+        const val INSTITUTION_KEY = "institution"
+        const val IMAGE_KEY = "image"
+        const val BIO_KEY = "bio"
+        const val LAST_UPDATED = "lastUpdated"
+        const val GET_LAST_UPDATED = "get_last_updated"
 
         fun fromJSON(json: Map<String, Any>): Student{
             val name = json[NAME_KEY] as? String ?: ""
@@ -35,18 +49,21 @@ data class Student(
             val institution = json[INSTITUTION_KEY] as? String ?: ""
             val bio = json[BIO_KEY] as? String ?: ""
             val image = json[IMAGE_KEY] as? String ?: ""
-            val createdDate = json[CREATED_DATE_KEY] as? Timestamp ?: Timestamp.now()
-            val updatedDate = json[UPDATED_DATE_KEY] as? Timestamp ?: Timestamp.now()
 
-            return Student(
+            val student = Student(
                 name = name,
                 email = email,
                 institution = institution,
                 image = image,
-                bio = bio,
-                createdDate = createdDate,
-                updatedDate = updatedDate
+                bio = bio
             )
+
+            val timestamp: Timestamp? = json[LAST_UPDATED] as? Timestamp
+            timestamp?.let {
+                student.lastUpdated = it.seconds
+            }
+
+            return student
         }
     }
 
@@ -57,8 +74,7 @@ data class Student(
                 INSTITUTION_KEY to institution,
                 IMAGE_KEY to image,
                 BIO_KEY to bio,
-                CREATED_DATE_KEY to createdDate,
-                UPDATED_DATE_KEY to updatedDate
+                LAST_UPDATED to FieldValue.serverTimestamp()
             )
         }
 }

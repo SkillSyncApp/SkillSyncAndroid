@@ -172,7 +172,6 @@ object ValidationHelper {
                 )
             )
         } else {
-
             addEditTextLine.setBackgroundColor(
                 ContextCompat.getColor(
                     context,
@@ -186,7 +185,5 @@ object ValidationHelper {
                 )
             )
         }
-
     }
-
 }

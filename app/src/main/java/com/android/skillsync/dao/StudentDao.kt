@@ -12,7 +12,7 @@ import com.android.skillsync.models.Student.Student
 interface StudentDao {
 
     @Query("SELECT * FROM student")
-    fun getAllStudents(): LiveData<List<Student>>
+    fun getAllStudents(): LiveData<MutableList<Student>>
 
     @Insert
     fun addStudent(student: Student)

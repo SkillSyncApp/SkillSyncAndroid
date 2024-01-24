@@ -1,11 +1,13 @@
 package com.android.skillsync.models.Comapny
 
+import android.content.Context
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.android.skillsync.base.MyApplication
 import com.android.skillsync.models.CompanyLocation
 import com.firebase.geofire.core.GeoHash
-import com.google.firebase.firestore.ServerTimestamp
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.GeoPoint
 import java.util.*
 
@@ -18,20 +20,31 @@ data class Company(
     val logo: String,
     val bio: String,
     val location: CompanyLocation = CompanyLocation("Unknown", GeoPoint(0.0, 0.0), GeoHash(0.0, 0.0)),
-    @ServerTimestamp
-    val createdDate: Timestamp = Timestamp.now(),
-    @ServerTimestamp
-    val updatedDate: Timestamp = Timestamp.now(),
+    var lastUpdated: Long? = null
 ) {
 
     companion object {
+
+        var lastUpdated: Long
+            get() {
+                return MyApplication.Globals
+                    .appContext?.getSharedPreferences("TAG", Context.MODE_PRIVATE)
+                    ?.getLong(GET_LAST_UPDATED, 0) ?: 0
+            }
+            set(value) {
+                MyApplication.Globals
+                    ?.appContext
+                    ?.getSharedPreferences("TAG", Context.MODE_PRIVATE)?.edit()
+                    ?.putLong(GET_LAST_UPDATED, value)?.apply()
+            }
+
         const val NAME_KEY = "name"
         const val EMAIL_KEY = "email"
         const val LOGO_KEY = "logo"
         const val BIO_KEY = "bio"
         const val LOCATION_KEY = "location"
-        const val CREATED_DATE_KEY = "createdDateTime"
-        const val UPDATED_DATE_KEY = "updatedDateTime"
+        const val LAST_UPDATED = "lastUpdated"
+        const val GET_LAST_UPDATED = "get_last_updated"
 
         fun fromJSON(json: Map<String, Any>): Company {
             val name = json[NAME_KEY] as? String ?: ""
@@ -39,18 +52,21 @@ data class Company(
             val logo = json[LOGO_KEY] as? String ?: ""
             val bio = json[BIO_KEY] as? String ?: ""
             val location = json[LOCATION_KEY] as? CompanyLocation ?: CompanyLocation("Unknown", GeoPoint(0.0, 0.0), GeoHash(0.0, 0.0))
-            val createdDate = json[CREATED_DATE_KEY] as? Timestamp ?: Timestamp.now()
-            val updatedDate = json[UPDATED_DATE_KEY] as? Timestamp ?: Timestamp.now()
 
-            return Company(
+            val company = Company(
                 name = name,
                 email = email,
                 logo = logo,
                 location = location,
-                bio = bio,
-                createdDate = createdDate,
-                updatedDate = updatedDate
+                bio = bio
             )
+
+            val timestamp: Timestamp? = json[LAST_UPDATED] as? Timestamp
+            timestamp?.let {
+                company.lastUpdated = it.seconds
+            }
+
+            return company
         }
     }
 
@@ -62,8 +78,7 @@ data class Company(
                 LOGO_KEY to logo,
                 BIO_KEY to bio,
                 LOCATION_KEY to location,
-                CREATED_DATE_KEY to createdDate,
-                UPDATED_DATE_KEY to updatedDate
+                LAST_UPDATED to FieldValue.serverTimestamp()
             )
         }
 }

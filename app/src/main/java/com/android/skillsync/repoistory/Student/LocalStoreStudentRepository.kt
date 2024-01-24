@@ -8,7 +8,7 @@ import com.android.skillsync.models.Student.Student
 class LocalStoreUserRepository {
     val appLocalDB = AppLocalDatabase
     val studentDao = appLocalDB.db.getStudentDao()
-    val student: LiveData<List<Student>> = studentDao.getAllStudents()
+    val student: LiveData<MutableList<Student>> = studentDao.getAllStudents()
 
     @WorkerThread
     suspend fun addStudent(student: Student) {

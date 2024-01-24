@@ -13,7 +13,7 @@ class PostViewModel(private val postRepository: LocalStorePostRepository): ViewM
 
     // LiveData to observe changes in the list of posts
     private val _postsLiveData = postRepository.posts
-    val postsLiveData: LiveData<List<Post>> get() = _postsLiveData
+    val postsLiveData: LiveData<MutableList<Post>> get() = _postsLiveData
 
     fun getAllPosts() = viewModelScope.launch(Dispatchers.IO) {
         postRepository.getAllPosts()

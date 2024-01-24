@@ -22,13 +22,6 @@ class MainActivity : AppCompatActivity() {
         // Sign out the current user
         firebaseAuth.signOut()
 
-// TODO in posts feed
-//        postViewModel = ViewModelProvider(this).get(PostViewModel:: class.java)
-//
-//        postViewModel.postsLiveData.observe(this, { posts ->
-//            // show posts in ui
-//        })
-
         val navHostFragment: NavHostFragment? = supportFragmentManager.findFragmentById(R.id.nav_graph) as? NavHostFragment
         navController = navHostFragment?.navController
         navController?.let { NavigationUI.setupActionBarWithNavController(this, it) }

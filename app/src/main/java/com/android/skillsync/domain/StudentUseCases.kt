@@ -5,7 +5,6 @@ import com.android.skillsync.models.Student.Student
 import com.android.skillsync.repoistory.Auth.FireStoreAuthRepository
 import com.android.skillsync.repoistory.Student.FireStoreStudentRepository
 import com.android.skillsync.repoistory.Student.LocalStoreUserRepository
-import kotlin.random.Random
 
 class StudentUseCases {
 
@@ -13,7 +12,7 @@ class StudentUseCases {
     val fireStoreStudentRepository: FireStoreStudentRepository = FireStoreStudentRepository()
     val fireStoreAuthRepository: FireStoreAuthRepository = FireStoreAuthRepository()
 
-    val studentLiveData: LiveData<List<Student>> get() = localStoreStudentRepository.student
+    val studentLiveData: LiveData<MutableList<Student>> get() = localStoreStudentRepository.student
 
     fun getAllStudents() {
         studentLiveData
