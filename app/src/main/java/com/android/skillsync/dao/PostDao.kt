@@ -12,7 +12,7 @@ import com.android.skillsync.models.Post.Post
 interface PostDao {
 
     @Query("SELECT * FROM post")
-    fun getAllPosts(): LiveData<List<Post>>
+    fun getAllPosts(): LiveData<MutableList<Post>>
 
     @Insert
     fun insertPost(post: Post)

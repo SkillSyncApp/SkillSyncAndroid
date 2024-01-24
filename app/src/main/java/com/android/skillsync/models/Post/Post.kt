@@ -1,11 +1,13 @@
 package com.android.skillsync.models.Post
 
+import android.content.Context
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.android.skillsync.base.MyApplication
 import com.android.skillsync.models.Student.Student
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.ServerTimestamp
+import com.google.firebase.firestore.FieldValue
 import java.util.UUID
 
 @Entity(
@@ -24,35 +26,49 @@ data class Post(
     val title: String,
     val content: String,
     val imagePath: String,
-    @ServerTimestamp
-    val createdDate: Timestamp = Timestamp.now(),
-    @ServerTimestamp
-    val updatedDate: Timestamp = Timestamp.now(),
+    var lastUpdated: Long? = null
 ) {
     companion object {
+
+        var lastUpdated: Long
+            get() {
+                return MyApplication.Globals
+                    .appContext?.getSharedPreferences("TAG", Context.MODE_PRIVATE)
+                    ?.getLong(GET_LAST_UPDATED, 0) ?: 0
+            }
+            set(value) {
+                MyApplication.Globals
+                    ?.appContext
+                    ?.getSharedPreferences("TAG", Context.MODE_PRIVATE)?.edit()
+                    ?.putLong(GET_LAST_UPDATED, value)?.apply()
+            }
+
         const val OWNER_ID_KEY = "ownerId"
         const val TITLE_KEY = "title"
         const val CONTENT_KEY = "content"
         const val IMAGE_PATH_KEY = "imagePath"
-        const val CREATED_DATE_KEY = "createdDate"
-        const val UPDATED_DATE_KEY = "updatedDate"
+        const val LAST_UPDATED = "lastUpdated"
+        const val GET_LAST_UPDATED = "get_last_updated"
 
         fun fromJSON(json: Map<String, Any>): Post {
             val ownerId = json[OWNER_ID_KEY] as? String ?: "" // "" as unknown
             val title = json[TITLE_KEY] as? String ?: ""
             val content = json[CONTENT_KEY] as? String ?: ""
             val imagePath = json[IMAGE_PATH_KEY] as? String ?: ""
-            val createdDate = json[CREATED_DATE_KEY] as? Timestamp ?: Timestamp.now()
-            val updatedDate = json[UPDATED_DATE_KEY] as? Timestamp ?: Timestamp.now()
 
-            return Post(
+            val post = Post(
                 ownerId = ownerId,
                 title = title,
                 content = content,
-                imagePath = imagePath,
-                createdDate = createdDate,
-                updatedDate = updatedDate
+                imagePath = imagePath
             )
+
+            val timestamp: Timestamp? = json[LAST_UPDATED] as? Timestamp
+            timestamp?.let {
+                post.lastUpdated = it.seconds
+            }
+
+            return post
         }
     }
 
@@ -63,8 +79,7 @@ data class Post(
                 TITLE_KEY to title,
                 CONTENT_KEY to content,
                 IMAGE_PATH_KEY to imagePath,
-                CREATED_DATE_KEY to createdDate,
-                UPDATED_DATE_KEY to updatedDate
+                LAST_UPDATED to FieldValue.serverTimestamp()
             )
         }
 }

@@ -16,26 +16,31 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.android.skillsync.ViewModel.CompanyViewModel
 import com.android.skillsync.databinding.FragmentMapViewBinding
-import com.android.skillsync.models.CompanyLocation
-import com.android.skillsync.repoistory.Company.FireStoreCompanyRepository
+import com.android.skillsync.models.Comapny.Company
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.ItemizedIconOverlay
 import org.osmdroid.views.overlay.OverlayItem
+import java.util.Timer
+import java.util.TimerTask
 
 class MapViewFragment : Fragment(), LocationListener {
 
     private lateinit var aMapView: MapView
     private lateinit var locationManager: LocationManager
     private lateinit var view: View
+    private lateinit var viewModel: CompanyViewModel
+
     private val LOCATIONS_PERMISSIONS_CODE = 2
+    private val timer = Timer()
+    private val binding get() = _binding!!
 
     private var _binding: FragmentMapViewBinding? = null
-
-    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,10 +49,52 @@ class MapViewFragment : Fragment(), LocationListener {
         _binding = FragmentMapViewBinding.inflate(layoutInflater, container, false)
         view = binding.root
 
+        viewModel = ViewModelProvider(this)[CompanyViewModel::class.java]
+
         initializeMapView()
         checkLocationPermissions()
 
+        viewModel.companies?.observe(viewLifecycleOwner) { companies ->
+            updateMapMarkers(companies)
+        }
+
+        scheduleAutomaticRefresh()
+
         return view
+    }
+
+    private fun scheduleAutomaticRefresh() {
+        // Schedule a task to run every 5 minutes
+        timer.scheduleAtFixedRate(object : TimerTask() {
+            override fun run() {
+                // Reload data every 5 minutes
+                reloadData()
+            }
+        }, 0,  5 * 60 * 1000 ) // 5 minutes in milliseconds
+    }
+
+    private fun updateMapMarkers(companies: MutableList<Company>) {
+        for (company in companies) {
+            val latitude = company.location.location.latitude
+            val longitude = company.location.location.longitude
+            addMarker(GeoPoint(latitude, longitude), "Company Marker", "Company Marker")
+        }
+    }
+
+    private fun reloadData() {
+        // TODO loading
+        viewModel.setCompaniesOnMap { companyLocation ->
+            // Assuming you want to add markers for each company location
+            val latitude = companyLocation.location.latitude
+            val longitude = companyLocation.location.longitude
+            addMarker(
+               GeoPoint(latitude, longitude),
+                "Company Marker",
+                "Company Marker"
+            )
+        }
+
+        viewModel.refreshCompanies()
     }
 
     private fun initializeMapView() {
@@ -134,14 +181,6 @@ class MapViewFragment : Fragment(), LocationListener {
         val geoPoint = GeoPoint(location.latitude, location.longitude)
         aMapView.controller.setCenter(geoPoint)
         addMarker(geoPoint, "I Am Here!", "OSMDroid Marker")
-
-        val companyLocationCallback: (CompanyLocation) -> Unit = { companyLocation ->
-            val aLatitude = companyLocation.location.latitude
-            val aLongitude = companyLocation.location.longitude
-            addMarker(GeoPoint(aLatitude, aLongitude), "Company Marker", "Company Marker")
-        }
-
-//        firebaseRepository.setCompaniesOnMap(companyLocationCallback)
     }
 
     override fun onRequestPermissionsResult(
@@ -160,8 +199,14 @@ class MapViewFragment : Fragment(), LocationListener {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
+    override fun onResume() {
+        super.onResume()
+        reloadData()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+        timer.cancel()
     }
 }

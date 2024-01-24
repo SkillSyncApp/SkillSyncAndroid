@@ -1,10 +1,13 @@
 package com.android.skillsync.repoistory.Company
 
+import android.util.Log
 import com.android.skillsync.models.Comapny.Company
+import com.android.skillsync.models.CompanyLocation
 import com.android.skillsync.repoistory.ApiManager
+import com.firebase.geofire.core.GeoHash
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.GeoPoint
 import kotlinx.coroutines.tasks.await
-import java.util.Date
 
 class FireStoreCompanyRepository {
     companion object {
@@ -13,86 +16,68 @@ class FireStoreCompanyRepository {
 
     val apiManager = ApiManager()
 
-    fun getNewCompanies(since: Date) {
-        val sinceTimestamp = Timestamp(since)
-
+    fun getCompanies(since: Long, callback: (List<Company>) -> Unit) {
         apiManager.db.collection(COMPANIES_COLLECTION_PATH)
-            .whereGreaterThanOrEqualTo("updatedDate", sinceTimestamp).get()
-            .addOnSuccessListener {
-//                onSuccessCallBack()
-
-            }.addOnFailureListener {
-//                onFailureCallBack()
+            .whereGreaterThanOrEqualTo(Company.LAST_UPDATED, Timestamp(since, 0))
+            .get().addOnCompleteListener {
+                when (it.isSuccessful) {
+                    true -> {
+                        val companies: MutableList<Company> = mutableListOf()
+                        for (json in it.result) {
+                            val company = Company.fromJSON(json.data)
+                            companies.add(company)
+                        }
+                    }
+                    false -> callback(listOf())
+                }
             }
     }
 
-    suspend fun addCompany(company: Company): String {
+    suspend fun addCompany(company: Company, function: () -> Unit): String {
         val documentReference = apiManager.db.collection(COMPANIES_COLLECTION_PATH)
             .add(company.json)
             .await()
 
         return documentReference.id
     }
+
+
+    fun setCompaniesOnMap(callback: (CompanyLocation) -> Unit) {
+        val companiesReference = apiManager.db.collection(COMPANIES_COLLECTION_PATH)
+        companiesReference.get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    val companyId = document.id
+                    fetchCompanyLocation(companyId, callback)
+                }
+            }
+    }
+
+    private fun fetchCompanyLocation(companyId: String, callback: (CompanyLocation) -> Unit) {
+        val companyDocument = apiManager.db.collection(COMPANIES_COLLECTION_PATH)
+
+        companyDocument.document(companyId).get()
+            .addOnSuccessListener { documentSnapshot ->
+                val data = documentSnapshot.data
+                if (data != null) {
+                    val locationData = data["location"] as? Map<*, *>
+                    if (locationData != null) {
+                        val address = locationData["address"] as String
+                        val geoPoint = locationData["location"] as GeoPoint
+                            val latitude = geoPoint.latitude
+                            val longitude = geoPoint.longitude
+
+                            val companyLocation = CompanyLocation(
+                                address,
+                                GeoPoint(latitude, longitude),
+                                GeoHash(latitude, longitude)
+                            )
+                            callback(companyLocation)
+                        }
+                }
+            }
+            .addOnFailureListener { locationException ->
+                Log.e("Firestore", "Error getting location documents: $locationException")
+            }
+    }
 }
-
-//TODO complete it
-//
-//    fun setCompaniesOnMap(callback: (CompanyLocation) -> Unit) {
-//        val companiesReference = firestore.collection(COMPANIES_COLLECTION_PATH)
-//
-//        companiesReference.get()
-//            .addOnSuccessListener { documents ->
-//                for (document in documents) {
-//                    val companyId = document.id
-//                    fetchLocationsCompanies(companyId, callback)
-//                }
-//            }
-//            .addOnFailureListener { exception ->
-//                Log.e("Firestore", "Error getting company documents: $exception")
-//            }
-//    }
-
-//    private fun fetchLocationsCompanies(companyId: String, callback: (CompanyLocation) -> Unit) {
-//        val locationsCollection = firestore.collection("$COMPANIES_COLLECTION_PATH/$companyId/locations")
-//
-//        locationsCollection.get()
-//            .addOnSuccessListener { locationDocuments ->
-//                for (locationDocument in locationDocuments) {
-//                    fetchCompanyLocation(companyId, callback)
-//                }
-//            }
-//            .addOnFailureListener { locationException ->
-//                Log.e("Firestore", "Error getting location documents: $locationException")
-//            }
-//    }
-
-//    private fun fetchCompanyLocation(companyId: String, callback: (CompanyLocation) -> Unit) {
-//        val companyDocument = firestore.collection(COMPANIES_COLLECTION_PATH).document(companyId)
-//
-//        companyDocument.get()
-//            .addOnSuccessListener { documentSnapshot ->
-//                val data = documentSnapshot.data?.get("location") as? Map<*, *>
-//                if (data != null) {
-//                    val address = data["address"] as? String ?: "Unknown Address"
-//                    val geoPoint = data["location"] as? com.google.firebase.firestore.GeoPoint
-//                    if (geoPoint != null) {
-//                        val latitude = geoPoint.latitude
-//                        val longitude = geoPoint.longitude
-//
-//                        val locationData = CompanyLocation(
-//                            address,
-//                            com.google.firebase.firestore.GeoPoint(latitude, longitude)
-//                        )
-//                        callback(locationData)
-//                    } else {
-//                        Log.e("Firestore", "Error getting location documents: No GeoPoint found")
-//                    }
-//                } else {
-//                    Log.e("Firestore", "Error getting location documents: No data found")
-//                }
-//            }
-//            .addOnFailureListener { locationException ->
-//                Log.e("Firestore", "Error getting location documents: $locationException")
-//            }
-//    }
-//}

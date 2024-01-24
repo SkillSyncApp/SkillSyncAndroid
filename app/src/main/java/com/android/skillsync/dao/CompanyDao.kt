@@ -12,7 +12,7 @@ import com.android.skillsync.models.Comapny.Company
 @Dao
 interface CompanyDao {
     @Query("SELECT * FROM company")
-    fun getAllCompanies(): LiveData<List<Company>>
+    fun getAllCompanies(): LiveData<MutableList<Company>>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     fun insert(company: Company)
