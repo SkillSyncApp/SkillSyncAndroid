@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.activity.result.contract.ActivityResultContracts
 import com.squareup.picasso.Picasso
 
-class ImageHelper(private val fragment: Fragment, private val imageView: ImageView) {
+class ImageHelper(fragment: Fragment, private val imageView: ImageView) {
 
     private var imageUrl: String? = null
 

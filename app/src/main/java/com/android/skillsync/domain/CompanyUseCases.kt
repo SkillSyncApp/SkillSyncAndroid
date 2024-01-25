@@ -49,9 +49,7 @@ class CompanyUseCases {
     }
 
     suspend fun addCompany(company: Company) {
-        val companyId = fireStoreCompanyRepository.addCompany(company) {
-            refreshCompanies()
-        }
+        val companyId = fireStoreCompanyRepository.addCompany(company)
         company.id = companyId
     }
 
@@ -63,7 +61,7 @@ class CompanyUseCases {
 //        fireStoreCompanyRepository.(company)
     }
 
-    fun setCompaniesOnMap(callback: (CompanyLocation) -> Unit) {
+    fun setCompaniesOnMap(callback: (MutableList<Company>) -> Unit) {
         fireStoreCompanyRepository.setCompaniesOnMap(callback)
     }
 }

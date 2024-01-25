@@ -3,9 +3,7 @@ package com.android.skillsync.repoistory.Post
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import com.android.skillsync.dao.AppLocalDatabase
-import com.android.skillsync.dao.PostDao
 import com.android.skillsync.models.Post.Post
-import com.android.skillsync.repoistory.ApiManager
 
 class LocalStorePostRepository {
     val appLocalDB = AppLocalDatabase

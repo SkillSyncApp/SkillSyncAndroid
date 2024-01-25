@@ -83,15 +83,17 @@ class MapViewFragment : Fragment(), LocationListener {
 
     private fun reloadData() {
         // TODO loading
-        viewModel.setCompaniesOnMap { companyLocation ->
-            // Assuming you want to add markers for each company location
-            val latitude = companyLocation.location.latitude
-            val longitude = companyLocation.location.longitude
-            addMarker(
-               GeoPoint(latitude, longitude),
-                "Company Marker",
-                "Company Marker"
-            )
+        viewModel.setCompaniesOnMap { companies ->
+            for (company in companies) {
+                // Assuming you want to add markers for each company location
+                val latitude = company.location.location.latitude
+                val longitude = company.location.location.longitude
+                addMarker(
+                    GeoPoint(latitude, longitude),
+                    "Company Marker",
+                    "Company Marker"
+                )
+            }
         }
 
         viewModel.refreshCompanies()

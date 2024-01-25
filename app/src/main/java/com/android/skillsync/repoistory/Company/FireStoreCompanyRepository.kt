@@ -33,22 +33,30 @@ class FireStoreCompanyRepository {
             }
     }
 
-    suspend fun addCompany(company: Company, function: () -> Unit): String {
+    suspend fun addCompany(company: Company): String {
         val documentReference = apiManager.db.collection(COMPANIES_COLLECTION_PATH)
             .add(company.json)
             .await()
 
-        return documentReference.id
+            return documentReference.id
     }
 
 
-    fun setCompaniesOnMap(callback: (CompanyLocation) -> Unit) {
-        val companiesReference = apiManager.db.collection(COMPANIES_COLLECTION_PATH)
-        companiesReference.get()
-            .addOnSuccessListener { documents ->
-                for (document in documents) {
-                    val companyId = document.id
-                    fetchCompanyLocation(companyId, callback)
+    fun setCompaniesOnMap(callback: (MutableList<Company>) -> Unit) {
+        val timestamp = Company.lastUpdated
+        apiManager.db.collection(COMPANIES_COLLECTION_PATH)
+            .whereGreaterThanOrEqualTo(Company.LAST_UPDATED, Timestamp(timestamp,0))
+            .get().addOnCompleteListener {
+                when (it.isSuccessful) {
+                    true -> {
+                        val companies: MutableList<Company> = mutableListOf()
+                        for (json in it.result) {
+                            val company = Company.fromJSON(json.data)
+                            companies.add(company)
+                        }
+                        callback(companies)
+                    }
+                    false -> Log.e("firebase", "error to set companies on map")
                 }
             }
     }

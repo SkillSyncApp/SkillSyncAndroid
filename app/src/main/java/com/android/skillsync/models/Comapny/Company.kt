@@ -9,7 +9,7 @@ import com.firebase.geofire.core.GeoHash
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.GeoPoint
-import java.util.*
+import java.util.UUID
 
 @Entity
 data class Company(
@@ -19,7 +19,11 @@ data class Company(
     val email: String,
     val logo: String,
     val bio: String,
-    val location: CompanyLocation = CompanyLocation("Unknown", GeoPoint(0.0, 0.0), GeoHash(0.0, 0.0)),
+    val location: CompanyLocation = CompanyLocation(
+        "Unknown",
+        GeoPoint(0.0, 0.0),
+        GeoHash(0.0, 0.0)
+    ),
     var lastUpdated: Long? = null
 ) {
 
@@ -51,7 +55,11 @@ data class Company(
             val email = json[EMAIL_KEY] as? String ?: ""
             val logo = json[LOGO_KEY] as? String ?: ""
             val bio = json[BIO_KEY] as? String ?: ""
-            val location = json[LOCATION_KEY] as? CompanyLocation ?: CompanyLocation("Unknown", GeoPoint(0.0, 0.0), GeoHash(0.0, 0.0))
+            val location = json[LOCATION_KEY] as? CompanyLocation ?: CompanyLocation(
+                "Unknown",
+                GeoPoint(0.0, 0.0),
+                GeoHash(0.0, 0.0)
+            )
 
             val company = Company(
                 name = name,

@@ -90,4 +90,9 @@
             android:id="@+id/action_signUpStudentFragment_to_signInFragment"
             app:destination="@id/signInFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/companiesCardRecyclerView"
+        android:name="com.android.skillsync.CompaniesCardRecyclerView"
+        android:label="fragment_companies_card_recycler_view"
+        tools:layout="@layout/fragment_companies_card_recycler_view" />
 </navigation>
