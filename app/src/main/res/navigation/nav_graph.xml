@@ -69,7 +69,11 @@
         android:id="@+id/mapViewFragment"
         android:name="com.android.skillsync.MapViewFragment"
         android:label="fragment_map_view"
-        tools:layout="@layout/fragment_map_view" />
+        tools:layout="@layout/fragment_map_view" >
+        <action
+            android:id="@+id/action_mapViewFragment_to_feedFragment"
+            app:destination="@id/feedFragment" />
+    </fragment>
     <fragment
         android:id="@+id/pickUserTypeFragment"
         android:name="com.android.skillsync.PickUserTypeFragment"
@@ -90,4 +94,9 @@
             android:id="@+id/action_signUpStudentFragment_to_signInFragment"
             app:destination="@id/signInFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/feedFragment"
+        android:name="com.android.skillsync.FeedFragment"
+        android:label="fragment_feed"
+        tools:layout="@layout/fragment_feed" />
 </navigation>

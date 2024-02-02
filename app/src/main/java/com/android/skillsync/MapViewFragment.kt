@@ -9,6 +9,8 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -59,15 +61,22 @@ class MapViewFragment : Fragment(), LocationListener {
         }
 
         scheduleAutomaticRefresh()
+        setHasOptionsMenu(true)
 
         return view
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        // Inflate the options menu for this fragment
+        inflater.inflate(R.menu.menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
 
     private fun scheduleAutomaticRefresh() {
         // Schedule a task to run every 5 minutes
         timer.scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
-                // Reload data every 5 minutes
                 reloadData()
             }
         }, 0,  5 * 60 * 1000 ) // 5 minutes in milliseconds
@@ -84,7 +93,6 @@ class MapViewFragment : Fragment(), LocationListener {
     private fun reloadData() {
         // TODO loading
         viewModel.setCompaniesOnMap { companyLocation ->
-            // Assuming you want to add markers for each company location
             val latitude = companyLocation.location.latitude
             val longitude = companyLocation.location.longitude
             addMarker(
