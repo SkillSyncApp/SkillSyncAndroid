@@ -2,28 +2,35 @@ package com.android.skillsync.domain
 
 import androidx.lifecycle.LiveData
 import com.android.skillsync.models.Post.Post
+import com.android.skillsync.models.Student.Student
+import com.android.skillsync.repoistory.Auth.FireStoreAuthRepository
 import com.android.skillsync.repoistory.Post.FireStorePostRepository
 import com.android.skillsync.repoistory.Post.LocalStorePostRepository
+import com.android.skillsync.repoistory.Student.FireStoreStudentRepository
+import com.android.skillsync.repoistory.Student.LocalStoreUserRepository
 
-class PostUseCases(
-    private val localStorePostRepository: LocalStorePostRepository,
-    private val fireStorePostRepository: FireStorePostRepository) {
+class PostUseCases() {
+
+    val localStorePostRepository: LocalStorePostRepository = LocalStorePostRepository()
+    val fireStorePostRepository: FireStorePostRepository = FireStorePostRepository()
+    val fireStoreAuthRepository: FireStoreAuthRepository = FireStoreAuthRepository()
+
 
     val postsLiveData: LiveData<MutableList<Post>> get() = localStorePostRepository.posts
 
-    suspend fun getAllPosts() {
-        localStorePostRepository.getAllPosts()
+    fun getAll() {
+        postsLiveData
     }
 
-    suspend fun addPost(post: Post) {
-        localStorePostRepository.insert(post)
+    suspend fun add(post: Post) {
+        localStorePostRepository.addPost(post)
     }
 
-    suspend fun deletePost(post: Post) {
+    suspend fun delete(post: Post) {
         localStorePostRepository.delete(post)
     }
 
-    suspend fun deleteAllPosts() {
+    suspend fun deleteAll() {
         localStorePostRepository.deleteAllPosts()
     }
 

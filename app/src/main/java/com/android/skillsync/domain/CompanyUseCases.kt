@@ -48,14 +48,14 @@ class CompanyUseCases {
         }
     }
 
-    suspend fun addCompany(company: Company) {
+    suspend fun add(company: Company) {
         val companyId = fireStoreCompanyRepository.addCompany(company) {
             refreshCompanies()
         }
         company.id = companyId
     }
 
-    suspend fun deleteCompany(company: Company) {
+    suspend fun delete(company: Company) {
 //        fireStoreCompanyRepository.delete(company)
     }
 
