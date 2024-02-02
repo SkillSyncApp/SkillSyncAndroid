@@ -9,20 +9,36 @@ import android.widget.EditText
 import android.widget.TextView
 
 class NewPostFragment : Fragment() {
+    private lateinit var view: View
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        setHintForEditText(R.id.project_name_group, R.string.project_name_hint, R.string.project_name_title)
-        setHintForEditText(R.id.project_description_group,  R.string.project_description_hint,null)
-        setHintForEditText(R.id.project_deadline_group,null, R.string.project_deadline_title)
-        setHintForEditText(R.id.project_availability_group,null, R.string.project__availability_title)
+    ): View {
+        view = inflater.inflate(R.layout.fragment_new_post, container, false)
+        setHintForEditText(
+            editTextGroupId = R.id.project_name_group,
+            hintResourceId = R.string.project_name_hint,
+            inputTitleResourceId = R.string.project_name_title
+        )
+        setHintForEditText(
+            editTextGroupId = R.id.project_description_group,
+            hintResourceId = R.string.project_description_hint
+        )
+        setHintForEditText(
+            editTextGroupId = R.id.project_deadline_group,
+            inputTitleResourceId = R.string.project_deadline_title
+        )
+        setHintForEditText(
+            editTextGroupId = R.id.project_availability_group,
+            inputTitleResourceId = R.string.project__availability_title
+        )
 
-        return inflater.inflate(R.layout.fragment_new_post, container, false)
+        return view
     }
 
-    private fun setHintForEditText(editTextGroupId: Int, hintResourceId: Int?, inputTitleResourceId: Int?) {
-        val editTextGroup = view?.findViewById<View>(editTextGroupId)
+    private fun setHintForEditText(editTextGroupId: Int, hintResourceId: Int? = null, inputTitleResourceId: Int? = null) {
+        val editTextGroup = view.findViewById<View>(editTextGroupId)
         val editTextLabel = editTextGroup?.findViewById<TextView>(R.id.edit_text_label)
         val editTextField = editTextGroup?.findViewById<EditText>(R.id.edit_text_field)
 

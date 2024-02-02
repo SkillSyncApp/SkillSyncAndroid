@@ -22,11 +22,11 @@ class CompanyViewModel: ViewModel() {
     }
 
     fun addCompany(company: Company) = viewModelScope.launch(Dispatchers.IO) {
-        companyUseCases.addCompany(company)
+        companyUseCases.add(company)
     }
 
     fun deleteCompany(company: Company) = viewModelScope.launch(Dispatchers.IO) {
-        companyUseCases.deleteCompany(company)
+        companyUseCases.delete(company)
     }
 
     fun update(company: Company) = viewModelScope.launch(Dispatchers.IO) {

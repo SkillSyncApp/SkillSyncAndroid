@@ -41,7 +41,6 @@ class FireStoreCompanyRepository {
         return documentReference.id
     }
 
-
     fun setCompaniesOnMap(callback: (CompanyLocation) -> Unit) {
         val companiesReference = apiManager.db.collection(COMPANIES_COLLECTION_PATH)
         companiesReference.get()

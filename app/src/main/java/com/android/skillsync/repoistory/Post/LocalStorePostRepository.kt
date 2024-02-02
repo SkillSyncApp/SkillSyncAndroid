@@ -13,7 +13,7 @@ class LocalStorePostRepository {
     val posts: LiveData<MutableList<Post>> = postDao.getAllPosts()
 
     @WorkerThread
-    suspend fun insert(post: Post) {
+    suspend fun addPost(post: Post) {
         postDao.insertPost(post)
     }
 
