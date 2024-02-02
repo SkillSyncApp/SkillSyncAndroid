@@ -11,7 +11,7 @@ import com.android.skillsync.models.Post.Post
 import com.android.skillsync.models.Student.Student
 
 @TypeConverters(Converters::class)
-@Database(entities = [Post::class, Company::class, Student:: class], version = 2)
+@Database(entities = [Post::class, Company::class, Student:: class], version = 3)
 abstract class AppLocalDbRepository : RoomDatabase() {
     abstract fun getPostDao(): PostDao
     abstract fun getCompanyDao(): CompanyDao

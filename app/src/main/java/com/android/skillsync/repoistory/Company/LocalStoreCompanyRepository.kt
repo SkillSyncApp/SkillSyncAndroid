@@ -10,7 +10,7 @@ class LocalStoreCompanyRepository {
     val companyDao = appLocalDB.db.getCompanyDao()
 
     @WorkerThread
-    fun insert(company: Company) {
+    fun add(company: Company) {
         companyDao.insert(company)
     }
 

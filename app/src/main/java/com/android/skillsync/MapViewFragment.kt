@@ -9,8 +9,7 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -19,6 +18,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.ui.NavigationUI
+import com.android.skillsync.Navigations.navigate
 import com.android.skillsync.ViewModel.CompanyViewModel
 import com.android.skillsync.databinding.FragmentMapViewBinding
 import com.android.skillsync.models.Comapny.Company
@@ -38,11 +39,12 @@ class MapViewFragment : Fragment(), LocationListener {
     private lateinit var view: View
     private lateinit var viewModel: CompanyViewModel
 
-    private val LOCATIONS_PERMISSIONS_CODE = 2
     private val timer = Timer()
     private val binding get() = _binding!!
 
     private var _binding: FragmentMapViewBinding? = null
+    private val LOCATIONS_PERMISSIONS_CODE = 2
+    private var locationUpdatesRequested = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,25 +55,27 @@ class MapViewFragment : Fragment(), LocationListener {
 
         viewModel = ViewModelProvider(this)[CompanyViewModel::class.java]
 
-        initializeMapView()
-        checkLocationPermissions()
+        if (isLocationPermissionGranted()) {
+            initializeMapView()
+            requestLocationUpdates()
+        } else requestLocationPermissions()
 
         viewModel.companies?.observe(viewLifecycleOwner) { companies ->
             updateMapMarkers(companies)
         }
 
         scheduleAutomaticRefresh()
-        setHasOptionsMenu(true)
+        setEventListeners()
 
         return view
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        // Inflate the options menu for this fragment
-        inflater.inflate(R.menu.menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
+    private fun setEventListeners() {
+        binding.feedBtn.setOnClickListener {
+            clearMapOverlays()
+            view.navigate(R.id.action_mapViewFragment_to_feedFragment)
+        }
     }
-
 
     private fun scheduleAutomaticRefresh() {
         // Schedule a task to run every 5 minutes
@@ -97,7 +101,7 @@ class MapViewFragment : Fragment(), LocationListener {
             val longitude = companyLocation.location.longitude
             addMarker(
                GeoPoint(latitude, longitude),
-                "Company Marker",
+                companyLocation.address,
                 "Company Marker"
             )
         }
@@ -106,7 +110,7 @@ class MapViewFragment : Fragment(), LocationListener {
     }
 
     private fun initializeMapView() {
-        aMapView = binding.root.findViewById(R.id.map)
+        aMapView = binding.map
         aMapView.setTileSource(TileSourceFactory.MAPNIK)
         aMapView.controller.setZoom(17.0)
 
@@ -117,11 +121,6 @@ class MapViewFragment : Fragment(), LocationListener {
                 AppCompatActivity.MODE_PRIVATE
             )
         )
-    }
-
-    private fun checkLocationPermissions() {
-        if (isLocationPermissionGranted()) requestLocationUpdates()
-        else requestLocationPermissions()
     }
 
     private fun isLocationPermissionGranted(): Boolean {
@@ -153,6 +152,31 @@ class MapViewFragment : Fragment(), LocationListener {
         )
 
         aMapView.overlays.add(itemizedIconOverlay)
+        aMapView.invalidate()
+    }
+
+    private fun removeLocationUpdates() {
+        if (locationUpdatesRequested) {
+            locationManager.removeUpdates(this)
+            locationUpdatesRequested = false // Reset the flag
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        clearMapOverlays()
+        removeLocationUpdates()
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        clearMapOverlays()
+        removeLocationUpdates()
+        _binding = null
+    }
+
+    private fun clearMapOverlays() {
+        aMapView.overlays.clear()
+        aMapView.invalidate()
     }
 
     private fun requestLocationUpdates() {
@@ -183,6 +207,7 @@ class MapViewFragment : Fragment(), LocationListener {
             1f,   // Minimum distance between updates (in meters)
             this
         )
+        locationUpdatesRequested = true
     }
 
     override fun onLocationChanged(location: Location) {
@@ -214,7 +239,7 @@ class MapViewFragment : Fragment(), LocationListener {
 
     override fun onDestroy() {
         super.onDestroy()
-        _binding = null
         timer.cancel()
+        _binding = null
     }
 }

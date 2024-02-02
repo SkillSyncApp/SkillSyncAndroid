@@ -1,14 +1,9 @@
 package com.android.skillsync.ViewModel
 
-import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.android.skillsync.domain.PostUseCases
-import com.android.skillsync.models.Comapny.Company
 import com.android.skillsync.models.Post.Post
-import com.android.skillsync.repoistory.Post.LocalStorePostRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

@@ -4,16 +4,16 @@ import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import com.android.skillsync.dao.AppLocalDatabase
 import com.android.skillsync.dao.PostDao
+import com.android.skillsync.models.Comapny.Company
 import com.android.skillsync.models.Post.Post
 import com.android.skillsync.repoistory.ApiManager
 
 class LocalStorePostRepository {
     val appLocalDB = AppLocalDatabase
     val postDao = appLocalDB.db.getPostDao()
-    val posts: LiveData<MutableList<Post>> = postDao.getAllPosts()
 
     @WorkerThread
-    suspend fun addPost(post: Post) {
+    fun add(post: Post) {
         postDao.insertPost(post)
     }
 
@@ -33,7 +33,7 @@ class LocalStorePostRepository {
     }
 
     @WorkerThread
-    fun getAllPosts() {
-        postDao.getAllPosts()
+    fun getAllPosts(): LiveData<MutableList<Post>> {
+        return postDao.getAllPosts()
     }
 }

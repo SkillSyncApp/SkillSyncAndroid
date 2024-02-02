@@ -49,7 +49,7 @@ object ValidationHelper {
         // Add your generic string validation logic here
         val pattern = Regex("^[a-zA-Z,\\. ]+\$")
         val isLengthValid = input.length >= 3
-        return pattern.matches(input) && isLengthValid && input != null && input.isNotBlank()
+        return pattern.matches(input) && isLengthValid && input.isNotBlank()
 
     }
 

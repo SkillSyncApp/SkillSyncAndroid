@@ -17,7 +17,7 @@ class PlacesApiCall {
         val retrofit: Retrofit = Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(
             GsonConverterFactory.create()).build()
 
-        val apiService: PlacesApiService = retrofit.create<PlacesApiService>(PlacesApiService::class.java)
+        val apiService: PlacesApiService = retrofit.create(PlacesApiService::class.java)
 
         // Set Israel as origin
         val placesRequestBody = mapOf(

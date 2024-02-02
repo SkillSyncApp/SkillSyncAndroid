@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -17,6 +18,7 @@ import com.android.skillsync.ViewModel.StudentViewModel
 import com.android.skillsync.databinding.CustomInputFieldPasswordBinding
 import com.android.skillsync.databinding.CustomInputFieldTextBinding
 import com.android.skillsync.databinding.FragmentSignUpStudentBinding
+import com.android.skillsync.helpers.ActionBarHelper
 import com.android.skillsync.helpers.DialogHelper
 import com.android.skillsync.helpers.DynamicTextHelper
 import com.android.skillsync.helpers.ImageHelper
@@ -36,13 +38,10 @@ class SignUpStudentFragment : Fragment() {
     private lateinit var studentViewModel: StudentViewModel
     private lateinit var dynamicTextHelper: DynamicTextHelper
 
-    private var fieldErrorShown = false
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentSignUpStudentBinding.inflate(layoutInflater, container, false)
         view = binding.root
         dynamicTextHelper = DynamicTextHelper(view)
@@ -50,7 +49,19 @@ class SignUpStudentFragment : Fragment() {
         setHints()
         setEventListeners()
 
+        // Hide the BottomNavigationView
+        ActionBarHelper.hideActionBarAndBottomNavigationView((requireActivity() as? AppCompatActivity))
+
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     private fun setHints() {
@@ -108,11 +119,6 @@ class SignUpStudentFragment : Fragment() {
     private val onSuccess: () -> Unit = {
         studentViewModel.addStudent(student)
         view.navigate(R.id.action_signUpStudentFragment_to_signInFragment)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
 
     private fun isValidInputs(

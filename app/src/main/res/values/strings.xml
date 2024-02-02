@@ -14,7 +14,8 @@
     <string name="post_new_project_title">Post a new project</string>
     <string name="post_new_project_text">Add the information about the project that you want to create</string>
     <string name="post">Post</string>
-    <string name="project_name_title">Project Informations</string>
+    <string name="project_name_title">Project Title</string>
+    <string name="project_description">Project Description</string>
     <string name="project_name_hint">Enter the project name here</string>
     <string name="project_description_hint">Enter the description here</string>
     <string name="project_deadline_title">Set the expected deadline</string>
@@ -61,5 +62,10 @@
     <string name="sign_up_as">Sign up as</string>
     <string name="user_image">User image</string>
     <string name="name">Name</string>
+    <string name="image_s_post">image\'s post</string>
+    <string name="feed">Feed</string>
+    <string name="add_post">Add Post</string>
+    <string name="map">Map</string>
+    <string name="profile">Profile</string>
 
 </resources>

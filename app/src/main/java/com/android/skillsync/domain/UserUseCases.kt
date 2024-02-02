@@ -19,4 +19,8 @@ class UserUseCases {
     fun resetPassword(email: String, onSuccessCallBack: () -> Unit, onFailureCallBack: (String?) -> Unit) {
         fireStoreAuthRepository.resetPassword(email, onSuccessCallBack, onFailureCallBack)
     }
+
+    fun getUserId(): String? {
+        return fireStoreAuthRepository.firebaseAuth.currentUser?.uid
+    }
 }

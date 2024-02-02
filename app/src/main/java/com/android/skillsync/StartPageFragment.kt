@@ -5,10 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 
-class StartPageFragment : Fragment() {
+class StartPageFragment : BaseFragment() {
 
     var signInButton: Button? = null
     var signUpButton: Button? = null
@@ -19,12 +18,19 @@ class StartPageFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_start_page, container, false)
 
         setEventListeners()
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
     private fun setEventListeners() {

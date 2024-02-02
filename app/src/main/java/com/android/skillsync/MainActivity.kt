@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
-import com.android.skillsync.ViewModel.PostViewModel
+import com.android.skillsync.helpers.ActionBarHelper
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 
@@ -24,13 +24,17 @@ class MainActivity : AppCompatActivity() {
         // Sign out the current user
         firebaseAuth.signOut()
 
-        val navHostFragment: NavHostFragment? = supportFragmentManager.findFragmentById(R.id.nav_graph) as? NavHostFragment
-        navController = navHostFragment?.navController
-        navController?.let { NavigationUI.setupActionBarWithNavController(this, it) }
+        ActionBarHelper.showActionBarAndBottomNavigationView(this)
 
-        val bottomNavigationView: BottomNavigationView = findViewById(R.id.mainActivityBottomNavigationView)
+        val navHostFragment: NavHostFragment? =
+            supportFragmentManager.findFragmentById(R.id.navHostMain) as? NavHostFragment
+        navController = navHostFragment?.navController
+
+        val bottomNavigationView: BottomNavigationView =
+            findViewById(R.id.mainActivityBottomNavigationView)
         navController?.let { NavigationUI.setupWithNavController(bottomNavigationView, it) }
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         super.onCreateOptionsMenu(menu)

@@ -28,13 +28,13 @@ class CompanyUseCases {
         val lastUpdated: Long = Company.lastUpdated
 
         // 2. Get all updated records from firestore since last update locally
-        fireStoreCompanyRepository.getCompanies(lastUpdated) { list ->
-            Log.i("TAG", "Firebase returned ${list.size}, lastUpdated: $lastUpdated")
+        fireStoreCompanyRepository.getCompanies(lastUpdated) { companies ->
+            Log.i("TAG", "Firebase returned ${companies.size}, lastUpdated: $lastUpdated")
             // 3. Insert new record to ROOM
             executor.execute {
                 var time = lastUpdated
-                for (company in list) {
-                    localStoreCompanyRepository.insert(company)
+                for (company in companies) {
+                    localStoreCompanyRepository.add(company)
 
                     company.lastUpdated?.let {
                         if (time < it)
