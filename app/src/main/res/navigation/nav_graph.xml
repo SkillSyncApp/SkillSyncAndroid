@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/newPostFragment">
+    app:defaultNavHost="true"
+    app:navGraph="@navigation/nav_graph"
+    app:startDestination="@id/startPageFragment">
 
     <fragment
         android:id="@+id/startPageFragment"
@@ -98,5 +100,9 @@
         android:id="@+id/feedFragment"
         android:name="com.android.skillsync.FeedFragment"
         android:label="fragment_feed"
-        tools:layout="@layout/fragment_feed" />
+        tools:layout="@layout/fragment_feed" >
+        <action
+            android:id="@+id/action_feedFragment_to_newPostFragment"
+            app:destination="@id/newPostFragment" />
+    </fragment>
 </navigation>

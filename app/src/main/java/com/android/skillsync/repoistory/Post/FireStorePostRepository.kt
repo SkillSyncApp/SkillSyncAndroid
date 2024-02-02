@@ -12,27 +12,41 @@ class FireStorePostRepository {
         const val POSTS_COLLECTION_PATH = "posts"
     }
 
-    fun addPost(post: Post, onSuccessCallBack: () -> Unit, onFailureCallBack: () -> Unit) {
+    var onSuccess: (() -> Unit)? = null
+    var onFailure: (() -> Unit)? = null
+
+    fun addPost(post: Post, callback: () -> Unit) {
         apiManager.db.collection(POSTS_COLLECTION_PATH).add(post.json)
-            .addOnSuccessListener { onSuccessCallBack() }
-            .addOnCompleteListener { onFailureCallBack() }
+            .addOnSuccessListener { callback() }
+            .addOnCompleteListener { onFailure?.invoke() }
     }
 
-    fun deletePost(postId: String, onSuccessCallBack: () -> Unit, onFailureCallBack: () -> Unit) {
+    fun deletePost(postId: String) {
         apiManager.db.collection(POSTS_COLLECTION_PATH).document(postId).delete()
-            .addOnSuccessListener { onSuccessCallBack() }
-            .addOnCompleteListener { onFailureCallBack() }
+            .addOnSuccessListener { onSuccess?.invoke() }
+            .addOnCompleteListener { onFailure?.invoke() }
     }
 
-    fun updatePost(postId: String, data: Map<String, Any>, onSuccessCallBack: () -> Unit, onFailureCallBack: () -> Unit) {
+    fun updatePost(postId: String, data: Map<String, Any>) {
         apiManager.db.collection(POSTS_COLLECTION_PATH).document(postId).update(data)
-            .addOnSuccessListener { onSuccessCallBack() }
-            .addOnCompleteListener { onFailureCallBack() }
+            .addOnSuccessListener { onSuccess?.invoke() }
+            .addOnCompleteListener { onFailure?.invoke() }
     }
 
-    fun getPosts(postId: String, since: Long, onSuccessCallBack: () -> Unit, onFailureCallBack: () -> Unit) {
-        apiManager.db.collection(POSTS_COLLECTION_PATH).whereGreaterThanOrEqualTo(Post.LAST_UPDATED, Timestamp(since, 0)).get()
-            .addOnSuccessListener { onSuccessCallBack() }
-            .addOnCompleteListener { onFailureCallBack() }
+    fun getPosts(since: Long, callback: (List<Post>) -> Unit) {
+        apiManager.db.collection(POSTS_COLLECTION_PATH)
+            .whereGreaterThanOrEqualTo(Post.LAST_UPDATED, Timestamp(since, 0)).get()
+            .addOnCompleteListener {
+                when (it.isSuccessful) {
+                    true -> {
+                        val posts: MutableList<Post> = mutableListOf()
+                        for (json in it.result) {
+                            val post = Post.fromJSON(json.data)
+                            posts.add(post)
+                        }
+                    }
+                    false -> callback(listOf())
+                }
+            }
     }
 }

@@ -9,13 +9,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.android.skillsync.ViewModel.UserAuthViewModel
 import com.android.skillsync.databinding.FragmentForgetPasswordBinding
 import com.android.skillsync.helpers.DialogHelper
 
-class ForgetPasswordFragment : Fragment() {
+class ForgetPasswordFragment : BaseFragment() {
 
     private var _binding: FragmentForgetPasswordBinding? = null
     private val binding get() = _binding!!
@@ -31,7 +30,6 @@ class ForgetPasswordFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentForgetPasswordBinding.inflate(layoutInflater, container, false)
         view = binding.root
         userAuthViewModel = UserAuthViewModel()
@@ -39,6 +37,10 @@ class ForgetPasswordFragment : Fragment() {
         setEventListeners(view)
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
     }
 
     private fun resetPassword() {

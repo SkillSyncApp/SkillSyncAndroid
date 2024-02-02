@@ -7,17 +7,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import com.android.skillsync.Navigations.navigate
 import com.android.skillsync.ViewModel.UserAuthViewModel
 import com.android.skillsync.databinding.FragmentSignInBinding
 import com.android.skillsync.helpers.DialogHelper
 
-class SignInFragment : Fragment() {
+class SignInFragment : BaseFragment() {
     private lateinit var view: View
-    private lateinit var binding: FragmentSignInBinding
-    private lateinit var userAuthViewModel: UserAuthViewModel
+    private var _binding: FragmentSignInBinding? = null
+    private val binding get() = _binding!!
+
+    private val userAuthViewModel: UserAuthViewModel by activityViewModels()
 
     private var emailLayout: View? = null
     private var passwordLayout: View? = null
@@ -30,15 +32,23 @@ class SignInFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSignInBinding.inflate(layoutInflater, container, false)
+        _binding = FragmentSignInBinding.inflate(layoutInflater, container, false)
         view = binding.root
-        userAuthViewModel = UserAuthViewModel()
 
         setUpDynamicTextFields()
         signInUser()
         setEventsListeners()
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     // TODO remember user

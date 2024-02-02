@@ -59,7 +59,7 @@ class GroupProfileFragment : Fragment() {
     }
 
     private fun addMembersToList() {
-//        Group.fromJSON(
+//        Student.fromJSON(
 //            mapOf(
 //                "id" to Random.nextLong(),
 //                "emailAddress" to "SkillSync@gmail.com",

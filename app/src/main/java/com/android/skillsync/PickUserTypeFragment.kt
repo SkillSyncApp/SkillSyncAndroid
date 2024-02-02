@@ -1,14 +1,13 @@
 package com.android.skillsync
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.navigation.Navigation
 
-class PickUserTypeFragment : Fragment() {
+class PickUserTypeFragment : BaseFragment() {
 
     private lateinit var companyCard: CardView
     private lateinit var studentCard: CardView
@@ -19,11 +18,18 @@ class PickUserTypeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         view = inflater.inflate(R.layout.fragment_pick_user_type, container, false)
         setEventListeners()
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
     }
 
     private fun setEventListeners() {

@@ -44,7 +44,7 @@
     app:layout_constraintTop_toBottomOf="@id/new_post_title" />
 
 <include
-    android:id="@+id/project_name_group"
+    android:id="@+id/post_title_group"
     layout="@layout/custom_input_field_text"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
     app:layout_constraintTop_toBottomOf="@id/new_post_description" />
 
 <include
-    android:id="@+id/project_description_group"
+    android:id="@+id/post_description_group"
     layout="@layout/custom_input_field_text"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
@@ -63,44 +63,34 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.0"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/project_name_group" />
+    app:layout_constraintTop_toBottomOf="@id/post_title_group" />
 
-<include
-    android:id="@+id/project_deadline_group"
-    layout="@layout/custom_input_field_text"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="20dp"
-    android:inputType="textPassword"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.0"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/project_description_group" />
+    <ImageView
+        android:id="@+id/image_to_upload"
+        android:contentDescription="@string/image_s_post"
+        app:layout_constraintBottom_toTopOf="@+id/post_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/post_description_group"
+        app:layout_constraintVertical_bias="0.0"
+        android:src="@drawable/company_icon"
+        android:layout_width="189dp"
+        android:layout_height="137dp"
+        />
 
-<include
-    android:id="@+id/project_availability_group"
-    layout="@layout/custom_input_field_text"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="16dp"
-    android:inputType="textPassword"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.0"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/project_deadline_group" />
+    <Button
+        android:id="@+id/post_button"
+        style="@style/AppTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="80dp"
+        android:background="@drawable/log_in_btn"
+        android:gravity="center"
+        android:text="@string/post"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/post_description_group"
+        app:layout_constraintVertical_bias="0.646" />
 
-<Button
-    android:id="@+id/post_button"
-    style="@style/AppTextStyle"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginHorizontal="80dp"
-    android:layout_marginTop="24dp"
-    android:background="@drawable/log_in_btn"
-    android:gravity="center"
-    android:text="@string/post"
-    android:textAppearance="@style/log_in_button"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/project_availability_group" />
 </androidx.constraintlayout.widget.ConstraintLayout>

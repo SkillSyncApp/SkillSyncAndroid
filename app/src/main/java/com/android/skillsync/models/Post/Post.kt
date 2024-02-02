@@ -2,23 +2,13 @@ package com.android.skillsync.models.Post
 
 import android.content.Context
 import androidx.room.Entity
-import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.android.skillsync.base.MyApplication
-import com.android.skillsync.models.Student.Student
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import java.util.UUID
 
-@Entity(
-    tableName = "Post",
-    foreignKeys = [ForeignKey(
-        entity = Student::class,
-        parentColumns = ["id"],
-        childColumns = ["ownerId"],
-        onDelete = ForeignKey.CASCADE
-    )]
-)
+@Entity
 data class Post(
     @PrimaryKey
     var id: String = UUID.randomUUID().toString(), // temp id
@@ -51,7 +41,7 @@ data class Post(
         const val GET_LAST_UPDATED = "get_last_updated"
 
         fun fromJSON(json: Map<String, Any>): Post {
-            val ownerId = json[OWNER_ID_KEY] as? String ?: "" // "" as unknown
+            val ownerId = json[OWNER_ID_KEY] as? String ?: ""
             val title = json[TITLE_KEY] as? String ?: ""
             val content = json[CONTENT_KEY] as? String ?: ""
             val imagePath = json[IMAGE_PATH_KEY] as? String ?: ""

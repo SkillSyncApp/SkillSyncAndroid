@@ -12,9 +12,9 @@ import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.Fragment
 import com.android.skillsync.Navigations.navigate
 import com.android.skillsync.ViewModel.CompanyViewModel
+import com.android.skillsync.ViewModel.UserAuthViewModel
 import com.android.skillsync.databinding.CustomInputFieldPasswordBinding
 import com.android.skillsync.databinding.CustomInputFieldTextBinding
 import com.android.skillsync.databinding.FragmentSignUpCompanyBinding
@@ -29,7 +29,7 @@ import com.android.skillsync.services.PlacesApiCall
 import com.firebase.geofire.core.GeoHash
 import com.google.firebase.firestore.GeoPoint
 
-class SignUpCompanyFragment : Fragment() {
+class SignUpCompanyFragment : BaseFragment() {
     private lateinit var locationsAdapter: ArrayAdapter<String>
     private lateinit var placesSuggestions: Array<Place>
     private lateinit var imageView: ImageView
@@ -38,8 +38,8 @@ class SignUpCompanyFragment : Fragment() {
     private lateinit var signUpCompany: Button
     private lateinit var dynamicTextHelper: DynamicTextHelper
     private lateinit var companyViewModel: CompanyViewModel
+    private lateinit var userAuthViewModel: UserAuthViewModel
     private lateinit var imageHelper: ImageHelper
-
 
     private var _binding: FragmentSignUpCompanyBinding? = null
     private val binding get() = _binding!!
@@ -53,10 +53,10 @@ class SignUpCompanyFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentSignUpCompanyBinding.inflate(layoutInflater, container, false)
         view = binding.root
         companyViewModel = CompanyViewModel()
+        userAuthViewModel = UserAuthViewModel()
         dynamicTextHelper = DynamicTextHelper(view)
 
         initLocationsAutoComplete()
@@ -65,6 +65,10 @@ class SignUpCompanyFragment : Fragment() {
         setEventListeners()
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
     }
 
     override fun onDestroy() {
@@ -139,6 +143,7 @@ class SignUpCompanyFragment : Fragment() {
                 val bio = bioGroup.editTextField.text.toString()
 
                 company = Company(
+                    id = userAuthViewModel.getUserId().toString(),
                     name = name,
                     email = email,
                     logo = logo,
