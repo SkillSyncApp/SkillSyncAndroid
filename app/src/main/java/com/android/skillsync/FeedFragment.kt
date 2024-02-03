@@ -24,10 +24,10 @@ class FeedFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        view = inflater.inflate(R.layout.fragment_feed, container, false);
-        initPosts();
+        view = inflater.inflate(R.layout.fragment_feed, container, false)
+        initPosts()
 
-        return view;
+        return view
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,25 +38,25 @@ class FeedFragment : Fragment() {
 
     private fun initPosts() {
         postsRecyclerView = view.findViewById(R.id.postsRecyclerView) ?: return
-        postsRecyclerView.setHasFixedSize(true);
+        postsRecyclerView.setHasFixedSize(true)
         postsRecyclerView.layoutManager =
-            LinearLayoutManager(context, RecyclerView.VERTICAL, false);
+            LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
-        postAdapter = PostAdapter(getPosts());
-        postsRecyclerView.adapter = postAdapter;
+        postAdapter = PostAdapter(getPosts())
+        postsRecyclerView.adapter = postAdapter
     }
 
     private fun getPosts(): ArrayList<Post> {
-        posts = ArrayList();
+        posts = ArrayList()
 
         // TODO: we need to populate the owner details (name + image) from the ownerId
-        val defaultPost1 = Post("111", "Wix", "title", "post content here", "");
-        val defaultPost2 = Post("222", "Amazon", "title", "Amazon's here! this is out new post and work offers. Follow us for more updates and information", "");
-        val defaultPost3 = Post("333", "Fox", "title", "post content here", "");
-        posts.add(defaultPost1);
-        posts.add(defaultPost2);
-        posts.add(defaultPost3);
+        val defaultPost1 = Post("111", "Wix", "title", "post content here", "")
+        val defaultPost2 = Post("222", "Amazon", "title", "Amazon's here! this is out new post and work offers. Follow us for more updates and information", "")
+        val defaultPost3 = Post("333", "Fox", "title", "post content here", "")
+        posts.add(defaultPost1)
+        posts.add(defaultPost2)
+        posts.add(defaultPost3)
 
-        return posts;
+        return posts
     }
 }
