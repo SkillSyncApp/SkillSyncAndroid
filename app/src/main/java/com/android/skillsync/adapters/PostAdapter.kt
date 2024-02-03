@@ -12,23 +12,23 @@ class PostAdapter(private val posts: List<Post>)
     : RecyclerView.Adapter<PostAdapter.PostHolder>() {
 
     class PostHolder(itemView:View): RecyclerView.ViewHolder(itemView) { // check if we need to split to a different file - check tal github
-        val ownerNameLabel: TextView = itemView.findViewById(R.id.ownerName);
-        val contentLabel: TextView = itemView.findViewById(R.id.content);
+        val ownerNameLabel: TextView = itemView.findViewById(R.id.ownerName)
+        val contentLabel: TextView = itemView.findViewById(R.id.content)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.post_item, parent, false);
-        return PostHolder(view);
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.post_item, parent, false)
+        return PostHolder(view)
     }
 
     override fun getItemCount(): Int {
-        println(posts.size);
-        return posts.size;
+        return posts.size
     }
 
     override fun onBindViewHolder(holder: PostHolder, position: Int) {
-        val post = posts[position];
-        holder.ownerNameLabel.text = post.ownerId;
-        holder.contentLabel.text = post.content;
+        val post = posts[position]
+
+        holder.ownerNameLabel.text = post.ownerId
+        holder.contentLabel.text = post.content
     }
 }
