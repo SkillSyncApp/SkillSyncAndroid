@@ -27,6 +27,7 @@ class FireStoreCompanyRepository {
                             val company = Company.fromJSON(json.data)
                             companies.add(company)
                         }
+                        callback(companies)
                     }
                     false -> callback(listOf())
                 }

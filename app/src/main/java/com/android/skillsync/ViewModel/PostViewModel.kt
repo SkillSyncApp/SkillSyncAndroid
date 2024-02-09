@@ -7,11 +7,11 @@ import com.android.skillsync.models.Post.Post
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class PostViewModel(): ViewModel() {
+class PostViewModel: ViewModel() {
     val postsUseCases: PostUseCases = PostUseCases()
 
     fun getAllPosts() = viewModelScope.launch(Dispatchers.IO) {
-        postsUseCases.getAll()
+        postsUseCases.getAllPosts()
     }
 
     fun addPost(post: Post) = viewModelScope.launch(Dispatchers.IO) {
@@ -26,7 +26,7 @@ class PostViewModel(): ViewModel() {
         postsUseCases.deleteAll()
     }
 
-    fun update(post: Post) = viewModelScope.launch(Dispatchers.IO) {
-        postsUseCases.update(post)
+    fun update(post: Post, data: Map<String, Any>) = viewModelScope.launch(Dispatchers.IO) {
+        postsUseCases.update(post, data)
     }
 }
