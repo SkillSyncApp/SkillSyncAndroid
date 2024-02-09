@@ -8,6 +8,7 @@ import com.android.skillsync.models.Comapny.Company
 import com.android.skillsync.models.CompanyLocation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+
 class CompanyViewModel: ViewModel() {
     var companies: LiveData<MutableList<Company>>? = null
 

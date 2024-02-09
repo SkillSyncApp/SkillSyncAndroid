@@ -1,10 +1,5 @@
 package com.android.skillsync.repoistory.Auth
 
-import android.widget.TextView
-import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
-import com.android.skillsync.R
-import com.android.skillsync.models.Student.Student
 import com.android.skillsync.repoistory.ApiManager
 
 class FireStoreAuthRepository {

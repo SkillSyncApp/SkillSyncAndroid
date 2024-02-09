@@ -6,6 +6,7 @@ import com.android.skillsync.models.Post.Post
 import com.android.skillsync.repoistory.Post.FireStorePostRepository
 import com.android.skillsync.repoistory.Post.LocalStorePostRepository
 import java.util.concurrent.Executors
+import kotlin.collections.indexOfFirst
 
 class PostUseCases {
 
@@ -13,28 +14,34 @@ class PostUseCases {
     val fireStorePostRepository: FireStorePostRepository = FireStorePostRepository()
 
     private var executor = Executors.newSingleThreadExecutor()
-    val posts: LiveData<MutableList<Post>>?= null
+    val posts: LiveData<MutableList<Post>>? = null
 
-    fun getAll(): LiveData<MutableList<Post>>  {
+    fun getAllPosts(): LiveData<MutableList<Post>> {
         refreshPosts()
-        return posts ?: localStorePostRepository.getAllPosts()
+        return posts?: localStorePostRepository.getAllPosts()
+    }
+
+    suspend fun add(post: Post) {
+        fireStorePostRepository.addPost(post) {
+            refreshPosts()
+        }
     }
 
     fun refreshPosts() {
+
         // 1. Get last local update
         val lastUpdated: Long = Post.lastUpdated
 
         // 2. Get all updated records from firestore since last update locally
         fireStorePostRepository.getPosts(lastUpdated) { posts ->
             Log.i("TAG", "Firebase returned ${posts.size}, lastUpdated: $lastUpdated")
-
             // 3. Insert new record to ROOM
             executor.execute {
                 var time = lastUpdated
                 for (post in posts) {
-                    localStorePostRepository.add(post)
+                    localStorePostRepository.insert(post)
 
-                    post.lastUpdated?.let { it ->
+                    post.lastUpdated?.let {
                         if (time < it)
                             time = post.lastUpdated ?: System.currentTimeMillis()
                     }
@@ -46,12 +53,6 @@ class PostUseCases {
         }
     }
 
-    suspend fun add(post: Post) {
-        fireStorePostRepository.addPost(post) {
-            refreshPosts()
-        }
-    }
-
     suspend fun delete(post: Post) {
         localStorePostRepository.delete(post)
     }
@@ -60,7 +61,31 @@ class PostUseCases {
         localStorePostRepository.deleteAllPosts()
     }
 
-    suspend fun update(post: Post) {
-        localStorePostRepository.update(post)
+    suspend fun update(post: Post, data: Map<String,Any>) {
+        fireStorePostRepository.updatePost(post.id, data) {
+            updateLocalCache(post)
+        }
+    }
+
+    private fun updateLocalCache(updatedPost: Post) {
+        val currentPosts = localStorePostRepository.getAllPosts().value
+
+        // Check if currentPosts is not null before proceeding
+        currentPosts?.let { posts ->
+            // Find the index of the post to be updated in the list
+            val index = posts.indexOfFirst { it.id == updatedPost.id }
+
+            if (index != -1) {
+                // If the post is found, update it in the local cache
+                posts[index] = updatedPost
+                localStorePostRepository.update(updatedPost)
+            } else {
+                // If the post is not found, insert it into the local cache
+                localStorePostRepository.insert(updatedPost)
+            }
+
+            // Update the last updated timestamp in Post singleton
+            Post.lastUpdated = System.currentTimeMillis()
+        }
     }
 }
