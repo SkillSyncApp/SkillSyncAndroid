@@ -30,8 +30,10 @@ import com.firebase.geofire.core.GeoHash
 import com.google.firebase.firestore.GeoPoint
 
 class SignUpCompanyFragment : BaseFragment() {
+    private lateinit var autoCompany: AutoCompleteTextView
     private lateinit var locationsAdapter: ArrayAdapter<String>
     private lateinit var placesSuggestions: Array<Place>
+
     private lateinit var imageView: ImageView
     private lateinit var company: Company
     private lateinit var view: View
@@ -77,7 +79,7 @@ class SignUpCompanyFragment : BaseFragment() {
     }
 
     private fun initLocationsAutoComplete() {
-        val autoCompany: AutoCompleteTextView? = view.findViewById(R.id.companySuggestion)
+        autoCompany = view.findViewById(R.id.companySuggestion)
 
         locationsAdapter = ArrayAdapter(
             requireContext(),
@@ -85,9 +87,9 @@ class SignUpCompanyFragment : BaseFragment() {
             ArrayList()
         )
 
-        autoCompany?.setAdapter(locationsAdapter)
-        autoCompany?.setOnItemClickListener { _, _, i, _ ->
-            val selectedPlace = placesSuggestions[i];
+        autoCompany.setAdapter(locationsAdapter)
+        autoCompany.setOnItemClickListener { _, _, i, _ ->
+            val selectedPlace = placesSuggestions[i]
             val latitude = selectedPlace.latitude.toDouble()
             val longitude = selectedPlace.longitude.toDouble()
 
@@ -97,8 +99,9 @@ class SignUpCompanyFragment : BaseFragment() {
                 GeoHash(latitude, longitude)
             )
         }
+        autoCompany.threshold = 1
 
-        autoCompany?.addTextChangedListener(object : TextWatcher {
+        autoCompany.addTextChangedListener(object : TextWatcher {
             @RequiresApi(Build.VERSION_CODES.O_MR1)
             override fun afterTextChanged(s: Editable?) {
                 if (!s.isNullOrEmpty()) {
@@ -171,6 +174,9 @@ class SignUpCompanyFragment : BaseFragment() {
                 locationsAdapter.clear()
                 places.forEach { locationsAdapter.add(it.title.plus(" - ").plus(it.address)) }
                 locationsAdapter.notifyDataSetChanged()
+
+                autoCompany = view.findViewById(R.id.companySuggestion)
+                autoCompany.showDropDown()
             }
         }
     }
