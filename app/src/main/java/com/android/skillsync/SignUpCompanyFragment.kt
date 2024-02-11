@@ -175,7 +175,6 @@ class SignUpCompanyFragment : BaseFragment() {
                 places.forEach { locationsAdapter.add(it.title.plus(" - ").plus(it.address)) }
                 locationsAdapter.notifyDataSetChanged()
 
-                autoCompany = view.findViewById(R.id.companySuggestion)
                 autoCompany.showDropDown()
             }
         }
