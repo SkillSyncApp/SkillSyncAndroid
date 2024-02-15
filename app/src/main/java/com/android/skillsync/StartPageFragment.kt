@@ -25,14 +25,6 @@ class StartPageFragment : BaseFragment() {
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
     private fun setEventListeners() {
         signInButton = view.findViewById(R.id.button_sign_in)
         signUpButton = view.findViewById(R.id.button_sign_up)
