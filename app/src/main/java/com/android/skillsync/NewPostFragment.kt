@@ -5,14 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import com.android.skillsync.ViewModel.PostViewModel
 import com.android.skillsync.ViewModel.UserAuthViewModel
 import com.android.skillsync.databinding.CustomInputFieldTextBinding
 import com.android.skillsync.databinding.FragmentNewPostBinding
+import com.android.skillsync.helpers.DynamicTextHelper
 import com.android.skillsync.helpers.ImageHelper
 import com.android.skillsync.helpers.ValidationHelper
 import com.android.skillsync.models.Post.Post
@@ -23,6 +22,7 @@ class NewPostFragment : Fragment() {
     private lateinit var post: Post
     private lateinit var imageView: ImageView
     private lateinit var imageHelper: ImageHelper
+    private lateinit var dynamicTextHelper: DynamicTextHelper
 
     private var _binding: FragmentNewPostBinding? = null
     private val binding get() = _binding!!
@@ -36,25 +36,22 @@ class NewPostFragment : Fragment() {
         _binding = FragmentNewPostBinding.inflate(layoutInflater, container, false)
         view = binding.root
         imageView = binding.imageToUpload
+        dynamicTextHelper = DynamicTextHelper(view)
 
         imageHelper = ImageHelper(this, imageView)
         imageHelper.setImageViewClickListener()
 
         postViewModel = PostViewModel()
 
-        setHintForEditText(
-            editTextGroupId = R.id.post_title_group,
-            hintResourceId = R.string.project_name_hint,
-            inputTitleResourceId = R.string.project_name_title
-        )
-        setHintForEditText(
-            editTextGroupId = R.id.post_description_group,
-            hintResourceId = R.string.project_description_hint,
-            inputTitleResourceId = R.string.project_description
-        )
+        setHints()
         setEventListeners()
 
         return view
+    }
+
+    private fun setHints() {
+        dynamicTextHelper.setHintForEditText(R.id.post_title_group, R.string.project_name_hint, R.string.project_name_title)
+        dynamicTextHelper.setHintForEditText(R.id.post_description_group, R.string.project_name_hint, R.string.project_description)
     }
 
     override fun onDestroy() {
@@ -82,21 +79,6 @@ class NewPostFragment : Fragment() {
             }
         }
     }
-
-    private fun setHintForEditText(editTextGroupId: Int, hintResourceId: Int? = null, inputTitleResourceId: Int? = null) {
-        val editTextGroup = binding.root.findViewById<View>(editTextGroupId)
-        val editTextLabel = editTextGroup?.findViewById<TextView>(R.id.edit_text_label)
-        val editTextField = editTextGroup?.findViewById<EditText>(R.id.edit_text_field)
-
-        inputTitleResourceId?.let {
-            editTextLabel?.text = getString(it)
-        }
-
-        hintResourceId?.let {
-            editTextField?.hint = getString(it)
-        }
-    }
-
 
     private fun isValidInputs(
         title: CustomInputFieldTextBinding,

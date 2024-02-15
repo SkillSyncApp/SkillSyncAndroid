@@ -5,7 +5,7 @@
     android:id="@+id/nav_graph"
     app:defaultNavHost="true"
     app:navGraph="@navigation/nav_graph"
-    app:startDestination="@id/postFragment">
+    app:startDestination="@id/startPageFragment">
 
     <fragment
         android:id="@+id/startPageFragment"
@@ -114,4 +114,9 @@
         android:id="@+id/postFragment"
         android:name="com.android.skillsync.PostFragment"
         android:label="PostFragment" />
+    <fragment
+        android:id="@+id/editPost"
+        android:name="com.android.skillsync.editPost"
+        android:label="fragment_edit_post"
+        tools:layout="@layout/fragment_edit_post" />
 </navigation>

@@ -71,5 +71,9 @@
     <string name="edit_button">edit_button</string>
     <string name="about_us">About Us</string>
     <string name="about_project">About Project</string>
+    <string name="edit_project_details">Edit Project Details</string>
+    <string name="add_the_information_about_the_project_that_you_want_to_create">Add the information about the project that you want to create</string>
+    <string name="edit_post">Edit Post</string>
+    <string name="project_name">Project Name</string>
 
 </resources>
