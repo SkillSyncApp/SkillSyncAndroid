@@ -18,7 +18,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.ui.NavigationUI
 import com.android.skillsync.Navigations.navigate
 import com.android.skillsync.ViewModel.CompanyViewModel
 import com.android.skillsync.databinding.FragmentMapViewBinding

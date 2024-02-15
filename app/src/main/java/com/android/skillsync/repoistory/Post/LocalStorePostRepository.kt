@@ -9,7 +9,6 @@ import com.android.skillsync.models.Comapny.Company
 class LocalStorePostRepository {
     val appLocalDB = AppLocalDatabase
     val postDao = appLocalDB.db.getPostDao()
-    val posts: LiveData<MutableList<Post>> = postDao.getAllPosts()
 
     @WorkerThread
     fun insert(post: Post) {

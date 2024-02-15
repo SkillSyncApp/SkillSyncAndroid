@@ -2,6 +2,7 @@ package com.android.skillsync.domain
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.android.skillsync.models.Post.Post
 import com.android.skillsync.repoistory.Post.FireStorePostRepository
 import com.android.skillsync.repoistory.Post.LocalStorePostRepository
@@ -14,21 +15,23 @@ class PostUseCases {
     val fireStorePostRepository: FireStorePostRepository = FireStorePostRepository()
 
     private var executor = Executors.newSingleThreadExecutor()
-    val posts: LiveData<MutableList<Post>>? = null
+    val posts: MutableLiveData<MutableList<Post>> = MutableLiveData()
 
     fun getAllPosts(): LiveData<MutableList<Post>> {
         refreshPosts()
-        return posts?: localStorePostRepository.getAllPosts()
+        if (posts.value == null) {
+            posts.value = localStorePostRepository.getAllPosts().value
+        }
+        return posts
     }
 
-    suspend fun add(post: Post) {
+    fun add(post: Post) {
         fireStorePostRepository.addPost(post) {
             refreshPosts()
         }
     }
 
     fun refreshPosts() {
-
         // 1. Get last local update
         val lastUpdated: Long = Post.lastUpdated
 
@@ -40,15 +43,14 @@ class PostUseCases {
                 var time = lastUpdated
                 for (post in posts) {
                     localStorePostRepository.insert(post)
-
                     post.lastUpdated?.let {
                         if (time < it)
                             time = post.lastUpdated ?: System.currentTimeMillis()
                     }
-                }
 
-                // 4. Update local data
-                Post.lastUpdated = time
+                    // 4. Update local data
+                    Post.lastUpdated = time
+                }
             }
         }
     }
@@ -88,4 +90,3 @@ class PostUseCases {
             Post.lastUpdated = System.currentTimeMillis()
         }
     }
-}

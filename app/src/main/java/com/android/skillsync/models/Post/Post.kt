@@ -20,18 +20,18 @@ data class Post(
 ) {
     companion object {
 
-        var lastUpdated: Long
-            get() {
-                return MyApplication.Globals
-                    .appContext?.getSharedPreferences("TAG", Context.MODE_PRIVATE)
-                    ?.getLong(GET_LAST_UPDATED, 0) ?: 0
-            }
-            set(value) {
-                MyApplication.Globals
-                    ?.appContext
-                    ?.getSharedPreferences("TAG", Context.MODE_PRIVATE)?.edit()
-                    ?.putLong(GET_LAST_UPDATED, value)?.apply()
-            }
+    var lastUpdated: Long
+        get() {
+            return MyApplication.Globals
+                .appContext?.getSharedPreferences("TAG", Context.MODE_PRIVATE)
+                ?.getLong(GET_LAST_UPDATED, 0) ?: 0
+        }
+        set(value) {
+            MyApplication.Globals
+                ?.appContext
+                ?.getSharedPreferences("TAG", Context.MODE_PRIVATE)?.edit()
+                ?.putLong(GET_LAST_UPDATED, value)?.apply()
+        }
 
         const val OWNER_ID_KEY = "ownerId"
         const val TITLE_KEY = "title"

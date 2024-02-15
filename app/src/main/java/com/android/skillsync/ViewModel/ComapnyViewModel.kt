@@ -18,10 +18,6 @@ class CompanyViewModel: ViewModel() {
         companyUseCases.fireStoreAuthRepository.createUser(email, password, onSuccessCallBack, onFailureCallBack)
     }
 
-    fun getAllCompanies(): LiveData<MutableList<Company>> {
-        return companyUseCases.getAllCompanies()
-    }
-
     fun addCompany(company: Company) = viewModelScope.launch(Dispatchers.IO) {
         companyUseCases.add(company)
     }

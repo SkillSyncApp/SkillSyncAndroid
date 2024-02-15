@@ -4,7 +4,6 @@ plugins {
     id("com.google.gms.google-services")
     id("androidx.navigation.safeargs.kotlin")
     id("kotlin-kapt")
-
 }
 
 android {
@@ -58,6 +57,7 @@ dependencies {
     implementation("androidx.room:room-ktx:$room_version")
 
     implementation("com.squareup.picasso:picasso:2.71828")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")

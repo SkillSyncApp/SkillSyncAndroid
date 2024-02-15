@@ -8,27 +8,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.skillsync.R
 import com.android.skillsync.models.Post.Post
 
-class PostAdapter(private val posts: List<Post>)
-    : RecyclerView.Adapter<PostAdapter.PostHolder>() {
-
-    class PostHolder(itemView:View): RecyclerView.ViewHolder(itemView) { // check if we need to split to a different file - check tal github
-        val ownerNameLabel: TextView = itemView.findViewById(R.id.ownerName)
-        val contentLabel: TextView = itemView.findViewById(R.id.content)
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.post_item, parent, false)
-        return PostHolder(view)
+class PostAdapter(var posts: MutableList<Post>?) : RecyclerView.Adapter<PostViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.post_item, parent, false)
+        return PostViewHolder(itemView)
     }
 
     override fun getItemCount(): Int {
-        return posts.size
+        return posts?.size ?: 0
     }
 
-    override fun onBindViewHolder(holder: PostHolder, position: Int) {
-        val post = posts[position]
+    override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
+        val post = posts?.get(position)
 
-        holder.ownerNameLabel.text = post.ownerId
-        holder.contentLabel.text = post.content
+        holder.bind(post)
     }
 }
