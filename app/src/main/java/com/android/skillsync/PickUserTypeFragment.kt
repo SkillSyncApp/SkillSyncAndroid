@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 
 class PickUserTypeFragment : BaseFragment() {
 
@@ -26,6 +28,12 @@ class PickUserTypeFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val backButton = view.findViewById<ImageView>(R.id.back_button)
+
+
+        backButton.setOnClickListener {
+            findNavController().navigateUp()        }
     }
 
     override fun onDestroyView() {
