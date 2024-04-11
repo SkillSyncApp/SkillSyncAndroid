@@ -4,32 +4,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     tools:context=".SignUpCompanyFragment">
+
+    <ImageView
+        android:id="@+id/back_button"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/back_arrow_icon"
+        android:padding="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="Back" />
 
     <TextView
         android:id="@+id/new_account_student"
         style="@style/AppTextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:gravity="center_horizontal|top"
         android:text="@string/sign_up_group_title"
         android:textAppearance="@style/log_in_text"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"  />
 
     <TextView
         android:id="@+id/create_student_title"
         style="@style/AppTextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
         android:gravity="center_horizontal|top"
         android:text="@string/sign_up_group_sub_title"
         android:textAppearance="@style/sign_in_description"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/new_account_student" />
     <!--Start Body-->

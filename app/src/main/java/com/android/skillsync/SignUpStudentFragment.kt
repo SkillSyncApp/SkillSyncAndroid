@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.android.skillsync.Navigations.navigate
 import com.android.skillsync.ViewModel.StudentViewModel
 import com.android.skillsync.databinding.CustomInputFieldPasswordBinding
@@ -57,6 +58,11 @@ class SignUpStudentFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val backButton = view.findViewById<ImageView>(R.id.back_button)
+
+
+        backButton.setOnClickListener {
+            findNavController().navigateUp()        }
     }
 
     override fun onDestroy() {

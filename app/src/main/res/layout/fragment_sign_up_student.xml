@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".SignUpStudentFragment">
 
+    <ImageView
+        android:id="@+id/back_button"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/back_arrow_icon"
+        android:padding="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="Back" />
+
     <TextView
         android:id="@+id/sign_up_student_title"
         style="@style/AppTextStyle"

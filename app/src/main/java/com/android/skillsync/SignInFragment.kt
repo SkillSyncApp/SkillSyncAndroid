@@ -5,10 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.android.skillsync.Navigations.navigate
 import com.android.skillsync.ViewModel.UserAuthViewModel
 import com.android.skillsync.databinding.FragmentSignInBinding
@@ -40,6 +42,16 @@ class SignInFragment : BaseFragment() {
         setEventsListeners()
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val backButton = view.findViewById<ImageView>(R.id.back_button)
+
+
+        backButton.setOnClickListener {
+            findNavController().navigateUp()        }
     }
 
     override fun onDestroy() {
