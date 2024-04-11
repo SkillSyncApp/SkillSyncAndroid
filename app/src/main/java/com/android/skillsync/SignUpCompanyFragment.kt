@@ -12,6 +12,7 @@ import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
+import androidx.navigation.fragment.findNavController
 import com.android.skillsync.Navigations.navigate
 import com.android.skillsync.ViewModel.CompanyViewModel
 import com.android.skillsync.ViewModel.UserAuthViewModel
@@ -69,6 +70,12 @@ class SignUpCompanyFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val backButton = view.findViewById<ImageView>(R.id.back_button)
+
+
+        backButton.setOnClickListener {
+            findNavController().navigateUp()        }
     }
 
     override fun onDestroy() {
