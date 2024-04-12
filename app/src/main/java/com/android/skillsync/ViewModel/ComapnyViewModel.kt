@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.skillsync.domain.CompanyUseCases
 import com.android.skillsync.models.Comapny.Company
-import com.android.skillsync.models.CompanyLocation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -26,10 +25,6 @@ class CompanyViewModel: ViewModel() {
         companyUseCases.add(company)
     }
 
-    fun deleteCompany(company: Company) = viewModelScope.launch(Dispatchers.IO) {
-        companyUseCases.delete(company)
-    }
-
     fun update(company: Company) = viewModelScope.launch(Dispatchers.IO) {
         companyUseCases.update(company)
     }
@@ -38,7 +33,7 @@ class CompanyViewModel: ViewModel() {
         companyUseCases.refreshCompanies()
     }
 
-    fun setCompaniesOnMap(callback: (CompanyLocation) -> Unit) = viewModelScope.launch(Dispatchers.IO) {
+    fun setCompaniesOnMap(callback: (Company) -> Unit) = viewModelScope.launch(Dispatchers.IO) {
         companyUseCases.setCompaniesOnMap(callback)
     }
 }
