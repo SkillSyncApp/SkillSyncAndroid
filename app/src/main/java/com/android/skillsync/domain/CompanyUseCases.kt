@@ -3,7 +3,6 @@ package com.android.skillsync.domain
 import android.util.Log
 import androidx.lifecycle.LiveData
 import com.android.skillsync.models.Comapny.Company
-import com.android.skillsync.models.CompanyLocation
 import com.android.skillsync.repoistory.Auth.FireStoreAuthRepository
 import com.android.skillsync.repoistory.Company.FireStoreCompanyRepository
 import com.android.skillsync.repoistory.Company.LocalStoreCompanyRepository
@@ -55,15 +54,11 @@ class CompanyUseCases {
         company.id = companyId
     }
 
-    suspend fun delete(company: Company) {
-//        fireStoreCompanyRepository.delete(company)
-    }
-
     suspend fun update(company: Company) {
 //        fireStoreCompanyRepository.(company)
     }
 
-    fun setCompaniesOnMap(callback: (CompanyLocation) -> Unit) {
+    fun setCompaniesOnMap(callback: (Company) -> Unit) {
         fireStoreCompanyRepository.setCompaniesOnMap(callback)
     }
 }
