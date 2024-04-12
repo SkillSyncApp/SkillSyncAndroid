@@ -12,7 +12,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -171,6 +173,12 @@ class MapViewFragment : Fragment(), LocationListener {
                 override fun onItemSingleTapUp(index: Int, item: OverlayItem): Boolean {
                     // Log information when a pin is clicked
                     Log.d("Map Click", "Marker clicked: ${item.title} ${data["bio"]} ${data["address"]}")
+                    val companyData = hashMapOf(
+                        "name" to data["name"],
+                        "address" to data["address"],
+                        "bio" to data["bio"]
+                    )
+                    showCompanyInfoDialog(companyData)
                     return true
                 }
 
@@ -183,6 +191,20 @@ class MapViewFragment : Fragment(), LocationListener {
 
         aMapView.overlays.add(itemizedIconOverlay)
         aMapView.invalidate()
+    }
+
+    private fun showCompanyInfoDialog(companyData: HashMap<String, String?>) {
+        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.card_view_location, null)
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .create()
+
+        // Set data to views
+        dialogView.findViewById<TextView>(R.id.textViewTitle).text = companyData["name"]
+        dialogView.findViewById<TextView>(R.id.textViewBio).text = companyData["bio"]
+        dialogView.findViewById<TextView>(R.id.textViewAddress).text = companyData["address"]
+
+        dialog.show()
     }
 
     private fun removeLocationUpdates() {
