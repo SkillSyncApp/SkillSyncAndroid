@@ -8,8 +8,8 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -18,7 +18,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.ui.NavigationUI
 import com.android.skillsync.Navigations.navigate
 import com.android.skillsync.ViewModel.CompanyViewModel
 import com.android.skillsync.databinding.FragmentMapViewBinding
@@ -38,6 +37,7 @@ class MapViewFragment : Fragment(), LocationListener {
     private lateinit var locationManager: LocationManager
     private lateinit var view: View
     private lateinit var viewModel: CompanyViewModel
+    private var companyList: MutableList<Company> = mutableListOf()
 
     private val timer = Timer()
     private val binding get() = _binding!!
@@ -83,26 +83,46 @@ class MapViewFragment : Fragment(), LocationListener {
             override fun run() {
                 reloadData()
             }
-        }, 0,  5 * 60 * 1000 ) // 5 minutes in milliseconds
+        }, 0,  5 * 60 * 1000) // 5 minutes in milliseconds
     }
 
     private fun updateMapMarkers(companies: MutableList<Company>) {
+        companyList.clear()
+        companyList.addAll(companies)
+
         for (company in companies) {
-            val latitude = company.location.location.latitude
-            val longitude = company.location.location.longitude
-            addMarker(GeoPoint(latitude, longitude), "Company Marker", "Company Marker")
+                val (address, location) = company.location
+                val latitude = location.latitude
+                val longitude = location.longitude
+                val companyData = hashMapOf(
+                    "name" to company.name,
+                    "bio" to company.bio,
+                    "address" to address
+                )
+                addMarker(
+                    GeoPoint(latitude, longitude),
+                    companyData,
+                    companyData["name"].toString()
+                )
+            addMarker(GeoPoint(latitude, longitude), companyData, "Company Marker")
         }
     }
 
     private fun reloadData() {
         // TODO loading
-        viewModel.setCompaniesOnMap { companyLocation ->
-            val latitude = companyLocation.location.latitude
-            val longitude = companyLocation.location.longitude
+        viewModel.setCompaniesOnMap { company ->
+            val (address, location) = company.location
+            val latitude = location.latitude
+            val longitude = location.longitude
+            val companyData = hashMapOf(
+                "name" to company.name,
+                "bio" to company.bio,
+                "address" to address
+            )
             addMarker(
                GeoPoint(latitude, longitude),
-                companyLocation.address,
-                "Company Marker"
+                companyData,
+                companyData["name"].toString()
             )
         }
 
@@ -138,17 +158,27 @@ class MapViewFragment : Fragment(), LocationListener {
         )
     }
 
-    private fun addMarker(geoPoint: GeoPoint, title: String, snippet: String) {
-        val markerIcon: Drawable? =
-            ContextCompat.getDrawable(requireContext(), R.drawable.map_pin_icon)
+    private fun addMarker(geoPoint: GeoPoint, data: HashMap<String, String>, snippet: String) {
+        val markerIcon: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.map_pin_icon)
 
-        val overlayItem = OverlayItem(title, snippet, geoPoint)
+        val overlayItem = OverlayItem(data["name"], snippet, geoPoint)
         overlayItem.setMarker(markerIcon)
 
         val itemizedIconOverlay = ItemizedIconOverlay(
             context?.applicationContext,
             listOf(overlayItem),
-            null
+            object : ItemizedIconOverlay.OnItemGestureListener<OverlayItem> {
+                override fun onItemSingleTapUp(index: Int, item: OverlayItem): Boolean {
+                    // Log information when a pin is clicked
+                    Log.d("Map Click", "Marker clicked: ${item.title} ${data["bio"]} ${data["address"]}")
+                    return true
+                }
+
+                override fun onItemLongPress(index: Int, item: OverlayItem): Boolean {
+                    // Handle long press if needed
+                    return false
+                }
+            }
         )
 
         aMapView.overlays.add(itemizedIconOverlay)
@@ -213,7 +243,7 @@ class MapViewFragment : Fragment(), LocationListener {
     override fun onLocationChanged(location: Location) {
         val geoPoint = GeoPoint(location.latitude, location.longitude)
         aMapView.controller.setCenter(geoPoint)
-        addMarker(geoPoint, "I Am Here!", "OSMDroid Marker")
+        addMarker(geoPoint, hashMapOf("name" to "this is my user location", "bio" to "", "address" to ""), "OSMDroid Marker")
     }
 
     override fun onRequestPermissionsResult(

@@ -2,7 +2,7 @@
     <string name="app_name">skillSyncApp</string>
     <string name="sign_in">Sign in</string>
     <string name="lets_log_in_title">Lets sign you in.</string>
-    <string name="sign_in_description_text">Sign in with your data that have entered during your registration</string>
+    <string name="sign_in_description_text">Sign in with your email and password and join us</string>
     <string name="email">Email</string>
 
     <string name="welcome_title">Welcome to</string>

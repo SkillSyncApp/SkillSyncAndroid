@@ -42,7 +42,7 @@ class FireStoreCompanyRepository {
         return documentReference.id
     }
 
-    fun setCompaniesOnMap(callback: (CompanyLocation) -> Unit) {
+    fun setCompaniesOnMap(callback: (Company) -> Unit) {
         val companiesReference = apiManager.db.collection(COMPANIES_COLLECTION_PATH)
         companiesReference.get()
             .addOnSuccessListener { documents ->
@@ -53,9 +53,8 @@ class FireStoreCompanyRepository {
             }
     }
 
-    private fun fetchCompanyLocation(companyId: String, callback: (CompanyLocation) -> Unit) {
+    private fun fetchCompanyLocation(companyId: String, callback: (Company) -> Unit) {
         val companyDocument = apiManager.db.collection(COMPANIES_COLLECTION_PATH)
-
         companyDocument.document(companyId).get()
             .addOnSuccessListener { documentSnapshot ->
                 val data = documentSnapshot.data
@@ -64,16 +63,31 @@ class FireStoreCompanyRepository {
                     if (locationData != null) {
                         val address = locationData["address"] as String
                         val geoPoint = locationData["location"] as GeoPoint
-                            val latitude = geoPoint.latitude
-                            val longitude = geoPoint.longitude
+                        val latitude = geoPoint.latitude
+                        val longitude = geoPoint.longitude
 
-                            val companyLocation = CompanyLocation(
-                                address,
-                                GeoPoint(latitude, longitude),
-                                GeoHash(latitude, longitude)
-                            )
-                            callback(companyLocation)
+                        val companyLocation = CompanyLocation(
+                            address,
+                            geoPoint,
+                            GeoHash(latitude, longitude)
+                        )
+
+                        val timestamp: Timestamp? = data["lastUpdated"] as? Timestamp
+                        var lastUpdated: Long? = null
+                        timestamp?.let {
+                            lastUpdated = it.seconds
                         }
+
+                        val company = Company(
+                            name = data["name"] as String,
+                            email = data["email"] as String,
+                            logo = data["logo"] as String,
+                            bio = data["bio"] as String,
+                            location = companyLocation,
+                            lastUpdated = lastUpdated ?: 0 // Default to 0 if timestamp is null
+                        )
+                        callback(company)
+                    }
                 }
             }
             .addOnFailureListener { locationException ->
