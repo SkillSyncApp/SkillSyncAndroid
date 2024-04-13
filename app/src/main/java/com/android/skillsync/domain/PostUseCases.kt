@@ -1,7 +1,7 @@
 package com.android.skillsync.domain
 
-import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.android.skillsync.models.Post.Post
 import com.android.skillsync.repoistory.Post.FireStorePostRepository
 import com.android.skillsync.repoistory.Post.LocalStorePostRepository
@@ -14,27 +14,28 @@ class PostUseCases {
     val fireStorePostRepository: FireStorePostRepository = FireStorePostRepository()
 
     private var executor = Executors.newSingleThreadExecutor()
-    val posts: LiveData<MutableList<Post>>? = null
+    private val _posts: MutableLiveData<List<Post>> = MutableLiveData()
 
-    fun getAllPosts(): LiveData<MutableList<Post>> {
-        refreshPosts()
-        return posts?: localStorePostRepository.getAllPosts()
-    }
+    val posts: LiveData<List<Post>> get() = _posts
 
-    suspend fun add(post: Post) {
-        fireStorePostRepository.addPost(post) {
-            refreshPosts()
+    init {
+        // Initialize posts by observing local storage
+        val localPostsLiveData = localStorePostRepository.getAllPosts()
+        localPostsLiveData.observeForever { localPosts ->
+            _posts.value = localPosts
         }
     }
 
-    fun refreshPosts() {
+    fun add(post: Post) {
+        fireStorePostRepository.addPost(post)
+    }
 
+    fun refreshPosts() {
         // 1. Get last local update
         val lastUpdated: Long = Post.lastUpdated
 
         // 2. Get all updated records from firestore since last update locally
         fireStorePostRepository.getPosts(lastUpdated) { posts ->
-            Log.i("TAG", "Firebase returned ${posts.size}, lastUpdated: $lastUpdated")
             // 3. Insert new record to ROOM
             executor.execute {
                 var time = lastUpdated

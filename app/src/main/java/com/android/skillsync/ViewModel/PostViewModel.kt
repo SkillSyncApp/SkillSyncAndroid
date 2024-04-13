@@ -1,5 +1,7 @@
 package com.android.skillsync.ViewModel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.skillsync.domain.PostUseCases
@@ -8,10 +10,25 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class PostViewModel: ViewModel() {
-    val postsUseCases: PostUseCases = PostUseCases()
 
-    fun getAllPosts() = viewModelScope.launch(Dispatchers.IO) {
-        postsUseCases.getAllPosts()
+    private val _posts: MutableLiveData<List<Post>> = MutableLiveData()
+    val posts: LiveData<List<Post>> = _posts
+//    enum class LoadingState {
+//        LOADING,
+//        LOADED
+//    }
+//    val postsListLoadingState: MutableLiveData<LoadingState> = MutableLiveData(LoadingState.LOADED)
+
+    private val postsUseCases: PostUseCases = PostUseCases()
+
+    init {
+        postsUseCases.posts.observeForever { posts ->
+            _posts.value = posts
+        }
+    }
+
+    fun getPosts() = viewModelScope.launch (Dispatchers.IO) {
+        postsUseCases.posts
     }
 
     fun addPost(post: Post) = viewModelScope.launch(Dispatchers.IO) {
@@ -24,6 +41,14 @@ class PostViewModel: ViewModel() {
 
     fun deleteAllPosts() = viewModelScope.launch(Dispatchers.IO) {
         postsUseCases.deleteAll()
+    }
+
+    fun refreshPosts() {
+        viewModelScope.launch(Dispatchers.IO) {
+//            postsListLoadingState.value = LoadingState.LOADING
+            postsUseCases.refreshPosts()
+//            postsListLoadingState.value = LoadingState.LOADED
+        }
     }
 
     fun update(post: Post, data: Map<String, Any>) = viewModelScope.launch(Dispatchers.IO) {
