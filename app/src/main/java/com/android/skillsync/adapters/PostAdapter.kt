@@ -11,7 +11,7 @@ import com.android.skillsync.models.Post.Post
 import com.squareup.picasso.Picasso
 import android.net.Uri
 
-class PostAdapter(var posts: List<Post>)
+class PostAdapter(var posts: MutableList<Post>)
     : RecyclerView.Adapter<PostAdapter.PostHolder>() {
 
     class PostHolder(itemView:View): RecyclerView.ViewHolder(itemView) { // check if we need to split to a different file - check tal github
@@ -44,6 +44,15 @@ class PostAdapter(var posts: List<Post>)
         Picasso.get().load(imageUri).into(imageView)
     }
 
+
+    fun clear() {
+        posts.clear()
+    }
+
+    fun addAll(newPosts: List<Post>) {
+        posts.addAll(newPosts)
+        notifyDataSetChanged() // Notify the adapter that the data set has changed
+    }
 
 //        Picasso.get()
 //            .load(imageUri)

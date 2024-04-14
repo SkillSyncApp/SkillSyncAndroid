@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +16,8 @@ import com.android.skillsync.ViewModel.PostViewModel
 import com.android.skillsync.adapters.PostAdapter
 import com.android.skillsync.databinding.FragmentFeedBinding
 import com.android.skillsync.helpers.ActionBarHelper
+
+private var isInitialDataLoaded = false
 
 class FeedFragment : Fragment() {
     private lateinit var postsRecyclerView: RecyclerView
@@ -36,13 +39,20 @@ class FeedFragment : Fragment() {
         // Initialize views
         postsRecyclerView = binding.postsRecyclerView
         swipeRefreshLayout = binding.pullToRefresh
-        progressBar = binding.progressBar
+        postAdapter = PostAdapter(mutableListOf())
+        viewModel = ViewModelProvider(this)[PostViewModel::class.java]
 
-//        progressBar.visibility = View.VISIBLE
+        postsRecyclerView.setPadding(0, 0, 0, 250)
+
+
+        postAdapter.posts = viewModel.posts.value?.toMutableList() ?: mutableListOf()
+        progressBar = binding.progressBar
+        progressBar.visibility = View.VISIBLE
 
         // Set up RecyclerView
         postsRecyclerView.layoutManager = LinearLayoutManager(context)
-        viewModel = ViewModelProvider(this)[PostViewModel::class.java]
+        postsRecyclerView.adapter = postAdapter
+
 
         swipeRefreshLayout.setOnRefreshListener {
             reloadData()
@@ -50,12 +60,12 @@ class FeedFragment : Fragment() {
 
         // Set up ViewModel
         viewModel.posts.observe(viewLifecycleOwner) { newPosts ->
-            // Check if the data has changed, only update the adapter if it's different
-            postAdapter = PostAdapter(posts = newPosts)
-            postsRecyclerView.adapter = postAdapter
-
-            // Update adapter data
-            postAdapter.posts = newPosts
+            // Clear the existing data in the adapter
+            if (postAdapter.posts.isNotEmpty()) {
+                // Clear the existing data in the adapter if it's not the first load
+                postAdapter.clear()
+            }
+            postAdapter.addAll(newPosts)
             postAdapter.notifyDataSetChanged()
             progressBar.visibility = View.GONE
         }
@@ -67,7 +77,6 @@ class FeedFragment : Fragment() {
 //                e.printStackTrace() // This will print the error in the logcat
 //            }
 //        }
-        reloadData()
 
         return view
     }
@@ -79,14 +88,20 @@ class FeedFragment : Fragment() {
     }
 
     private fun reloadData() {
+        swipeRefreshLayout.isRefreshing = false
         progressBar.visibility = View.VISIBLE
         viewModel.refreshPosts()
         progressBar.visibility = View.GONE
-    }
 
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        reloadData()
     }
 }

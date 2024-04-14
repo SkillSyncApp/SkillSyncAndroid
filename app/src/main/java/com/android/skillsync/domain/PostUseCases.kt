@@ -1,10 +1,13 @@
 package com.android.skillsync.domain
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.android.skillsync.models.Post.Post
 import com.android.skillsync.repoistory.Post.FireStorePostRepository
 import com.android.skillsync.repoistory.Post.LocalStorePostRepository
+import java.time.Instant
 import java.util.concurrent.Executors
 import kotlin.collections.indexOfFirst
 
@@ -30,6 +33,7 @@ class PostUseCases {
         fireStorePostRepository.addPost(post)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun refreshPosts() {
         // 1. Get last local update
         val lastUpdated: Long = Post.lastUpdated
@@ -38,18 +42,13 @@ class PostUseCases {
         fireStorePostRepository.getPosts(lastUpdated) { posts ->
             // 3. Insert new record to ROOM
             executor.execute {
-                var time = lastUpdated
                 for (post in posts) {
                     localStorePostRepository.insert(post)
 
-                    post.lastUpdated?.let {
-                        if (time < it)
-                            time = post.lastUpdated ?: System.currentTimeMillis()
-                    }
                 }
 
                 // 4. Update local data
-                Post.lastUpdated = time
+                Post.lastUpdated = Instant.now().epochSecond
             }
         }
     }

@@ -11,8 +11,8 @@ import kotlinx.coroutines.launch
 
 class PostViewModel: ViewModel() {
 
-    private val _posts: MutableLiveData<List<Post>> = MutableLiveData()
-    val posts: LiveData<List<Post>> = _posts
+    private val _posts: MutableLiveData<MutableList<Post>> = MutableLiveData()
+    val posts: LiveData<MutableList<Post>> = _posts
 //    enum class LoadingState {
 //        LOADING,
 //        LOADED
@@ -23,7 +23,7 @@ class PostViewModel: ViewModel() {
 
     init {
         postsUseCases.posts.observeForever { posts ->
-            _posts.value = posts
+            _posts.postValue(posts.toMutableList())
         }
     }
 
