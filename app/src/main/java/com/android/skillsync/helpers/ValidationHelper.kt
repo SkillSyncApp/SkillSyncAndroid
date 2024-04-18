@@ -19,13 +19,18 @@ object ValidationHelper {
         context: Context
     ) {
         if (inputGroup is CustomInputFieldTextBinding) {
-            if (isValid) {
+            if(inputGroup.editTextField.text.isNullOrEmpty()) {
+                showTextError(inputGroup, context,"Required field")
+            }
+            else if (isValid) {
                 showValidInput(inputGroup, context)
             } else {
                 showTextError(inputGroup, context)
             }
         } else if (inputGroup is CustomInputFieldPasswordBinding) {
-            if (isValid) {
+            if(inputGroup.editTextField.text.isNullOrEmpty()) {
+                showTextError(inputGroup, context,"Required field")
+            } else if (isValid) {
                 showValidInput(inputGroup, context)
             } else {
                 showTextError(inputGroup, context)
@@ -79,14 +84,18 @@ object ValidationHelper {
 
 
     @SuppressLint("SetTextI18n")
-    private fun showTextError(inputGroup: CustomInputFieldTextBinding, context: Context) {
-        if (inputGroup.editTextLabel.text == context.getString(R.string.student_description_title)) {
-            inputGroup.errorMessage.text = "Invalid group description"
-        } else if (inputGroup.editTextLabel.text == context.getString(R.string.team_members_name_title)) {
-            inputGroup.errorMessage.text = "Invalid group members name"
-        } else {
-            inputGroup.errorMessage.text = "Invalid ${inputGroup.editTextLabel.text}"
+    private fun showTextError(inputGroup: CustomInputFieldTextBinding, context: Context,s:String? = null ) {
+        if(s.isNullOrEmpty()) {
+            if (inputGroup.editTextLabel.text == context.getString(R.string.student_description_title)) {
+                inputGroup.errorMessage.text = "Invalid group description"
+            } else if (inputGroup.editTextLabel.text == context.getString(R.string.team_members_name_title)) {
+                inputGroup.errorMessage.text = "Invalid group members name"
+            } else {
+                inputGroup.errorMessage.text = "Invalid ${inputGroup.editTextLabel.text}"
+            }
         }
+        else
+            inputGroup.errorMessage.text = s;
 
         inputGroup.errorMessage.visibility = View.VISIBLE
         inputGroup.editTextLine.setBackgroundColor(
@@ -126,14 +135,19 @@ object ValidationHelper {
 
 
     @SuppressLint("SetTextI18n")
-    private fun showTextError(inputGroup: CustomInputFieldPasswordBinding, context: Context) {
-        if (inputGroup.editTextLabel.text == context.getString(R.string.student_description_title)) {
-            inputGroup.errorMessage.text = "Invalid group description"
-        } else if (inputGroup.editTextLabel.text == context.getString(R.string.team_members_name_title)) {
-            inputGroup.errorMessage.text = "Invalid group members name"
-        } else {
-            inputGroup.errorMessage.text = "Invalid ${inputGroup.editTextLabel.text}"
+    private fun showTextError(inputGroup: CustomInputFieldPasswordBinding, context: Context,s:String? = null) {
+        if(s.isNullOrEmpty()) {
+            if (inputGroup.editTextLabel.text == context.getString(R.string.student_description_title)) {
+                inputGroup.errorMessage.text = "Invalid group description"
+            } else if (inputGroup.editTextLabel.text == context.getString(R.string.team_members_name_title)) {
+                inputGroup.errorMessage.text = "Invalid group members name"
+            } else {
+                inputGroup.errorMessage.text = "Invalid ${inputGroup.editTextLabel.text}"
+            }
         }
+        else
+            inputGroup.errorMessage.text = s;
+
 
         inputGroup.errorMessage.visibility = View.VISIBLE
         inputGroup.editTextLine.setBackgroundColor(
