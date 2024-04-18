@@ -161,7 +161,7 @@ class MapViewFragment : Fragment(), LocationListener {
     }
 
     private fun addMarker(geoPoint: GeoPoint, data: HashMap<String, String>, snippet: String) {
-        val markerIcon: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.map_pin_icon)
+        val markerIcon: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.custom_marker_icon)
 
         val overlayItem = OverlayItem(data["name"], snippet, geoPoint)
         overlayItem.setMarker(markerIcon)
@@ -206,7 +206,6 @@ class MapViewFragment : Fragment(), LocationListener {
 
         dialog.show()
     }
-
     private fun removeLocationUpdates() {
         if (locationUpdatesRequested) {
             locationManager.removeUpdates(this)
