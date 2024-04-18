@@ -89,7 +89,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="50dp"
                     android:fontFamily="@font/poppins"
-                    android:text="@string/company_name"
+                    android:text="@string/company_name_title"
                     android:textAlignment="center"
                     android:textSize="24sp"
                     android:textStyle="bold"
