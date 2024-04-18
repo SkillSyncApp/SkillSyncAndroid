@@ -8,13 +8,17 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.android.skillsync.Navigations.navigate
 import com.android.skillsync.ViewModel.UserAuthViewModel
+import com.android.skillsync.databinding.CustomInputFieldPasswordBinding
+import com.android.skillsync.databinding.CustomInputFieldTextBinding
 import com.android.skillsync.databinding.FragmentSignInBinding
 import com.android.skillsync.helpers.DialogHelper
+import com.android.skillsync.helpers.ValidationHelper
 
 class SignInFragment : BaseFragment() {
     private lateinit var view: View
@@ -22,6 +26,7 @@ class SignInFragment : BaseFragment() {
     private val binding get() = _binding!!
 
     private val userAuthViewModel: UserAuthViewModel by activityViewModels()
+    private var errorMessage: TextView? = null
 
     private var emailLayout: View? = null
     private var passwordLayout: View? = null
@@ -48,10 +53,11 @@ class SignInFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val backButton = view.findViewById<ImageView>(R.id.back_button)
-
-
+        errorMessage = view.findViewById(R.id.login_error_attempt)
         backButton.setOnClickListener {
-            findNavController().navigateUp()        }
+            Navigation.findNavController(it)
+                .navigate(R.id.startPageFragment)
+        }
     }
 
     override fun onDestroy() {
@@ -59,10 +65,9 @@ class SignInFragment : BaseFragment() {
         _binding = null
     }
 
-    // TODO remember user
+    // TODO: Implement remember user functionality
 
     private fun setEventsListeners() {
-        //TODO do from navigation
         forgetPassword = view.findViewById(R.id.forget_password_link)
         forgetPassword?.setOnClickListener {
             Navigation.findNavController(it)
@@ -90,10 +95,11 @@ class SignInFragment : BaseFragment() {
 
     private fun signInUser() {
         binding.signInButton.setOnClickListener {
+            if (isValidInputs(binding.emailGroup, binding.passwordGroup)) {
 
-            val email = binding.emailGroup.editTextField.text.toString()
-            val password = binding.passwordGroup.editTextField.text.toString()
-            if (email.isNotEmpty() && password.isNotEmpty()) {
+                val email = binding.emailGroup.editTextField.text.toString()
+                val password = binding.passwordGroup.editTextField.text.toString()
+
                 userAuthViewModel.signInUser(email, password, onSuccess, onError)
             }
         }
@@ -104,7 +110,31 @@ class SignInFragment : BaseFragment() {
     }
 
     private val onError: (String?) -> Unit = {
-        val dialogHelper = DialogHelper("Sorry," ,requireContext(), it)
-        dialogHelper.showDialogMessage()
+        errorMessage?.text = "One or more of the credentials you entered are incorrect. Please try again."
+        errorMessage?.visibility = View.VISIBLE
+//        val dialogHelper = DialogHelper("Sorry,", requireContext(), it)
+//        dialogHelper.showDialogMessage()
     }
+
+    private fun isValidInputs(
+        email: CustomInputFieldTextBinding,
+        password: CustomInputFieldPasswordBinding
+    ): Boolean {
+        val validationResults = mutableListOf<Boolean>()
+        validationResults.add(
+            ValidationHelper.isValidEmail(email.editTextField.text.toString()).also { isValid ->
+                ValidationHelper.handleValidationResult(isValid, email, requireContext())
+            }
+        )
+
+        validationResults.add(
+            ValidationHelper.isValidPassword(password.editTextField.text.toString())
+                .also { isValid ->
+                    ValidationHelper.handleValidationResult(isValid, password, requireContext())
+                }
+        )
+
+        return validationResults.all { it }
+    }
+
 }

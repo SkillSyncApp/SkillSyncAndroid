@@ -65,7 +65,7 @@
 
     <include
         android:id="@+id/email_group"
-        layout="@layout/custom_input_field_email"
+        layout="@layout/custom_input_field_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
@@ -99,6 +99,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password_group"
         app:layout_constraintVertical_bias="0.119" />
+
+
+    <TextView
+        android:id="@+id/login_error_attempt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red"
+        android:textSize="14sp"
+        android:padding="16dp"
+        android:textStyle="italic"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/sign_in_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/forget_password_link" />
 
     <Button
         android:id="@+id/sign_in_button"
