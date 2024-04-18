@@ -46,10 +46,12 @@ android {
 dependencies {
 
     val nav_version = "2.7.6"
+    val swipeRefreshLayout = "1.1.0"
 
     // Kotlin
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:$swipeRefreshLayout")
 
     val room_version = "2.6.1"
 
