@@ -31,12 +31,11 @@ class PostAdapter(var posts: MutableList<Post>)
 
     override fun onBindViewHolder(holder: PostHolder, position: Int) {
         val post = posts[position]
-//        if (post.imagePath.isNotEmpty()) {
-//            val imageUri = Uri.parse(post.imagePath)
-//            loadImage(imageUri, holder.image)
-//        }
+        if (post.imagePath.isNotEmpty()) {
+            val imageUri = Uri.parse(post.imagePath)
+            loadImage(imageUri, holder.image)
+        }
         holder.ownerNameLabel.text = post.title
-
         holder.contentLabel.text = post.content
     }
 
@@ -53,19 +52,4 @@ class PostAdapter(var posts: MutableList<Post>)
         posts.addAll(newPosts)
         notifyDataSetChanged() // Notify the adapter that the data set has changed
     }
-
-//        Picasso.get()
-//            .load(imageUri)
-//            .into(imageView, object : Callback {
-//                override fun onSuccess() {
-//                    // Image loaded successfully
-//                    println("Image loaded successfully")
-//                }
-//
-//                override fun onError(e: Exception?) {
-//                    // Error loading image, handle it here
-//                    println("Error loading image: ${e?.message}")
-//                }
-//            })
-//    }
 }
