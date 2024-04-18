@@ -164,8 +164,8 @@ class SignUpCompanyFragment : BaseFragment() {
 
     private fun setHints() {
         dynamicTextHelper.setTextViewText(R.id.company_name_group, R.string.company_name_title)
-        dynamicTextHelper.setTextViewText(R.id.email_group, R.string.company_email_title)
-        dynamicTextHelper.setTextViewText(R.id.password_group, R.string.password_title)
+        dynamicTextHelper.setTextViewText(R.id.email_group, R.string.email)
+        dynamicTextHelper.setTextViewText(R.id.password_group, R.string.password)
         dynamicTextHelper.setTextViewText(R.id.bio_group, R.string.bio_title)
     }
 

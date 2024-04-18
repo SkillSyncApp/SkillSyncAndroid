@@ -86,12 +86,22 @@ object ValidationHelper {
     @SuppressLint("SetTextI18n")
     private fun showTextError(inputGroup: CustomInputFieldTextBinding, context: Context,s:String? = null ) {
         if(s.isNullOrEmpty()) {
-            if (inputGroup.editTextLabel.text == context.getString(R.string.student_description_title)) {
-                inputGroup.errorMessage.text = "Invalid group description"
-            } else if (inputGroup.editTextLabel.text == context.getString(R.string.team_members_name_title)) {
-                inputGroup.errorMessage.text = "Invalid group members name"
-            } else {
-                inputGroup.errorMessage.text = "Invalid ${inputGroup.editTextLabel.text}"
+            when (inputGroup.editTextLabel.text) {
+                        context.getString(R.string.email),context.getString(R.string.user_email_title) -> {
+                    inputGroup.errorMessage.text = "Invalid Email Address"
+                }
+                context.getString(R.string.password) -> {
+                    inputGroup.errorMessage.text = "Password must have at least 6 characters"
+                }
+                context.getString(R.string.bio_title),
+                context.getString(R.string.company_name_title),
+                context.getString(R.string.team_name_title),
+                context.getString(R.string.team_institution_title)-> {
+                    inputGroup.errorMessage.text = "Field must be at least 6 characters long and contain only letters" //, comma, dot, or space"
+                }
+                else -> {
+                    inputGroup.errorMessage.text = "Invalid ${inputGroup.editTextLabel.text}"
+                }
             }
         }
         else
@@ -137,13 +147,7 @@ object ValidationHelper {
     @SuppressLint("SetTextI18n")
     private fun showTextError(inputGroup: CustomInputFieldPasswordBinding, context: Context,s:String? = null) {
         if(s.isNullOrEmpty()) {
-            if (inputGroup.editTextLabel.text == context.getString(R.string.student_description_title)) {
-                inputGroup.errorMessage.text = "Invalid group description"
-            } else if (inputGroup.editTextLabel.text == context.getString(R.string.team_members_name_title)) {
-                inputGroup.errorMessage.text = "Invalid group members name"
-            } else {
-                inputGroup.errorMessage.text = "Invalid ${inputGroup.editTextLabel.text}"
-            }
+            inputGroup.errorMessage.text = "Password must have at least 6 characters"
         }
         else
             inputGroup.errorMessage.text = s;
