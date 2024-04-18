@@ -26,10 +26,4 @@ interface PostDao {
 
     @Query("DELETE FROM post")
     suspend fun deleteAllPosts()
-
-    @Query("SELECT title FROM Post WHERE id =:id")
-    fun getPostTitle(id: String): String
-
-    @Query("SELECT logo FROM Company WHERE id =:id")
-    fun getCompanyUrlLogo(id: String): String
 }
