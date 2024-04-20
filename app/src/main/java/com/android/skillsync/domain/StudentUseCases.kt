@@ -18,6 +18,10 @@ class StudentUseCases {
         studentLiveData
     }
 
+    fun getStudent(studentId: String, callback: (student: Student) -> Unit) {
+        fireStoreStudentRepository.getStudent(studentId, callback);
+    }
+
     suspend fun addStudent(student: Student) {
         fireStoreStudentRepository.addStudent(student)
         localStoreStudentRepository.addStudent(student) // todo maybe remove
