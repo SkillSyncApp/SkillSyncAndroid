@@ -12,9 +12,10 @@ class FireStorePostRepository {
         const val POSTS_COLLECTION_PATH = "posts"
     }
 
-    fun addPost(post: Post, callback: () -> Unit) {
+    fun addPost(post: Post) {
+        //, callback: () -> Unit
         apiManager.db.collection(POSTS_COLLECTION_PATH).add(post.json)
-            .addOnSuccessListener { callback() }
+//            .addOnSuccessListener { callback() }
     }
 
     fun deletePost(postId: String) {

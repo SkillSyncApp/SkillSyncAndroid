@@ -4,28 +4,79 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.android.skillsync.ViewModel.PostViewModel
 import com.android.skillsync.adapters.PostAdapter
+import com.android.skillsync.databinding.FragmentFeedBinding
 import com.android.skillsync.helpers.ActionBarHelper
-import com.android.skillsync.models.Post.Post
+
+private var isInitialDataLoaded = false
 
 class FeedFragment : Fragment() {
+    private lateinit var postsRecyclerView: RecyclerView
+    private lateinit var postAdapter: PostAdapter
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var viewModel: PostViewModel
+    private lateinit var progressBar: ProgressBar
 
-    private lateinit var posts: ArrayList<Post>;
-
-    private lateinit var postsRecyclerView: RecyclerView;
-    private lateinit var postAdapter: PostAdapter;
-    private lateinit var view: View
+    private var _binding: FragmentFeedBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        view = inflater.inflate(R.layout.fragment_feed, container, false)
-        initPosts()
+    ): View {
+        _binding = FragmentFeedBinding.inflate(inflater, container, false)
+        val view = binding.root
+
+        // Initialize views
+        postsRecyclerView = binding.postsRecyclerView
+        swipeRefreshLayout = binding.pullToRefresh
+        postAdapter = PostAdapter(mutableListOf())
+        viewModel = ViewModelProvider(this)[PostViewModel::class.java]
+
+        postsRecyclerView.setPadding(0, 0, 0, 250)
+
+
+        postAdapter.posts = viewModel.posts.value?.toMutableList() ?: mutableListOf()
+        progressBar = binding.progressBar
+        progressBar.visibility = View.VISIBLE
+
+        // Set up RecyclerView
+        postsRecyclerView.layoutManager = LinearLayoutManager(context)
+        postsRecyclerView.adapter = postAdapter
+
+
+        swipeRefreshLayout.setOnRefreshListener {
+            reloadData()
+        }
+
+        // Set up ViewModel
+        viewModel.posts.observe(viewLifecycleOwner) { newPosts ->
+            // Clear the existing data in the adapter
+            if (postAdapter.posts.isNotEmpty()) {
+                // Clear the existing data in the adapter if it's not the first load
+                postAdapter.clear()
+            }
+            postAdapter.addAll(newPosts)
+            postAdapter.notifyDataSetChanged()
+            progressBar.visibility = View.GONE
+        }
+
+//        viewModel.postsListLoadingState.observe(viewLifecycleOwner) { state ->
+//            try {
+//                swipeRefreshLayout.isRefreshing = state == PostUseCases.LoadingState.LOADING
+//            } catch (e: Exception) {
+//                e.printStackTrace() // This will print the error in the logcat
+//            }
+//        }
 
         return view
     }
@@ -36,27 +87,21 @@ class FeedFragment : Fragment() {
         setHasOptionsMenu(true)
     }
 
-    private fun initPosts() {
-        postsRecyclerView = view.findViewById(R.id.postsRecyclerView) ?: return
-        postsRecyclerView.setHasFixedSize(true)
-        postsRecyclerView.layoutManager =
-            LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+    private fun reloadData() {
+        swipeRefreshLayout.isRefreshing = false
+        progressBar.visibility = View.VISIBLE
+        viewModel.refreshPosts()
+        progressBar.visibility = View.GONE
 
-        postAdapter = PostAdapter(getPosts())
-        postsRecyclerView.adapter = postAdapter
     }
 
-    private fun getPosts(): ArrayList<Post> {
-        posts = ArrayList()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
-        // TODO: we need to populate the owner details (name + image) from the ownerId
-        val defaultPost1 = Post("111", "Wix", "title", "post content here", "")
-        val defaultPost2 = Post("222", "Amazon", "title", "Amazon's here! this is out new post and work offers. Follow us for more updates and information", "")
-        val defaultPost3 = Post("333", "Fox", "title", "post content here", "")
-        posts.add(defaultPost1)
-        posts.add(defaultPost2)
-        posts.add(defaultPost3)
-
-        return posts
+    override fun onResume() {
+        super.onResume()
+        reloadData()
     }
 }
