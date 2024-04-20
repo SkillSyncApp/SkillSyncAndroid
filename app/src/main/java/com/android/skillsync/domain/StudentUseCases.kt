@@ -19,9 +19,8 @@ class StudentUseCases {
     }
 
     suspend fun addStudent(student: Student) {
-        val studentId = fireStoreStudentRepository.addStudent(student)
-        student.id = studentId
-        localStoreStudentRepository.addStudent(student)
+        fireStoreStudentRepository.addStudent(student)
+        localStoreStudentRepository.addStudent(student) // todo maybe remove
     }
 
     suspend fun update(student: Student) {

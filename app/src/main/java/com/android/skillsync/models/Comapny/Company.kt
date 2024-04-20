@@ -38,6 +38,7 @@ data class Company(
                     ?.putLong(GET_LAST_UPDATED, value)?.apply()
             }
 
+        const val ID_KEY = "id"
         const val NAME_KEY = "name"
         const val EMAIL_KEY = "email"
         const val LOGO_KEY = "logo"
@@ -73,6 +74,7 @@ data class Company(
     val json: Map<String, Any>
         get() {
             return hashMapOf(
+                ID_KEY to id,
                 NAME_KEY to name,
                 EMAIL_KEY to email,
                 LOGO_KEY to logo,
