@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.android.skillsync.ViewModel.PostViewModel
 import com.android.skillsync.ViewModel.UserAuthViewModel
@@ -60,8 +61,8 @@ class NewPostFragment : Fragment() {
     }
 
     private fun setEventListeners() {
-       binding.postButton.setOnClickListener{
-            val titleGroup =  binding.postTitleGroup
+        binding.postButton.setOnClickListener {
+            val titleGroup = binding.postTitleGroup
             val contentGroup = binding.postDescriptionGroup
             val image = imageHelper.getImageUrl() ?: ""
 
@@ -75,10 +76,20 @@ class NewPostFragment : Fragment() {
                     content = content,
                     imagePath = image
                 )
-                postViewModel.addPost(post)
+
+                postViewModel.addPost(post) { success ->
+                    if (success) {
+                        Toast.makeText(requireContext(), "Post added successfully", Toast.LENGTH_SHORT).show()
+                        titleGroup.editTextField.text = null
+                        contentGroup.editTextField.text = null
+                    } else {
+                        Toast.makeText(requireContext(), "Failed to add post", Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
     }
+
 
     private fun isValidInputs(
         title: CustomInputFieldTextBinding,
@@ -92,7 +103,7 @@ class NewPostFragment : Fragment() {
         )
 
         validationResults.add(
-            ValidationHelper.isValidString(content.editTextField.text.toString()).also { isValid ->
+            ValidationHelper.isValidField(content.editTextField.text.toString()).also { isValid ->
                 ValidationHelper.handleValidationResult(isValid, content, requireContext())
             }
         )
