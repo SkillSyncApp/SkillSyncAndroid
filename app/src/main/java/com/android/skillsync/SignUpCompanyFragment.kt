@@ -41,6 +41,7 @@ class SignUpCompanyFragment : BaseFragment() {
     private lateinit var companyViewModel: CompanyViewModel
     private lateinit var userAuthViewModel: UserAuthViewModel
     private lateinit var imageHelper: ImageHelper
+    private lateinit var addressAutoComplete: AutoCompleteTextView
 
     private var _binding: FragmentSignUpCompanyBinding? = null
     private val binding get() = _binding!!
@@ -79,7 +80,7 @@ class SignUpCompanyFragment : BaseFragment() {
     }
 
     private fun initLocationsAutoComplete() {
-        val autoCompany: AutoCompleteTextView? = view.findViewById(R.id.companySuggestion)
+        addressAutoComplete = view.findViewById(R.id.companySuggestion)
 
         locationsAdapter = ArrayAdapter(
             requireContext(),
@@ -87,8 +88,8 @@ class SignUpCompanyFragment : BaseFragment() {
             ArrayList()
         )
 
-        autoCompany?.setAdapter(locationsAdapter)
-        autoCompany?.setOnItemClickListener { _, _, i, _ ->
+        addressAutoComplete?.setAdapter(locationsAdapter)
+        addressAutoComplete?.setOnItemClickListener { _, _, i, _ ->
             val selectedPlace = placesSuggestions[i];
             val latitude = selectedPlace.latitude.toDouble()
             val longitude = selectedPlace.longitude.toDouble()
@@ -100,7 +101,7 @@ class SignUpCompanyFragment : BaseFragment() {
             )
         }
 
-        autoCompany?.addTextChangedListener(object : TextWatcher {
+        addressAutoComplete?.addTextChangedListener(object : TextWatcher {
             @RequiresApi(Build.VERSION_CODES.O_MR1)
             override fun afterTextChanged(s: Editable?) {
                 if (!s.isNullOrEmpty()) {
@@ -172,9 +173,26 @@ class SignUpCompanyFragment : BaseFragment() {
             PlacesApiCall().getPlacesByQuery(it, query) { places ->
                 placesSuggestions = places
 
-                locationsAdapter.clear()
-                places.forEach { locationsAdapter.add(it.title.plus(" - ").plus(it.address)) }
+                locationsAdapter.clear();
+
+                // Filter invalid addresses (with missing fields)
+                val filteredPlacesArray = ArrayList<String>();
+                places.forEach {
+                    if (it.address != null && it.longitude != null && it.latitude != null) {
+                        filteredPlacesArray.add(it.title.plus(" - ").plus(it.address))
+                    }
+                }
+
+//                Log.d("placesApi", filteredPlacesArray.size.toString())
+
+                locationsAdapter = ArrayAdapter(
+                    requireContext(),
+                    android.R.layout.simple_spinner_dropdown_item,
+                    filteredPlacesArray
+                )
+
                 locationsAdapter.notifyDataSetChanged()
+                addressAutoComplete?.setAdapter(locationsAdapter)
             }
         }
     }
