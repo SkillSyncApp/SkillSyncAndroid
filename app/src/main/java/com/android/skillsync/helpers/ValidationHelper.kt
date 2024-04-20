@@ -45,10 +45,19 @@ object ValidationHelper {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
-    /*TODO - password validation*/
     fun isValidPassword(password: String): Boolean {
-        return password.length >= 6
+        if (password.length < 6)
+            return false
+
+        val letterPattern = Regex("[a-zA-Z]")
+        val digitPattern = Regex("[0-9]")
+
+        val containsLetter = letterPattern.containsMatchIn(password)
+        val containsDigit = digitPattern.containsMatchIn(password)
+
+        return containsLetter && containsDigit
     }
+
 
     fun isValidString(input: String): Boolean {
         // Add your generic string validation logic here
@@ -91,7 +100,7 @@ object ValidationHelper {
                     inputGroup.errorMessage.text = "Invalid Email Address"
                 }
                 context.getString(R.string.password) -> {
-                    inputGroup.errorMessage.text = "Password must have at least 6 characters"
+                    inputGroup.errorMessage.text = "Password must be at least 6 characters long and contain at least one letter and one number"
                 }
                 context.getString(R.string.bio_title),
                 context.getString(R.string.company_name_title),
@@ -147,7 +156,7 @@ object ValidationHelper {
     @SuppressLint("SetTextI18n")
     private fun showTextError(inputGroup: CustomInputFieldPasswordBinding, context: Context,s:String? = null) {
         if(s.isNullOrEmpty()) {
-            inputGroup.errorMessage.text = "Password must have at least 6 characters"
+            inputGroup.errorMessage.text = "Password must be at least 6 characters long and contain at least one letter and one number"
         }
         else
             inputGroup.errorMessage.text = s;
