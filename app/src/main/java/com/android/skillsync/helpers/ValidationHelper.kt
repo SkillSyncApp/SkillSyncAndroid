@@ -95,8 +95,8 @@ object ValidationHelper {
                 }
                 context.getString(R.string.bio_title),
                 context.getString(R.string.company_name_title),
-                context.getString(R.string.team_name_title),
-                context.getString(R.string.team_institution_title)-> {
+                context.getString(R.string.user_name_title),
+                context.getString(R.string.institution_title)-> {
                     inputGroup.errorMessage.text = "Field must be at least 6 characters long and contain only letters" //, comma, dot, or space"
                 }
                 else -> {
