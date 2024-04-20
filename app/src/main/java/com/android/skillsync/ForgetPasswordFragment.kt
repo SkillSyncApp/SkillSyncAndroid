@@ -78,7 +78,7 @@ class ForgetPasswordFragment : BaseFragment() {
             email = emailLayout!!.findViewById(R.id.edit_text_field)
 
             resetPassword?.apply {
-                isEnabled = false // initially disable the button
+                isEnabled = false
                 alpha = 0.8f
 
                 email?.addTextChangedListener(object : TextWatcher {
@@ -87,9 +87,7 @@ class ForgetPasswordFragment : BaseFragment() {
                         start: Int,
                         count: Int,
                         after: Int
-                    ) {
-                        isEnabled = s?.isNotEmpty() == true
-                    }
+                    ) {  }
 
                     override fun onTextChanged(
                         s: CharSequence?,
@@ -97,10 +95,11 @@ class ForgetPasswordFragment : BaseFragment() {
                         before: Int,
                         count: Int
                     ) {
-                        resetPassword?.run {
-                            isEnabled = s?.isNotEmpty() == true;
-                            alpha = if (isEnabled) 1.0f else 0.8f // change opacity - disable button
-                        }
+                        val isValidEmail = android.util.Patterns.EMAIL_ADDRESS.matcher(s.toString()).matches()
+
+                        // Enable button if email is not empty and in valid format
+                        resetPassword?.isEnabled = s?.isNotEmpty() == true && isValidEmail
+                        resetPassword?.alpha = if (resetPassword?.isEnabled == true) 1.0f else 0.8f
                     }
 
                     override fun afterTextChanged(s: Editable?) {}
