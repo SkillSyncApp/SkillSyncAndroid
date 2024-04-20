@@ -64,7 +64,7 @@
         app:layout_constraintTop_toBottomOf="@id/sign_you_in_title" />
 
     <include
-        android:id="@+id/email_group"
+        android:id="@+id/email_log_in"
         layout="@layout/custom_input_field_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
         app:layout_constraintTop_toBottomOf="@id/sign_you_in_description" />
 
     <include
-        android:id="@+id/password_group"
+        android:id="@+id/password_log_in"
         layout="@layout/custom_input_field_password"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -84,7 +84,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/email_group" />
+        app:layout_constraintTop_toBottomOf="@id/email_log_in" />
 
     <TextView
         android:id="@+id/forget_password_link"
@@ -97,7 +97,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.94"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password_group"
+        app:layout_constraintTop_toBottomOf="@+id/password_log_in"
         app:layout_constraintVertical_bias="0.119" />
 
 
@@ -128,7 +128,7 @@
         android:textAppearance="@style/log_in_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password_group" />
+        app:layout_constraintTop_toBottomOf="@+id/password_log_in" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/register_group"

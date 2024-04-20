@@ -59,7 +59,7 @@
         app:layout_constraintTop_toBottomOf="@id/create_student_title" />
 
     <include
-        android:id="@+id/email_group"
+        android:id="@+id/email_company"
         layout="@layout/custom_input_field_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/email_group"/>
+        app:layout_constraintTop_toBottomOf="@id/email_company"/>
 
     <AutoCompleteTextView
         android:id="@+id/companySuggestion"
@@ -133,7 +133,7 @@
         app:layout_constraintTop_toBottomOf="@id/add_error_message" />
 
     <include
-        android:id="@+id/password_group"
+        android:id="@+id/password_company"
         layout="@layout/custom_input_field_password"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -168,7 +168,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password_group"
+        app:layout_constraintTop_toBottomOf="@+id/password_company"
         app:layout_constraintVertical_bias="0.841" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

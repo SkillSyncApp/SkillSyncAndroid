@@ -48,7 +48,7 @@
     <!--Start Body-->
 
     <include
-        android:id="@+id/name_student_group"
+        android:id="@+id/name_student"
         layout="@layout/custom_input_field_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
         app:layout_constraintTop_toBottomOf="@id/new_post_sub_title"/>
 
     <include
-        android:id="@+id/email_group"
+        android:id="@+id/email_student"
         layout="@layout/custom_input_field_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -67,10 +67,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/name_student_group" />
+        app:layout_constraintTop_toBottomOf="@id/name_student" />
 
     <include
-        android:id="@+id/institution_group"
+        android:id="@+id/institution"
         layout="@layout/custom_input_field_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -78,10 +78,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/email_group" />
+        app:layout_constraintTop_toBottomOf="@id/email_student" />
 
     <include
-        android:id="@+id/bio_student_group"
+        android:id="@+id/bio_student"
         layout="@layout/custom_input_field_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -89,10 +89,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/institution_group" />
+        app:layout_constraintTop_toBottomOf="@id/institution" />
 
     <include
-        android:id="@+id/password_group"
+        android:id="@+id/password_student"
         layout="@layout/custom_input_field_password"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -100,7 +100,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/bio_student_group"/>
+        app:layout_constraintTop_toBottomOf="@id/bio_student"/>
 
     <Button
         android:id="@+id/sign_up_student_btn"
@@ -115,7 +115,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password_group"
+        app:layout_constraintTop_toBottomOf="@+id/password_student"
         app:layout_constraintVertical_bias="0.805" />
 
     <ImageView
@@ -126,6 +126,6 @@
         app:layout_constraintBottom_toTopOf="@+id/sign_up_student_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password_group"
+        app:layout_constraintTop_toBottomOf="@+id/password_student"
         android:contentDescription="@string/user_image" />
 </androidx.constraintlayout.widget.ConstraintLayout>
