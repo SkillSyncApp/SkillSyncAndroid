@@ -4,10 +4,11 @@ import com.android.skillsync.repoistory.Auth.FireStoreAuthRepository
 
 class UserUseCases {
     private val fireStoreAuthRepository: FireStoreAuthRepository = FireStoreAuthRepository()
-    fun createUser(email: String, password: String, onSuccessCallBack: () -> Unit, onFailureCallBack: (String?) -> Unit) {
-        fireStoreAuthRepository.createUser(email, password, onSuccessCallBack, onFailureCallBack)
+    fun createUser(email: String, password: String, onSuccessCallBack: (String?) -> Unit, onFailureCallBack: (String?) -> Unit) {
+        fireStoreAuthRepository.createUser(email, password, { userId ->
+            onSuccessCallBack(userId)
+        }, onFailureCallBack)
     }
-
     fun signInUser(email: String, password: String, onSuccessCallBack: () -> Unit, onFailureCallBack: (String?) -> Unit) {
         fireStoreAuthRepository.signInUser(email, password, onSuccessCallBack, onFailureCallBack)
     }

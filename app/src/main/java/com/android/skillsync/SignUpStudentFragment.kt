@@ -1,17 +1,12 @@
 package com.android.skillsync
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.android.skillsync.Navigations.navigate
@@ -62,7 +57,8 @@ class SignUpStudentFragment : Fragment() {
 
 
         backButton.setOnClickListener {
-            findNavController().navigateUp()        }
+            findNavController().navigateUp()
+        }
     }
 
     override fun onDestroy() {
@@ -122,9 +118,11 @@ class SignUpStudentFragment : Fragment() {
         dialogHelper.showDialogMessage()
     }
 
-    private val onSuccess: () -> Unit = {
-        studentViewModel.addStudent(student)
-        view.navigate(R.id.action_signUpStudentFragment_to_signInFragment)
+    private val onSuccess: (String?) -> Unit = { userId ->
+        userId?.let { id ->
+            studentViewModel.addStudent(student.copy(id = id))
+            view.navigate(R.id.action_signUpStudentFragment_to_signInFragment)
+        }
     }
 
     private fun isValidInputs(

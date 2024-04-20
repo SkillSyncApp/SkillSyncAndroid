@@ -10,8 +10,10 @@ import kotlinx.coroutines.launch
 class StudentViewModel: ViewModel() {
     val studentUseCases: StudentUseCases = StudentUseCases()
 
-    fun createUserAsStudent(email: String, password: String, onSuccessCallBack: () -> Unit, onFailureCallBack: (String?) -> Unit) = viewModelScope.launch(Dispatchers.IO) {
-        studentUseCases.fireStoreAuthRepository.createUser(email, password, onSuccessCallBack, onFailureCallBack)
+    fun createUserAsStudent(email: String, password: String, onSuccessCallBack: (String?) -> Unit, onFailureCallBack: (String?) -> Unit) = viewModelScope.launch(Dispatchers.IO) {
+        studentUseCases.fireStoreAuthRepository.createUser(email, password, { userId ->
+            onSuccessCallBack(userId)
+        }, onFailureCallBack)
     }
 
     fun getAllStudents() = viewModelScope.launch(Dispatchers.IO) {
