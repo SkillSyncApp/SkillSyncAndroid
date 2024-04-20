@@ -13,7 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -45,8 +45,17 @@ class MapViewFragment : Fragment(), LocationListener {
     private val binding get() = _binding!!
 
     private var _binding: FragmentMapViewBinding? = null
-    private val LOCATIONS_PERMISSIONS_CODE = 2
     private var locationUpdatesRequested = false
+    val LOCATIONS_PERMISSIONS_CODE = 2
+
+    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+        if (isGranted) {
+            // Permission is granted, proceed with your logic
+            initializeMapView()
+            requestLocationUpdates()
+        }
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,19 +65,15 @@ class MapViewFragment : Fragment(), LocationListener {
         view = binding.root
 
         viewModel = ViewModelProvider(this)[CompanyViewModel::class.java]
+        // Initialize the permission launcher
+        requestPermissionLauncher
 
         if (isLocationPermissionGranted()) {
             initializeMapView()
             requestLocationUpdates()
-        } else requestLocationPermissions()
-
-        viewModel.companies?.observe(viewLifecycleOwner) { companies ->
-            updateMapMarkers(companies)
+        } else {
+            requestLocationPermissions()
         }
-
-        scheduleAutomaticRefresh()
-        setEventListeners()
-
         return view
     }
 
@@ -93,19 +98,19 @@ class MapViewFragment : Fragment(), LocationListener {
         companyList.addAll(companies)
 
         for (company in companies) {
-                val (address, location) = company.location
-                val latitude = location.latitude
-                val longitude = location.longitude
-                val companyData = hashMapOf(
-                    "name" to company.name,
-                    "bio" to company.bio,
-                    "address" to address
-                )
-                addMarker(
-                    GeoPoint(latitude, longitude),
-                    companyData,
-                    companyData["name"].toString()
-                )
+            val (address, location) = company.location
+            val latitude = location.latitude
+            val longitude = location.longitude
+            val companyData = hashMapOf(
+                "name" to company.name,
+                "bio" to company.bio,
+                "address" to address
+            )
+            addMarker(
+                GeoPoint(latitude, longitude),
+                companyData,
+                companyData["name"].toString()
+            )
             addMarker(GeoPoint(latitude, longitude), companyData, "Company Marker")
         }
     }
@@ -122,7 +127,7 @@ class MapViewFragment : Fragment(), LocationListener {
                 "address" to address
             )
             addMarker(
-               GeoPoint(latitude, longitude),
+                GeoPoint(latitude, longitude),
                 companyData,
                 companyData["name"].toString()
             )
@@ -153,11 +158,27 @@ class MapViewFragment : Fragment(), LocationListener {
     }
 
     private fun requestLocationPermissions() {
-        ActivityCompat.requestPermissions(
-            requireActivity(),
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-            LOCATIONS_PERMISSIONS_CODE
-        )
+        if (!isLocationPermissionGranted()) {
+            try {
+                requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+            } catch (e: Exception) {
+                Log.e("MapViewFragment", "Error launching permission request: ${e.message}")
+                e.printStackTrace()
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == LOCATIONS_PERMISSIONS_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, proceed with your logic
+                initializeMapView()
+                requestLocationUpdates()
+            } else {
+                Log.d("MapViewFragment", "Location permission denied")
+            }
+        }
     }
 
     private fun addMarker(geoPoint: GeoPoint, data: HashMap<String, String>, snippet: String) {
@@ -243,14 +264,7 @@ class MapViewFragment : Fragment(), LocationListener {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return
+            requestLocationPermissions()
         }
         locationManager.requestLocationUpdates(
             LocationManager.NETWORK_PROVIDER,
@@ -264,28 +278,26 @@ class MapViewFragment : Fragment(), LocationListener {
     override fun onLocationChanged(location: Location) {
         val geoPoint = GeoPoint(location.latitude, location.longitude)
         aMapView.controller.setCenter(geoPoint)
-        addMarker(geoPoint, hashMapOf("name" to "this is my user location", "bio" to "", "address" to ""), "OSMDroid Marker")
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        when (requestCode) {
-            LOCATIONS_PERMISSIONS_CODE -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    requestLocationUpdates()
-                } else Toast.makeText(context, "Location permission denied", Toast.LENGTH_SHORT)
-                    .show()
-            }
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        addMarker(geoPoint, hashMapOf("name" to "this is my location", "bio" to "", "address" to ""), "OSMDroid Marker")
     }
 
     override fun onResume() {
         super.onResume()
-        reloadData()
+        if (isLocationPermissionGranted()) {
+            // Location permission is granted, proceed with initialization
+            initializeMapView()
+            requestLocationUpdates()
+
+            viewModel.companies?.observe(viewLifecycleOwner) { companies ->
+                updateMapMarkers(companies)
+            }
+            scheduleAutomaticRefresh()
+            setEventListeners()
+
+            reloadData()
+
+        } else requestLocationPermissions()
+
     }
 
     override fun onDestroy() {
