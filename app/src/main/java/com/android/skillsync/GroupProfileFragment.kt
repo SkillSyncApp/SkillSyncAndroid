@@ -62,7 +62,6 @@ class GroupProfileFragment : Fragment() {
 
                 // Blur the background image
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    profileImageBackgroundElement = view.findViewById(R.id.group_profile_background_image);
                     profileImageBackgroundElement?.setRenderEffect(
                         RenderEffect.createBlurEffect(
                             50f, 50f, Shader.TileMode.CLAMP

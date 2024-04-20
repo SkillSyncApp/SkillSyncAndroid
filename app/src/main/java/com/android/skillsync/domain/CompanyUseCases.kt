@@ -21,6 +21,10 @@ class CompanyUseCases {
         return companies ?: localStoreCompanyRepository.getAllCompanies()
     }
 
+    fun getCompany(companyId: String, callback: (company: Company) -> Unit) {
+        fireStoreCompanyRepository.getCompany(companyId, callback);
+    }
+
     fun refreshCompanies() {
 
         // 1. Get last local update
