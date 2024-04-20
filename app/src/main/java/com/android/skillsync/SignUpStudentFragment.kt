@@ -69,8 +69,8 @@ class SignUpStudentFragment : Fragment() {
     private fun setHints() {
         dynamicTextHelper.setTextViewText(R.id.email_group, R.string.user_email_title)
         dynamicTextHelper.setTextViewText(R.id.password_group, R.string.password)
-        dynamicTextHelper.setTextViewText(R.id.institution_group, R.string.team_institution_title)
-        dynamicTextHelper.setTextViewText(R.id.name_student_group, R.string.team_name_title)
+        dynamicTextHelper.setTextViewText(R.id.institution_group, R.string.institution_title)
+        dynamicTextHelper.setTextViewText(R.id.name_student_group, R.string.user_name_title)
         dynamicTextHelper.setTextViewText(R.id.bio_student_group, R.string.bio_title)
     }
 

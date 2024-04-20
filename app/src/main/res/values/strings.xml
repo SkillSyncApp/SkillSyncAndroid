@@ -36,8 +36,8 @@
     <string name="sign_up_group_sub_title">By creating a free account</string>
     <string name="user_email_title">User Email</string>
 
-    <string name="team_name_title">Team Name</string>
-    <string name="team_institution_title">Institution</string>
+    <string name="user_name_title">user Name</string>
+    <string name="institution_title">Institution</string>
     <string name="student_description_title">Tell us about you</string>
     <string name="team_members_name_title">Enter teams members name</string>
     <string name="company_name_title">Company Name</string>
