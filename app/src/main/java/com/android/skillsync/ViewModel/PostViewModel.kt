@@ -8,6 +8,7 @@ import com.android.skillsync.domain.PostUseCases
 import com.android.skillsync.models.Post.Post
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PostViewModel: ViewModel() {
 
@@ -31,9 +32,24 @@ class PostViewModel: ViewModel() {
         postsUseCases.posts
     }
 
-    fun addPost(post: Post) = viewModelScope.launch(Dispatchers.IO) {
-        postsUseCases.add(post)
-    }
+   // fun addPost(post: Post) = viewModelScope.launch(Dispatchers.IO) {
+   //     postsUseCases.add(post)
+    //}
+   fun addPost(post: Post, callback: (Boolean) -> Unit) {
+       viewModelScope.launch(Dispatchers.IO) {
+           try {
+               postsUseCases.add(post)
+               withContext(Dispatchers.Main) {
+                   callback(true) // Call the callback with success on the main thread
+               }
+           } catch (e: Exception) {
+               withContext(Dispatchers.Main) {
+                   callback(false) // Call the callback with failure on the main thread
+               }
+           }
+       }
+   }
+
 
     fun deletePost(post: Post) = viewModelScope.launch(Dispatchers.IO) {
         postsUseCases.delete(post)
