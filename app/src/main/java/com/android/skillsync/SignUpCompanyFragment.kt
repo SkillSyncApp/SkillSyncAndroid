@@ -123,9 +123,11 @@ class SignUpCompanyFragment : BaseFragment() {
         dialogHelper.showDialogMessage()
     }
 
-    private val onSuccess: () -> Unit = {
-        companyViewModel.addCompany(company)
-        view.navigate(R.id.action_signUpCompanyFragment_to_signInFragment)
+    private val onSuccess: (String?) -> Unit = { userId ->
+        userId?.let { id ->
+            companyViewModel.addCompany(company.copy(id = id))
+            view.navigate(R.id.action_signUpCompanyFragment_to_signInFragment)
+        }
     }
 
     private fun setEventListeners() {

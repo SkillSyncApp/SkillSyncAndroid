@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,8 +15,6 @@ import com.android.skillsync.ViewModel.PostViewModel
 import com.android.skillsync.adapters.PostAdapter
 import com.android.skillsync.databinding.FragmentFeedBinding
 import com.android.skillsync.helpers.ActionBarHelper
-
-private var isInitialDataLoaded = false
 
 class FeedFragment : Fragment() {
     private lateinit var postsRecyclerView: RecyclerView
@@ -69,14 +66,6 @@ class FeedFragment : Fragment() {
             postAdapter.notifyDataSetChanged()
             progressBar.visibility = View.GONE
         }
-
-//        viewModel.postsListLoadingState.observe(viewLifecycleOwner) { state ->
-//            try {
-//                swipeRefreshLayout.isRefreshing = state == PostUseCases.LoadingState.LOADING
-//            } catch (e: Exception) {
-//                e.printStackTrace() // This will print the error in the logcat
-//            }
-//        }
 
         return view
     }

@@ -6,10 +6,15 @@ class FireStoreAuthRepository {
 
     val firebaseAuth = ApiManager().firebaseAuth
 
-    fun createUser(email: String, password: String, onSuccessCallBack: () -> Unit, onFailureCallBack: (String?) -> Unit) {
+    fun createUser(email: String, password: String, onSuccessCallBack: (String?) -> Unit, onFailureCallBack: (String?) -> Unit) {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
-            .addOnSuccessListener { onSuccessCallBack() }
-            .addOnFailureListener { onFailureCallBack(it.message) }
+            .addOnSuccessListener { authResult ->
+                val userId = authResult.user?.uid
+                onSuccessCallBack(userId)
+            }
+            .addOnFailureListener { e ->
+                onFailureCallBack(e.message)
+            }
     }
 
     fun signInUser(email: String, password: String, onSuccessCallBack: () -> Unit, onFailureCallBack: (String?) -> Unit) {

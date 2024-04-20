@@ -13,8 +13,10 @@ class CompanyViewModel: ViewModel() {
 
     private val companyUseCases: CompanyUseCases = CompanyUseCases()
 
-    fun createUserAsCompanyOwner(email: String, password: String, onSuccessCallBack: () -> Unit, onFailureCallBack: (String?) -> Unit) = viewModelScope.launch(Dispatchers.IO) {
-        companyUseCases.fireStoreAuthRepository.createUser(email, password, onSuccessCallBack, onFailureCallBack)
+    fun createUserAsCompanyOwner(email: String, password: String, onSuccessCallBack: (String?) -> Unit, onFailureCallBack: (String?) -> Unit) = viewModelScope.launch(Dispatchers.IO) {
+        companyUseCases.fireStoreAuthRepository.createUser(email, password, { userId ->
+            onSuccessCallBack(userId)
+        }, onFailureCallBack)
     }
 
     fun getAllCompanies(): LiveData<MutableList<Company>> {

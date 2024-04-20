@@ -6,7 +6,6 @@ import androidx.room.PrimaryKey
 import com.android.skillsync.base.MyApplication
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.ServerTimestamp
 import java.util.UUID
 
 @Entity
@@ -35,6 +34,7 @@ data class Student(
                     ?.putLong(GET_LAST_UPDATED, value)?.apply()
             }
 
+        const val ID_KEY = "id"
         const val NAME_KEY = "name"
         const val EMAIL_KEY = "email"
         const val INSTITUTION_KEY = "institution"
@@ -70,6 +70,7 @@ data class Student(
     val json: Map<String, Any>
         get() {
             return hashMapOf(
+                ID_KEY to id,
                 EMAIL_KEY to email,
                 INSTITUTION_KEY to institution,
                 IMAGE_KEY to image,
