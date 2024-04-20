@@ -16,6 +16,57 @@ class FireStoreCompanyRepository {
 
     val apiManager = ApiManager()
 
+    fun getCompany(companyId: String, callback: (company: Company) -> Unit) {
+        val companyDocument = apiManager.db.collection(COMPANIES_COLLECTION_PATH)
+
+        companyDocument.whereEqualTo("id", companyId).get()
+            .addOnSuccessListener { documentSnapshot ->
+                if (!documentSnapshot.isEmpty) {
+                    val data = documentSnapshot.documents[0].data;
+
+                    if (data != null) {
+                        if (!data.isEmpty()) {
+                            val timestamp: Timestamp? = data["lastUpdated"] as? Timestamp
+                            var lastUpdated: Long? = null
+                            timestamp?.let {
+                                lastUpdated = it.seconds
+                            }
+
+                            val locationData = data["location"] as? Map<*, *>
+                            if (locationData != null) {
+                                val address = locationData["address"] as String
+                                val geoPoint = locationData["location"] as GeoPoint
+                                val latitude = geoPoint.latitude
+                                val longitude = geoPoint.longitude
+
+                                val companyLocation = CompanyLocation(
+                                    address,
+                                    geoPoint,
+                                    GeoHash(latitude, longitude)
+                                )
+
+                                val company = Company(
+                                    name = data["name"] as String,
+                                    email = data["email"] as String,
+                                    bio = data["bio"] as String,
+                                    location = companyLocation,
+                                    logo = data["logo"] as String,
+                                    lastUpdated = lastUpdated ?: 0
+                                )
+
+                                callback(company)
+                            }
+
+
+                        }
+                    }
+                }
+            }
+            .addOnFailureListener { locationException ->
+                Log.e("Firestore", "Error getting company: $locationException")
+            }
+    }
+
     fun getCompanies(since: Long, callback: (List<Company>) -> Unit) {
         apiManager.db.collection(COMPANIES_COLLECTION_PATH)
             .whereGreaterThanOrEqualTo(Company.LAST_UPDATED, Timestamp(since, 0))
