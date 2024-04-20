@@ -20,6 +20,10 @@ class StudentViewModel: ViewModel() {
         studentUseCases.getAllStudents()
     }
 
+    fun getStudent(studentId: String, callback: (student: Student) -> Unit) = viewModelScope.launch(Dispatchers.IO) {
+        studentUseCases.getStudent(studentId, callback);
+    }
+
     fun addStudent(student: Student) = viewModelScope.launch(Dispatchers.IO) {
         studentUseCases.addStudent(student)
     }
