@@ -72,6 +72,7 @@ data class Student(
             return hashMapOf(
                 ID_KEY to id,
                 EMAIL_KEY to email,
+                NAME_KEY to name,
                 INSTITUTION_KEY to institution,
                 IMAGE_KEY to image,
                 BIO_KEY to bio,
