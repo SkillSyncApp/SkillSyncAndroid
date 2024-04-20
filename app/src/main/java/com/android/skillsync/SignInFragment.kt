@@ -8,16 +8,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import com.android.skillsync.Navigations.navigate
 import com.android.skillsync.ViewModel.UserAuthViewModel
 import com.android.skillsync.databinding.CustomInputFieldPasswordBinding
 import com.android.skillsync.databinding.CustomInputFieldTextBinding
 import com.android.skillsync.databinding.FragmentSignInBinding
-import com.android.skillsync.helpers.DialogHelper
 import com.android.skillsync.helpers.ValidationHelper
 
 class SignInFragment : BaseFragment() {
@@ -83,8 +80,8 @@ class SignInFragment : BaseFragment() {
 
     @SuppressLint("SetTextI18n")
     private fun setUpDynamicTextFields() {
-        emailLayout = view.findViewById(R.id.email_group)
-        passwordLayout = view.findViewById(R.id.password_group)
+        emailLayout = view.findViewById(R.id.email_log_in)
+        passwordLayout = view.findViewById(R.id.password_log_in)
 
         emailLabel = emailLayout?.findViewById(R.id.edit_text_label)
         passwordLabel = passwordLayout?.findViewById(R.id.edit_text_label)
@@ -95,12 +92,14 @@ class SignInFragment : BaseFragment() {
 
     private fun signInUser() {
         binding.signInButton.setOnClickListener {
-            if (isValidInputs(binding.emailGroup, binding.passwordGroup)) {
+            val email = binding.emailLogIn
+            val password = binding.passwordLogIn
+            if (isValidInputs(email, password)) {
 
-                val email = binding.emailGroup.editTextField.text.toString()
-                val password = binding.passwordGroup.editTextField.text.toString()
+                val emailTextField = email.editTextField.text.toString()
+                val passwordTextField = password.editTextField.text.toString()
 
-                userAuthViewModel.signInUser(email, password, onSuccess, onError)
+                userAuthViewModel.signInUser(emailTextField, passwordTextField, onSuccess, onError)
             }
         }
     }
@@ -110,10 +109,9 @@ class SignInFragment : BaseFragment() {
     }
 
     private val onError: (String?) -> Unit = {
+        // TODO - remove hardcoded text to strings.xml
         errorMessage?.text = "One or more of the credentials you entered are incorrect. Please try again."
         errorMessage?.visibility = View.VISIBLE
-//        val dialogHelper = DialogHelper("Sorry,", requireContext(), it)
-//        dialogHelper.showDialogMessage()
     }
 
     private fun isValidInputs(

@@ -78,11 +78,6 @@ class SignUpCompanyFragment : BaseFragment() {
             findNavController().navigateUp()        }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
-
     private fun initLocationsAutoComplete() {
         val autoCompany: AutoCompleteTextView? = view.findViewById(R.id.companySuggestion)
 
@@ -139,9 +134,9 @@ class SignUpCompanyFragment : BaseFragment() {
 
         signUpCompany.setOnClickListener {
             val companyNameGroup = binding.companyNameGroup
-            val emailGroup = binding.emailGroup
+            val emailGroup = binding.emailCompany
             val bioGroup = binding.bioGroup
-            val passwordGroup = binding.passwordGroup
+            val passwordGroup = binding.passwordCompany
             val address = binding.companySuggestion.text
             val logo = imageHelper.getImageUrl() ?: "DEFAULT LOGO" // TODO
 
@@ -166,8 +161,8 @@ class SignUpCompanyFragment : BaseFragment() {
 
     private fun setHints() {
         dynamicTextHelper.setTextViewText(R.id.company_name_group, R.string.company_name_title)
-        dynamicTextHelper.setTextViewText(R.id.email_group, R.string.email)
-        dynamicTextHelper.setTextViewText(R.id.password_group, R.string.password)
+        dynamicTextHelper.setTextViewText(R.id.email_company, R.string.email)
+        dynamicTextHelper.setTextViewText(R.id.password_company, R.string.password)
         dynamicTextHelper.setTextViewText(R.id.bio_group, R.string.bio_title)
     }
 
@@ -231,5 +226,10 @@ class SignUpCompanyFragment : BaseFragment() {
                 }
         )
         return validationResults.all { it }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

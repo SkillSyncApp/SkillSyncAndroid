@@ -44,7 +44,7 @@ class ForgetPasswordFragment : BaseFragment() {
     }
 
     private fun resetPassword() {
-        val emailGroup = view.findViewById<ConstraintLayout>(R.id.email_group)
+        val emailGroup = view.findViewById<ConstraintLayout>(R.id.email)
         val email = emailGroup?.findViewById<TextView>(R.id.edit_text_field)?.text.toString()
 
         userAuthViewModel.resetPassword(email, onSuccess, onError)
@@ -63,7 +63,7 @@ class ForgetPasswordFragment : BaseFragment() {
     private fun setEventListeners(view: View) {
         resetPassword = view.findViewById(R.id.reset_password)
         backToSignIn = view.findViewById(R.id.back_to_sign_in)
-        emailLayout = view.findViewById(R.id.email_group)
+        emailLayout = view.findViewById(R.id.email)
 
         resetPassword?.setOnClickListener {
             resetPassword()

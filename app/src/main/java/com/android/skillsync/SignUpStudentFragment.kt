@@ -67,11 +67,11 @@ class SignUpStudentFragment : Fragment() {
     }
 
     private fun setHints() {
-        dynamicTextHelper.setTextViewText(R.id.email_group, R.string.user_email_title)
-        dynamicTextHelper.setTextViewText(R.id.password_group, R.string.password)
-        dynamicTextHelper.setTextViewText(R.id.institution_group, R.string.institution_title)
-        dynamicTextHelper.setTextViewText(R.id.name_student_group, R.string.user_name_title)
-        dynamicTextHelper.setTextViewText(R.id.bio_student_group, R.string.bio_title)
+        dynamicTextHelper.setTextViewText(R.id.email_student, R.string.user_email_title)
+        dynamicTextHelper.setTextViewText(R.id.password_student, R.string.password)
+        dynamicTextHelper.setTextViewText(R.id.institution, R.string.institution_title)
+        dynamicTextHelper.setTextViewText(R.id.name_student, R.string.user_name_title)
+        dynamicTextHelper.setTextViewText(R.id.bio_student, R.string.bio_title)
     }
 
     private fun setEventListeners() {
@@ -81,29 +81,35 @@ class SignUpStudentFragment : Fragment() {
         imageHelper = ImageHelper(this, imageView)
         imageHelper.setImageViewClickListener()
 
-        val image = imageHelper.getImageUrl() ?: "DEFAULT LOGO" // TODO
         studentViewModel = StudentViewModel()
 
         signUpBtn.setOnClickListener {
+            val email = binding.emailStudent
+            val password = binding.passwordStudent
+            val name = binding.nameStudent
+            val institution = binding.institution
+            val bio = binding.bioStudent
+            val logo = imageHelper.getImageUrl() ?: "DEFAULT LOGO" // TODO
+
             if (isValidInputs(
-                    binding.emailGroup,
-                    binding.passwordGroup,
-                    binding.nameStudentGroup,
-                    binding.institutionGroup,
-                    binding.bioStudentGroup
+                    email,
+                    password,
+                    name,
+                    institution,
+                    bio
                 )
             ) {
-                val name = binding.nameStudentGroup.editTextField.text.toString()
-                val email = binding.emailGroup.editTextField.text.toString()
-                val bio = binding.bioStudentGroup.editTextField.text.toString()
-                val password = binding.passwordGroup.editTextField.text.toString()
-                val institution = binding.institutionGroup.editTextField.text.toString()
+                val name = name.editTextField.text.toString()
+                val email = email.editTextField.text.toString()
+                val bio = bio.editTextField.text.toString()
+                val password = password.editTextField.text.toString()
+                val institution = institution.editTextField.text.toString()
 
                 student = Student(
                     name = name,
                     email = email,
                     institution = institution,
-                    image = image,
+                    image = logo,
                     bio = bio
                 )
 
