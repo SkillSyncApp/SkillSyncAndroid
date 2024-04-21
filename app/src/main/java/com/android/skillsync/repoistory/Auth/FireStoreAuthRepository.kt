@@ -4,7 +4,12 @@ import com.android.skillsync.repoistory.ApiManager
 
 class FireStoreAuthRepository {
 
+    companion object {
+        const val USER_TYPE_COLLECTION_PATH = "userType"
+    }
+
     val firebaseAuth = ApiManager().firebaseAuth
+    val apiManager = ApiManager()
 
     fun createUser(email: String, password: String, onSuccessCallBack: (String?) -> Unit, onFailureCallBack: (String?) -> Unit) {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
@@ -31,5 +36,16 @@ class FireStoreAuthRepository {
         firebaseAuth.sendPasswordResetEmail(email)
             .addOnSuccessListener { onSuccessCallBack() }
             .addOnFailureListener { onFailureCallBack(it.message) }
+    }
+
+    fun getUserType(userId: String, onSuccessCallBack: (String?) -> Unit) {
+        val documentRef = apiManager.db.collection(USER_TYPE_COLLECTION_PATH).document(userId)
+        documentRef.get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val userType = document.getString("type")
+                    onSuccessCallBack(userType)
+                }
+            }
     }
 }

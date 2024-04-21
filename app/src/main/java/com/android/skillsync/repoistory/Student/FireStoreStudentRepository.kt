@@ -2,9 +2,12 @@ package com.android.skillsync.repoistory.Student
 
 import android.util.Log
 import com.android.skillsync.models.Student.Student
+import com.android.skillsync.models.Type
+import com.android.skillsync.models.UserType
 import com.android.skillsync.repoistory.ApiManager
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.tasks.await
+import com.android.skillsync.repoistory.Auth.FireStoreAuthRepository.Companion.USER_TYPE_COLLECTION_PATH
 
 class FireStoreStudentRepository {
 
@@ -14,12 +17,13 @@ class FireStoreStudentRepository {
 
     val apiManager = ApiManager()
 
-    suspend fun addStudent(student: Student, /*onSuccessCallBack: () -> Unit, onFailureCallBack: () -> Unit*/): String {
+    suspend fun addStudent(student: Student, onSuccess: (String) -> Unit): String {
 
         val documentReference = apiManager.db.collection(USERS_COLLECTION_PATH)
             .add(student.json)
             .await()
 
+        onSuccess(student.id)
         return documentReference.id
     }
 
@@ -32,7 +36,7 @@ class FireStoreStudentRepository {
                     val data = documentSnapshot.documents[0].data;
 
                     if (data != null) {
-                        if (!data.isEmpty()) {
+                        if (data.isNotEmpty()) {
                             val timestamp: Timestamp? = data["lastUpdated"] as? Timestamp
                             var lastUpdated: Long? = null
                             timestamp?.let {
@@ -56,6 +60,11 @@ class FireStoreStudentRepository {
             .addOnFailureListener { locationException ->
                 Log.e("Firestore", "Error getting student: $locationException")
             }
+    }
+
+    fun setStudentInUserTypeDB(companyId: String) = run {
+        val userType = UserType(Type.STUDENT)
+        apiManager.db.collection(USER_TYPE_COLLECTION_PATH).document(companyId).set(userType)
     }
 
     fun updateStudent(student: Student, data: Map<String, Any>, onSuccessCallBack: () -> Unit, onFailureCallBack: () -> Unit){

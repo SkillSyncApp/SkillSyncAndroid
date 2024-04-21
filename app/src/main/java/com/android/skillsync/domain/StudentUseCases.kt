@@ -23,7 +23,9 @@ class StudentUseCases {
     }
 
     suspend fun addStudent(student: Student) {
-        fireStoreStudentRepository.addStudent(student)
+        fireStoreStudentRepository.addStudent(student) {studentId ->
+            fireStoreStudentRepository.setStudentInUserTypeDB(studentId)
+        }
         localStoreStudentRepository.addStudent(student) // todo maybe remove
     }
 

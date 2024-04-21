@@ -3,11 +3,14 @@ package com.android.skillsync.repoistory.Company
 import android.util.Log
 import com.android.skillsync.models.Comapny.Company
 import com.android.skillsync.models.CompanyLocation
+import com.android.skillsync.models.UserType
 import com.android.skillsync.repoistory.ApiManager
 import com.firebase.geofire.core.GeoHash
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.GeoPoint
 import kotlinx.coroutines.tasks.await
+import com.android.skillsync.models.Type
+import com.android.skillsync.repoistory.Auth.FireStoreAuthRepository.Companion.USER_TYPE_COLLECTION_PATH
 
 class FireStoreCompanyRepository {
     companion object {
@@ -85,12 +88,18 @@ class FireStoreCompanyRepository {
             }
     }
 
-    suspend fun addCompany(company: Company, function: () -> Unit): String {
+    suspend fun addCompany(company: Company, onSuccess: (String) -> Unit): String {
         val documentReference = apiManager.db.collection(COMPANIES_COLLECTION_PATH)
             .add(company.json)
             .await()
 
+        onSuccess(company.id)
         return documentReference.id
+    }
+
+    fun setCompanyInUserTypeDB(documentReferenceId: String) = run {
+        val userType = UserType(Type.COMPANY)
+        apiManager.db.collection(USER_TYPE_COLLECTION_PATH).document(documentReferenceId).set(userType)
     }
 
     fun setCompaniesOnMap(callback: (Company) -> Unit) {
