@@ -52,7 +52,8 @@ class CompanyUseCases {
     }
 
     suspend fun add(company: Company) {
-       fireStoreCompanyRepository.addCompany(company) {
+       fireStoreCompanyRepository.addCompany(company) { companyId ->
+           fireStoreCompanyRepository.setCompanyInUserTypeDB(companyId)
             refreshCompanies()
         }
     }
