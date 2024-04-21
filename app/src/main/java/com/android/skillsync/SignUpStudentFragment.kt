@@ -159,14 +159,14 @@ class SignUpStudentFragment : Fragment() {
         )
 
         validationResults.add(
-            ValidationHelper.isValidString(institution.editTextField.text.toString())
+            ValidationHelper.isValidField(institution.editTextField.text.toString())
                 .also { isValid ->
                     ValidationHelper.handleValidationResult(isValid, institution, requireContext())
                 }
         )
 
         validationResults.add(
-            ValidationHelper.isValidString(bio.editTextField.text.toString()).also { isValid ->
+            ValidationHelper.isValidField(bio.editTextField.text.toString()).also { isValid ->
                 ValidationHelper.handleValidationResult(isValid, bio, requireContext())
             }
         )
