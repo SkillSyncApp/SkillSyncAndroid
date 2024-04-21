@@ -37,10 +37,17 @@ class GroupProfileFragment : Fragment() {
         view = inflater.inflate(R.layout.fragment_group_profile, container, false)
 
         // TODO: use userId from args if got one, use current user if not
-        val userId = userAuthViewModel.getUserId()
-        fillProfileDetails(userId.toString())
+        val userId = userAuthViewModel.getUserId().toString()
+
+        fillProfileDetails(userId)
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val userId = userAuthViewModel.getUserId().toString()
+        userAuthViewModel.setMenuByUserType(userId, this)
     }
 
     private fun fillProfileDetails(studentId: String): Unit {

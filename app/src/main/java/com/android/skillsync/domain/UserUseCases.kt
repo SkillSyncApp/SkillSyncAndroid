@@ -1,5 +1,8 @@
 package com.android.skillsync.domain
 
+import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
+import com.android.skillsync.R
 import com.android.skillsync.repoistory.Auth.FireStoreAuthRepository
 
 class UserUseCases {
@@ -23,5 +26,17 @@ class UserUseCases {
 
     fun getUserId(): String? {
         return fireStoreAuthRepository.firebaseAuth.currentUser?.uid
+    }
+    fun setMenuByUserType(userId: String, fragment: Fragment) {
+        return fireStoreAuthRepository.getUserType(userId) { userType ->
+            if (userType != null) {
+                val navController = Navigation.findNavController(fragment.requireView())
+                if (userType == "STUDENT") {
+                    navController.navigate(R.id.groupProfileFragment)
+                } else {
+                    navController.navigate(R.id.companyProfileFragment)
+                }
+            }
+        }
     }
 }
