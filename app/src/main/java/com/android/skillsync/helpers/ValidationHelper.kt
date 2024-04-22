@@ -68,10 +68,8 @@ object ValidationHelper {
     }
     //general field
     fun isValidField(input: String): Boolean {
-        // Add your generic string validation logic here
-        val pattern = Regex("^[a-zA-Z0-9.,:'\"; ]+\$")
         val isLengthValid = input.length >= 3
-        return pattern.matches(input) && isLengthValid && input.isNotBlank()
+        return isLengthValid && input.isNotBlank()
     }
 
 
@@ -110,13 +108,13 @@ object ValidationHelper {
                 context.getString(R.string.password) -> {
                     inputGroup.errorMessage.text = "Password must be at least 6 characters long and contain at least one letter and one number"
                 }
-                context.getString(R.string.bio_title),
                 context.getString(R.string.company_name_title),
                 context.getString(R.string.user_name_title),
                 context.getString(R.string.project_name_title)
                 -> {
                     inputGroup.errorMessage.text = "Field must be at least 6 characters long and contain only letters" //, comma, dot, or space"
                 }
+                context.getString(R.string.bio_title),
                 context.getString(R.string.institution_title),
                 context.getString(R.string.project_description) -> {
                     inputGroup.errorMessage.text = "Field must be at least 3 characters long"
