@@ -68,10 +68,13 @@ class FireStoreStudentRepository {
     }
 
     fun updateStudent(student: Student, data: Map<String, Any>, onSuccessCallBack: () -> Unit, onFailureCallBack: () -> Unit){
-        apiManager.db.collection(USERS_COLLECTION_PATH).document(student.id).update(data)
-            .addOnSuccessListener { onSuccessCallBack() }
-            .addOnFailureListener { onFailureCallBack() }
+        apiManager.db.collection(USERS_COLLECTION_PATH).whereEqualTo("id", student.id).get().addOnSuccessListener {
+            apiManager.db.collection(USERS_COLLECTION_PATH).document(it.documents[0].id).update(data)
+                .addOnSuccessListener { onSuccessCallBack() }
+                .addOnFailureListener { onFailureCallBack() }
+        }
     }
+
 
     fun deleteStudent(student: Student, onSuccessCallBack: () -> Unit, onFailureCallBack: () -> Unit){
         apiManager.db.collection(USERS_COLLECTION_PATH).document(student.id).delete()
