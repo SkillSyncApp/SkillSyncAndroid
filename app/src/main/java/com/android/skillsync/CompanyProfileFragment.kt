@@ -12,15 +12,24 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.android.skillsync.ViewModel.CompanyViewModel
+import com.android.skillsync.ViewModel.PostViewModel
 import com.android.skillsync.ViewModel.UserAuthViewModel
+import com.android.skillsync.adapters.PostAdapter
 import com.squareup.picasso.Picasso
 
 class CompanyProfileFragment : Fragment() {
 
     private val userAuthViewModel: UserAuthViewModel by activityViewModels()
     private lateinit var companyViewModel: CompanyViewModel
+    private lateinit var postViewModel: PostViewModel
+
     private lateinit var view: View
+
+    private lateinit var postsRecyclerView: RecyclerView
+    private lateinit var postAdapter: PostAdapter
 
     private var profileImage: ImageView? = null
     private var profileImageBackgroundElement: ImageView? = null
@@ -33,11 +42,16 @@ class CompanyProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         companyViewModel = CompanyViewModel()
+        postViewModel = PostViewModel()
+
         view = inflater.inflate(R.layout.fragment_company_profile, container, false)
 
+        postAdapter = PostAdapter(mutableListOf())
+
         // TODO: use userId from args if got one, use current user if not
-        val userId = userAuthViewModel.getUserId()
-        fillProfileDetails(userId.toString())
+        val companyId = userAuthViewModel.getUserId()
+        fillProfileDetails(companyId.toString())
+        fillCompanyPosts(companyId.toString())
 
         return view
     }
@@ -66,6 +80,16 @@ class CompanyProfileFragment : Fragment() {
                 }
 
             }
+        }
+    }
+
+    private fun fillCompanyPosts(companyId: String): Unit {
+        postViewModel.getPostsByOwnerId(companyId) {
+            postsRecyclerView = view.findViewById(R.id.companyPostsRecyclerView)
+            postsRecyclerView.setPadding(0, 0, 0, 250)
+            postAdapter.posts = it.toMutableList()
+            postsRecyclerView.layoutManager = LinearLayoutManager(context)
+            postsRecyclerView.adapter = postAdapter
         }
     }
 }

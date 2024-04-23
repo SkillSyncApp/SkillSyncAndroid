@@ -9,7 +9,6 @@ import com.android.skillsync.repoistory.Post.FireStorePostRepository
 import com.android.skillsync.repoistory.Post.LocalStorePostRepository
 import java.time.Instant
 import java.util.concurrent.Executors
-import kotlin.collections.indexOfFirst
 
 class PostUseCases {
 
@@ -31,6 +30,10 @@ class PostUseCases {
 
     fun add(post: Post) {
         fireStorePostRepository.addPost(post)
+    }
+
+    fun getPostsByOwnerId(ownerId: String, callback: (posts: List<Post>) -> Unit) {
+        fireStorePostRepository.getPostsByOwnerId(ownerId, callback);
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
