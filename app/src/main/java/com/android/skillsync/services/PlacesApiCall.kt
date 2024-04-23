@@ -29,11 +29,12 @@ class PlacesApiCall {
         call.enqueue(object: Callback<PlacesResponse> {
             override fun onResponse(response: Response<PlacesResponse>, retrofit: Retrofit?) {
                 val res: PlacesResponse = response.body()
-                Log.d("Success", res.places.size.toString() + res.toString())
+                Log.d("Success", "places:" + res.places.size.toString() + res.toString())
                 callback(res.places)
             }
 
             override fun onFailure(t: Throwable?) {
+                Log.d("Error", "places: "+ t?.message)
                 Toast.makeText(context, "Request Fail", Toast.LENGTH_SHORT).show()
             }
         })

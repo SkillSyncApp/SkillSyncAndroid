@@ -28,6 +28,24 @@ class FireStorePostRepository {
 //            .addOnCompleteListener { onFailureCallBack() }
     }
 
+    fun getPostsByOwnerId(ownerId: String, callback: (List<Post>) -> Unit) {
+        apiManager.db.collection(POSTS_COLLECTION_PATH)
+            .whereEqualTo(Post.OWNER_ID_KEY, ownerId)
+            .get().addOnCompleteListener {
+                when (it.isSuccessful) {
+                    true -> {
+                        val posts: MutableList<Post> = mutableListOf()
+                        for (json in it.result) {
+                            val post = Post.fromJSON(json.data)
+                            posts.add(post)
+                        }
+                        callback(posts)
+                    }
+                    false -> callback(listOf())
+                }
+            }
+    }
+
     fun getPosts(since: Long, callback: (List<Post>) -> Unit) {
         apiManager.db.collection(POSTS_COLLECTION_PATH)
             .whereGreaterThanOrEqualTo(Post.LAST_UPDATED, Timestamp(since, 0))
