@@ -121,4 +121,15 @@
         android:name="com.android.skillsync.editPost"
         android:label="fragment_edit_post"
         tools:layout="@layout/fragment_edit_post" />
+
+    <fragment
+        android:id="@+id/editGroupProfileFragment"
+        android:name="com.android.skillsync.EditGroupProfileFragment"
+        android:label="fragment_forget_password"
+        tools:layout="@layout/fragment_edit_group_profile">
+
+        <action
+            android:id="@+id/action_editGroupProfileFragment_to_ProfileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
 </navigation>
