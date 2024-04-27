@@ -6,23 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.Group
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
-import com.android.skillsync.Navigations.navigate
 import com.android.skillsync.ViewModel.StudentViewModel
 import com.android.skillsync.ViewModel.UserAuthViewModel
 import com.android.skillsync.databinding.CustomInputFieldTextBinding
 import com.android.skillsync.databinding.FragmentEditGroupProfileBinding
 import com.android.skillsync.helpers.ActionBarHelper
-import com.android.skillsync.helpers.DialogHelper
 import com.android.skillsync.helpers.DynamicTextHelper
-import com.android.skillsync.helpers.ImageHelper
 import com.android.skillsync.helpers.ValidationHelper
 import com.android.skillsync.models.Student.Student
 
@@ -54,11 +48,11 @@ class EditGroupProfileFragment : Fragment() {
         // Hide the BottomNavigationView
         ActionBarHelper.hideActionBarAndBottomNavigationView((requireActivity() as? AppCompatActivity))
 
-        val backButton = view.findViewById<ImageView>(R.id.back_button)
-        backButton.setOnClickListener {
-            Navigation.findNavController(it)
-                .navigate(R.id.action_editGroupProfileFragment_to_groupProfileFragment)
-        }
+//        val backButton = view.findViewById<ImageView>(R.id.back_button)
+//        backButton.setOnClickListener {
+//            Navigation.findNavController(it)
+//                .navigate(R.id.action_editGroupProfileFragment_to_groupProfileFragment)
+//        }
 
         return view
     }

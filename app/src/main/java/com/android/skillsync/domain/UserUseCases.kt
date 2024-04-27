@@ -31,10 +31,8 @@ class UserUseCases {
         return fireStoreAuthRepository.getUserType(userId) { userType ->
             if (userType != null) {
                 val navController = Navigation.findNavController(fragment.requireView())
-                if (userType == "STUDENT") {
-                    navController.navigate(R.id.groupProfileFragment)
-                } else {
-                    navController.navigate(R.id.companyProfileFragment)
+                if (userType == "COMPANY") {
+                    navController.navigate(R.id.action_groupProfileFragment_to_companyProfileFragment)
                 }
             }
         }
