@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.skillsync.domain.CompanyUseCases
 import com.android.skillsync.models.Comapny.Company
+import com.android.skillsync.models.Student.Student
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -41,5 +42,13 @@ class CompanyViewModel: ViewModel() {
 
     fun setCompaniesOnMap(callback: (Company) -> Unit) = viewModelScope.launch(Dispatchers.IO) {
         companyUseCases.setCompaniesOnMap(callback)
+    }
+
+    fun update(company: Company, data: Map<String, Any>, onSuccessCallBack: () -> Unit, onFailureCallBack: () -> Unit) = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            companyUseCases.update(company, data, onSuccessCallBack, onFailureCallBack)
+        } catch (e: Exception) {
+            onFailureCallBack()
+        }
     }
 }
