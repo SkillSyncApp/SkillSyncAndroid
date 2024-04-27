@@ -28,7 +28,7 @@ class FireStoreCompanyRepository {
                     val data = documentSnapshot.documents[0].data;
 
                     if (data != null) {
-                        if (!data.isEmpty()) {
+                        if (data.isNotEmpty()) {
                             val timestamp: Timestamp? = data["lastUpdated"] as? Timestamp
                             var lastUpdated: Long? = null
                             timestamp?.let {
@@ -59,8 +59,6 @@ class FireStoreCompanyRepository {
 
                                 callback(company)
                             }
-
-
                         }
                     }
                 }
@@ -121,16 +119,7 @@ class FireStoreCompanyRepository {
                 if (data != null) {
                     val locationData = data["location"] as? Map<*, *>
                     if (locationData != null) {
-                        val address = locationData["address"] as String
-                        val geoPoint = locationData["location"] as GeoPoint
-                        val latitude = geoPoint.latitude
-                        val longitude = geoPoint.longitude
-
-                        val companyLocation = CompanyLocation(
-                            address,
-                            geoPoint,
-                            GeoHash(latitude, longitude)
-                        )
+                        val companyLocation = buildCompanyLocation(locationData)
 
                         val timestamp: Timestamp? = data["lastUpdated"] as? Timestamp
                         var lastUpdated: Long? = null
@@ -153,5 +142,18 @@ class FireStoreCompanyRepository {
             .addOnFailureListener { locationException ->
                 Log.e("Firestore", "Error getting location documents: $locationException")
             }
+    }
+
+    private fun buildCompanyLocation(locationData: Map<*, *>?): CompanyLocation {
+        val address = locationData?.get("address") as String
+        val geoPoint = locationData["location"] as GeoPoint
+        val latitude = geoPoint.latitude
+        val longitude = geoPoint.longitude
+
+        return CompanyLocation(
+            address,
+            geoPoint,
+            GeoHash(latitude, longitude)
+        )
     }
 }

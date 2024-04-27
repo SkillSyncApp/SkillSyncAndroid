@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/feedFragment"
         android:icon="@android:drawable/ic_dialog_dialer"
@@ -16,6 +14,11 @@
         android:title="@string/map"/>
     <item
         android:id="@+id/groupProfileFragment"
+        android:icon="@android:drawable/ic_menu_my_calendar"
+        android:title="@string/profile" />
+
+    <item
+        android:id="@+id/companyProfileFragment"
         android:icon="@android:drawable/ic_menu_my_calendar"
         android:title="@string/profile" />
 </menu>

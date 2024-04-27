@@ -7,6 +7,17 @@
     tools:context=".CompanyProfileFragment">
 
     <ImageView
+        android:id="@+id/back_button"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/back_arrow_icon"
+        android:padding="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"
+        android:contentDescription="Back" />
+
+    <ImageView
         android:id="@+id/company_profile_background_image"
         android:layout_width="413dp"
         android:layout_height="250dp"

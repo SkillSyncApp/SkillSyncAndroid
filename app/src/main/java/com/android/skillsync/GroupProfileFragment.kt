@@ -15,6 +15,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.skillsync.ViewModel.PostViewModel
+import androidx.navigation.fragment.findNavController
 import com.android.skillsync.ViewModel.StudentViewModel
 import com.android.skillsync.ViewModel.UserAuthViewModel
 import com.android.skillsync.adapters.PostAdapter
@@ -35,6 +36,7 @@ class GroupProfileFragment : Fragment() {
     private var groupName: TextView? = null
     private var groupBio: TextView? = null
     private var groupInstitution: TextView? = null
+    private var backButton: ImageView? = null
 
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreateView(
@@ -48,9 +50,17 @@ class GroupProfileFragment : Fragment() {
 
         postAdapter = PostAdapter(mutableListOf())
 
-        // TODO: use userId from args if got one, use current user if not
-        val userId = userAuthViewModel.getUserId().toString()
+        val args = arguments
+        val userId = args?.getString("userId") ?: userAuthViewModel.getUserId().toString()
 
+        if(args?.getString("userId")?.isNotEmpty() == true) {
+            backButton = view.findViewById(R.id.back_button)
+            backButton?.setVisibility(View.VISIBLE)
+
+            backButton?.setOnClickListener {
+                findNavController().navigateUp()
+            }
+        }
         fillProfileDetails(userId)
         fillGroupPosts(userId)
 
@@ -63,8 +73,8 @@ class GroupProfileFragment : Fragment() {
         userAuthViewModel.setMenuByUserType(userId, this)
     }
 
-    private fun fillProfileDetails(groupId: String): Unit {
-        studentViewModel.getStudent(groupId) {
+    private fun fillProfileDetails(studentId: String): Unit {
+        studentViewModel.getStudent(studentId) {
             groupName = view.findViewById(R.id.groupName)
             groupName?.text = it.name
 
@@ -88,7 +98,6 @@ class GroupProfileFragment : Fragment() {
                         )
                     )
                 }
-
             }
         }
     }
