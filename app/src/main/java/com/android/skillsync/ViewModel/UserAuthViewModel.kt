@@ -1,6 +1,5 @@
 package com.android.skillsync.ViewModel
 
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -30,9 +29,6 @@ class UserAuthViewModel: ViewModel() {
 
     fun resetPassword(email: String, onSuccessCallBack: () -> Unit, onFailureCallBack: (String?) -> Unit) {
         userUseCases.resetPassword(email, onSuccessCallBack, onFailureCallBack)
-    }
-    fun setMenuByUserType(userId: String, fragment: Fragment) {
-        userUseCases.setMenuByUserType(userId, fragment)
     }
 
     fun getInfoOnUser(id: String, onCallBack: (userInfo: UserInfo?, error: String?) -> Unit) {
