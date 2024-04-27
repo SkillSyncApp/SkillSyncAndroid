@@ -1,5 +1,6 @@
 package com.android.skillsync.adapters
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.skillsync.R
 import com.android.skillsync.models.Post.Post
 import com.squareup.picasso.Picasso
-import android.net.Uri
 
 class PostAdapter(var posts: MutableList<Post>)
     : RecyclerView.Adapter<PostAdapter.PostHolder>() {
@@ -48,7 +48,8 @@ class PostAdapter(var posts: MutableList<Post>)
         posts.clear()
     }
 
-    fun addAll(newPosts: List<Post>) {
+    fun addAll(newPosts: MutableList<Post>) {
+        newPosts.sortByDescending { it.lastUpdated };
         posts.addAll(newPosts)
         notifyDataSetChanged() // Notify the adapter that the data set has changed
     }

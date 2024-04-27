@@ -49,7 +49,11 @@
         android:id="@+id/groupProfileFragment"
         android:name="com.android.skillsync.GroupProfileFragment"
         android:label="fragment_group_profile"
-        tools:layout="@layout/fragment_group_profile" />
+        tools:layout="@layout/fragment_group_profile" >
+        <action
+            android:id="@+id/action_groupProfileFragment_to_companyProfileFragment"
+            app:destination="@id/companyProfileFragment" />
+    </fragment>
     <fragment
         android:id="@+id/signUpCompanyFragment"
         android:name="com.android.skillsync.SignUpCompanyFragment"
