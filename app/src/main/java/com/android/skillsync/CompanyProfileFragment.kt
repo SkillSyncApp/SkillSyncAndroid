@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.skillsync.ViewModel.CompanyViewModel
@@ -35,6 +36,7 @@ class CompanyProfileFragment : Fragment() {
     private var profileImageBackgroundElement: ImageView? = null
     private var companyName: TextView? = null
     private var companyBio: TextView? = null
+    private var backButton: ImageView? = null
 
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreateView(
@@ -48,8 +50,18 @@ class CompanyProfileFragment : Fragment() {
 
         postAdapter = PostAdapter(mutableListOf())
 
-        // TODO: use userId from args if got one, use current user if not
-        val companyId = userAuthViewModel.getUserId()
+        val args = arguments
+        val companyId = args?.getString("userId") ?: userAuthViewModel.getUserId()
+
+        if(args?.getString("userId")?.isNotEmpty() == true) {
+            backButton = view.findViewById(R.id.back_button)
+            backButton?.setVisibility(View.VISIBLE)
+
+            backButton?.setOnClickListener {
+                findNavController().navigateUp()
+            }
+        }
+
         fillProfileDetails(companyId.toString())
         fillCompanyPosts(companyId.toString())
 

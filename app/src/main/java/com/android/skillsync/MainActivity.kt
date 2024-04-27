@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
+import com.android.skillsync.ViewModel.UserAuthViewModel
 import com.android.skillsync.helpers.ActionBarHelper
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -14,10 +15,12 @@ import com.google.firebase.auth.FirebaseAuth
 class MainActivity : AppCompatActivity() {
 
     private var navController: NavController? = null
+    private var userAuthViewModel: UserAuthViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        userAuthViewModel = UserAuthViewModel()
 
         // TODO REMOVE - JUST TO TEST SIGN IN PAGE
         val firebaseAuth = FirebaseAuth.getInstance()
@@ -35,10 +38,27 @@ class MainActivity : AppCompatActivity() {
         navController?.let { NavigationUI.setupWithNavController(bottomNavigationView, it) }
     }
 
-
+    private var userTypeProfile = "COMPANY"
+    fun setProfile(userType: String) {
+        userTypeProfile = userType
+        invalidateOptionsMenu()
+    }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         super.onCreateOptionsMenu(menu)
-        menuInflater.inflate(R.menu.bottom_nav_menu, menu)
+        menuInflater.inflate(R.menu.nav_menu, menu)
+
+        // Check if the menu item exists before modifying its visibility
+        val companyMenuItem = menu?.findItem(R.id.companyProfileFragment)
+        val groupMenuItem = menu?.findItem(R.id.groupProfileFragment)
+
+        if(userTypeProfile == "USER") {
+            companyMenuItem?.isVisible = false
+            groupMenuItem?.isVisible = true
+        } else {
+            companyMenuItem?.isVisible = true
+            groupMenuItem?.isVisible = false
+        }
+
         return true
     }
 
