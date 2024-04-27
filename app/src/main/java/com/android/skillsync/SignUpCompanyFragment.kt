@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.navigation.fragment.findNavController
 import com.android.skillsync.Navigations.navigate
@@ -122,6 +123,7 @@ class SignUpCompanyFragment : BaseFragment() {
     private val onSuccess: (String?) -> Unit = { userId ->
         userId?.let { id ->
             companyViewModel.addCompany(company.copy(id = id))
+            Toast.makeText(requireContext(), "Account created successfully", Toast.LENGTH_SHORT).show()
             view.navigate(R.id.action_signUpCompanyFragment_to_signInFragment)
         }
     }

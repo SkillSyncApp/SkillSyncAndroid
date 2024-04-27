@@ -1,10 +1,7 @@
 package com.android.skillsync.domain
 
-import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation
-import com.android.skillsync.R
-import com.android.skillsync.repoistory.Auth.FireStoreAuthRepository
 import com.android.skillsync.models.UserInfo
+import com.android.skillsync.repoistory.Auth.FireStoreAuthRepository
 
 
 class UserUseCases {
@@ -38,17 +35,6 @@ class UserUseCases {
                     callback(UserInfo.UserCompany(companyInfo.copy(id = id)), null)
                 }
                 else -> callback(null, "Unknown user type") // Handle other types if needed
-            }
-        }
-    }
-
-    fun setMenuByUserType(userId: String, fragment: Fragment) {
-        return fireStoreAuthRepository.getUserType(userId) { userType ->
-            if (userType != null) {
-                val navController = Navigation.findNavController(fragment.requireView())
-                if (userType == "COMPANY") {
-                    navController.navigate(R.id.action_groupProfileFragment_to_companyProfileFragment)
-                }
             }
         }
     }
