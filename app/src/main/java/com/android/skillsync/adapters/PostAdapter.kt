@@ -17,7 +17,7 @@ class PostAdapter(var posts: MutableList<Post>)
     class PostHolder(itemView:View): RecyclerView.ViewHolder(itemView) { // check if we need to split to a different file - check tal github
         val ownerNameLabel: TextView = itemView.findViewById(R.id.ownerName)
         val contentLabel: TextView = itemView.findViewById(R.id.content)
-        val image = itemView.findViewById<ImageView>(R.id.ownerImage)
+        val image = itemView.findViewById<ImageView>(R.id.imagePost)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostHolder {

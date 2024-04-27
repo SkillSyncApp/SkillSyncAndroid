@@ -25,7 +25,7 @@ class LocalStorePostRepository {
     }
 
     @WorkerThread
-    suspend fun deleteAllPosts() {
+    fun deleteAllPosts() {
         postDao.deleteAllPosts()
     }
 
