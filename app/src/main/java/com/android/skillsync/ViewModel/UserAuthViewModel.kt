@@ -1,11 +1,11 @@
 package com.android.skillsync.ViewModel
 
-import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.android.skillsync.domain.UserUseCases
+import com.android.skillsync.models.UserInfo
 
 class UserAuthViewModel: ViewModel() {
     val userUseCases: UserUseCases = UserUseCases()
@@ -13,7 +13,7 @@ class UserAuthViewModel: ViewModel() {
     val userId: LiveData<String?> get() = _userId
 
     fun signInUser(email: String, password: String, onSuccessCallBack: () -> Unit, onFailureCallBack: (String?) -> Unit) {
-        userUseCases.signInUser(email, password,  onSuccessCallBack = {
+        userUseCases.signInUser(email, password, onSuccessCallBack = {
             // Set the user ID in the LiveData upon successful sign-in
             _userId.postValue(userUseCases.getUserId())
             onSuccessCallBack.invoke()
@@ -33,5 +33,9 @@ class UserAuthViewModel: ViewModel() {
     }
     fun setMenuByUserType(userId: String, fragment: Fragment) {
         userUseCases.setMenuByUserType(userId, fragment)
+    }
+
+    fun getInfoOnUser(id: String, onCallBack: (userInfo: UserInfo?, error: String?) -> Unit) {
+        userUseCases.getUserInfo(id, onCallBack)
     }
 }

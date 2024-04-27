@@ -4,14 +4,14 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.android.skillsync.R
 import com.android.skillsync.repoistory.Auth.FireStoreAuthRepository
+import com.android.skillsync.models.UserInfo
+
 
 class UserUseCases {
     private val fireStoreAuthRepository: FireStoreAuthRepository = FireStoreAuthRepository()
-    fun createUser(email: String, password: String, onSuccessCallBack: (String?) -> Unit, onFailureCallBack: (String?) -> Unit) {
-        fireStoreAuthRepository.createUser(email, password, { userId ->
-            onSuccessCallBack(userId)
-        }, onFailureCallBack)
-    }
+    private val studentUseCases: StudentUseCases = StudentUseCases()
+    private val companyUseCases: CompanyUseCases = CompanyUseCases()
+
     fun signInUser(email: String, password: String, onSuccessCallBack: () -> Unit, onFailureCallBack: (String?) -> Unit) {
         fireStoreAuthRepository.signInUser(email, password, onSuccessCallBack, onFailureCallBack)
     }
@@ -27,6 +27,21 @@ class UserUseCases {
     fun getUserId(): String? {
         return fireStoreAuthRepository.firebaseAuth.currentUser?.uid
     }
+
+    fun getUserInfo(id: String, callback: (userInfo: UserInfo?, error: String?) -> Unit) {
+        fireStoreAuthRepository.getUserType(id) { userType ->
+            when(userType) {
+                "STUDENT" -> studentUseCases.getStudent(id) { studentInfo ->
+                    callback(UserInfo.UserStudent(studentInfo.copy(id = id)), null)
+                }
+                "COMPANY" -> companyUseCases.getCompany(id) { companyInfo ->
+                    callback(UserInfo.UserCompany(companyInfo.copy(id = id)), null)
+                }
+                else -> callback(null, "Unknown user type") // Handle other types if needed
+            }
+        }
+    }
+
     fun setMenuByUserType(userId: String, fragment: Fragment) {
         return fireStoreAuthRepository.getUserType(userId) { userType ->
             if (userType != null) {
