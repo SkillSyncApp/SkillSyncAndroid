@@ -32,7 +32,7 @@ import com.google.firebase.firestore.GeoPoint
 
 class SignUpCompanyFragment : BaseFragment() {
     private lateinit var locationsAdapter: ArrayAdapter<String>
-    private lateinit var placesSuggestions: Array<Place>
+    private lateinit var placesSuggestions: ArrayList<Place>
     private lateinit var imageView: ImageView
     private lateinit var company: Company
     private lateinit var view: View
@@ -171,15 +171,16 @@ class SignUpCompanyFragment : BaseFragment() {
     fun searchPlaces(query: String) {
         context?.let {
             PlacesApiCall().getPlacesByQuery(it, query) { places ->
-                placesSuggestions = places
 
                 locationsAdapter.clear();
+                placesSuggestions = ArrayList();
 
                 // Filter invalid addresses (with missing fields)
                 val filteredPlacesArray = ArrayList<String>();
                 places.forEach {
                     if (it.address != null && it.longitude != null && it.latitude != null) {
                         filteredPlacesArray.add(it.title.plus(" - ").plus(it.address))
+                        placesSuggestions.add(it);
                     }
                 }
 
