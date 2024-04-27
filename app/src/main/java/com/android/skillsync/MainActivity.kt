@@ -1,7 +1,6 @@
 package com.android.skillsync
 
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -42,24 +41,6 @@ class MainActivity : AppCompatActivity() {
     fun setProfile(userType: String) {
         userTypeProfile = userType
         invalidateOptionsMenu()
-    }
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        super.onCreateOptionsMenu(menu)
-        menuInflater.inflate(R.menu.nav_menu, menu)
-
-        // Check if the menu item exists before modifying its visibility
-        val companyMenuItem = menu?.findItem(R.id.companyProfileFragment)
-        val groupMenuItem = menu?.findItem(R.id.groupProfileFragment)
-
-        if(userTypeProfile == "USER") {
-            companyMenuItem?.isVisible = false
-            groupMenuItem?.isVisible = true
-        } else {
-            companyMenuItem?.isVisible = true
-            groupMenuItem?.isVisible = false
-        }
-
-        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -46,14 +46,10 @@
             app:destination="@id/pickUserTypeFragment" />
     </fragment>
     <fragment
-        android:id="@+id/groupProfileFragment"
-        android:name="com.android.skillsync.GroupProfileFragment"
-        android:label="fragment_group_profile"
-        tools:layout="@layout/fragment_group_profile" >
-        <action
-            android:id="@+id/action_groupProfileFragment_to_companyProfileFragment"
-            app:destination="@id/companyProfileFragment" />
-    </fragment>
+        android:id="@+id/profileFragment"
+        android:name="com.android.skillsync.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/signUpCompanyFragment"
         android:name="com.android.skillsync.SignUpCompanyFragment"
@@ -109,28 +105,12 @@
             android:id="@+id/action_feedFragment_to_newPostFragment"
             app:destination="@id/newPostFragment" />
         <action
-            android:id="@+id/action_feedFragment_to_companyProfileFragment"
-            app:destination="@id/companyProfileFragment" >
+            android:id="@+id/action_feedFragment_to_ProfileFragment"
+            app:destination="@id/profileFragment" >
             <argument
                 android:name="userId"
                 app:argType="string" />
         </action>
-        <action
-            android:id="@+id/action_feedFragment_to_groupProfileFragment"
-            app:destination="@id/groupProfileFragment" >
-            <argument
-                android:name="userId"
-                app:argType="string" />
-        </action>
-    </fragment>
-    <fragment
-        android:id="@+id/companyProfileFragment"
-        android:name="com.android.skillsync.CompanyProfileFragment"
-        android:label="fragment_post"
-        tools:layout="@layout/fragment_post" >
-        <action
-            android:id="@+id/action_companyProfileFragment_to_groupProfileFragment"
-            app:destination="@id/groupProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/postFragment"
