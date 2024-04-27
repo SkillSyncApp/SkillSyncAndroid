@@ -75,4 +75,7 @@
     <string name="error_msg">One or more of the credentials you entered are incorrect. Please try again.</string>
     <string name="edit_group_profile_title">Edit Group Details</string>
     <string name="group_profile">Update Profile</string>
+
+    <string name="edit_company_profile_title">Edit Company Details</string>
+    <string name="company_profile">Update Company</string>
 </resources>
