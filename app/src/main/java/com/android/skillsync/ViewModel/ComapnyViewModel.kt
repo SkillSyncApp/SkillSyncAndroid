@@ -19,10 +19,6 @@ class CompanyViewModel: ViewModel() {
         }, onFailureCallBack)
     }
 
-    fun getAllCompanies(): LiveData<MutableList<Company>> {
-        return companyUseCases.getAllCompanies()
-    }
-
     fun addCompany(company: Company) = viewModelScope.launch(Dispatchers.IO) {
         companyUseCases.add(company)
     }

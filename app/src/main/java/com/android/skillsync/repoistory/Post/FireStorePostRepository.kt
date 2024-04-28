@@ -13,7 +13,6 @@ class FireStorePostRepository {
     }
 
     fun addPost(post: Post) {
-        //, callback: () -> Unit
         apiManager.db.collection(POSTS_COLLECTION_PATH).add(post.json)
 //            .addOnSuccessListener { callback() }
     }
