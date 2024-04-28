@@ -43,6 +43,7 @@ class ProfileFragment : Fragment() {
     private var additionalInfoTV: TextView? = null
     private var noPostsWarningTV: TextView? = null
 
+    private var editButton: ImageView? = null
     private var backButton: ImageView? = null
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -75,6 +76,7 @@ class ProfileFragment : Fragment() {
                 }
             }
 
+            handleEditButton(userId)
             fillPosts(userId)
         }
 
@@ -99,6 +101,22 @@ class ProfileFragment : Fragment() {
     private fun getGroup(groupId: String): Unit {
         studentViewModel.getStudent(groupId) {
             fillProfileDetails(it.name, it.bio, it.institution, it.image);
+        }
+    }
+
+    private fun handleEditButton(userId: String) {
+        var connectedUserId = userAuthViewModel.getUserId();
+        editButton = view.findViewById(R.id.profile_edit_button);
+
+        if (userId === connectedUserId) {
+            editButton?.visibility = View.VISIBLE;
+
+            // TODO: navigate to edit profile
+            // editButton?.setOnClickListener({
+            //
+            // });
+        } else {
+            editButton?.visibility = View.INVISIBLE;
         }
     }
 
