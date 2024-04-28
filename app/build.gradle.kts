@@ -45,6 +45,7 @@ android {
 
 dependencies {
 
+    implementation("com.google.firebase:firebase-storage:20.3.0")
     val nav_version = "2.7.6"
     val swipeRefreshLayout = "1.1.0"
 
