@@ -14,6 +14,7 @@ import com.android.skillsync.databinding.CustomInputFieldTextBinding
 import com.android.skillsync.databinding.FragmentNewPostBinding
 import com.android.skillsync.helpers.DynamicTextHelper
 import com.android.skillsync.helpers.ImageHelper
+import com.android.skillsync.helpers.ImageUploadListener
 import com.android.skillsync.helpers.ValidationHelper
 import com.android.skillsync.models.Post.Post
 
@@ -28,7 +29,6 @@ class NewPostFragment : Fragment() {
     private var _binding: FragmentNewPostBinding? = null
     private val binding get() = _binding!!
     private val userAuthViewModel: UserAuthViewModel by activityViewModels()
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,28 +64,57 @@ class NewPostFragment : Fragment() {
         binding.postButton.setOnClickListener {
             val titleGroup = binding.postTitleGroup
             val contentGroup = binding.postDescriptionGroup
-            val image = imageHelper.getImageUrl() ?: ""
 
+            // Check if both title and content are valid
             if (isValidInputs(titleGroup, contentGroup)) {
                 val title = titleGroup.editTextField.text.toString()
                 val content = contentGroup.editTextField.text.toString()
 
-                post = Post(
-                    ownerId = userAuthViewModel.getUserId().toString(),
-                    title = title,
-                    content = content,
-                    imagePath = image
-                )
+                // Check if the image has been uploaded
+                if (imageHelper.getImageUrl()?.isNotBlank() == true) {
+                    // Get the image URL asynchronously
+                    imageHelper.setImageUploadListener(object : ImageUploadListener {
+                        override fun onImageUploaded(imageUrl: String) {
+                            // Create the post with the image URL
+                            val post = Post(
+                                ownerId = userAuthViewModel.getUserId().toString(),
+                                title = title,
+                                content = content,
+                                imagePath = imageUrl
+                            )
 
-                postViewModel.addPost(post) { success ->
-                    if (success) {
-                        Toast.makeText(requireContext(), "Post added successfully", Toast.LENGTH_SHORT).show()
-                        titleGroup.editTextField.text = null
-                        contentGroup.editTextField.text = null
-                    } else {
-                        Toast.makeText(requireContext(), "Failed to add post", Toast.LENGTH_SHORT).show()
-                    }
+                            // Add the post
+                            addPost(post)
+                        }
+                    })
+
+                    // Trigger the image upload process
+                    imageHelper.uploadImage()
+                } else {
+                    // Create the post without an image URL
+                    val post = Post(
+                        ownerId = userAuthViewModel.getUserId().toString(),
+                        title = title,
+                        content = content,
+                        imagePath = ""
+                    )
+
+                    // Add the post
+                    addPost(post)
                 }
+            }
+        }
+    }
+
+
+    private fun addPost(post: Post) {
+        postViewModel.addPost(post) { success ->
+            if (success) {
+                Toast.makeText(requireContext(), "Post added successfully", Toast.LENGTH_SHORT).show()
+                binding.postTitleGroup.editTextField.text = null
+                binding.postDescriptionGroup.editTextField.text = null
+            } else {
+                Toast.makeText(requireContext(), "Failed to add post", Toast.LENGTH_SHORT).show()
             }
         }
     }

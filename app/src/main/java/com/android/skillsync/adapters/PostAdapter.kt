@@ -31,7 +31,8 @@ class PostAdapter(var posts: MutableList<Post>)
 
     override fun onBindViewHolder(holder: PostHolder, position: Int) {
         val post = posts[position]
-        if (post.imagePath.isNotEmpty()) {
+        if (post.imagePath.isNotBlank()) {
+            holder.image.setVisibility(View.VISIBLE)
             val imageUri = Uri.parse(post.imagePath)
             loadImage(imageUri, holder.image)
         }
