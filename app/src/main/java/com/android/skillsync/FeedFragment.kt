@@ -65,7 +65,6 @@ class FeedFragment : Fragment() {
             }
         }
 
-
         // Set up RecyclerView
         postsRecyclerView.layoutManager = LinearLayoutManager(context)
         postsRecyclerView.adapter = postAdapter
