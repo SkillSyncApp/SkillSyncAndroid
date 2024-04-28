@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -127,6 +128,7 @@ class SignUpStudentFragment : Fragment() {
     private val onSuccess: (String?) -> Unit = { userId ->
         userId?.let { id ->
             studentViewModel.addStudent(student.copy(id = id))
+            Toast.makeText(requireContext(), "Account created successfully", Toast.LENGTH_SHORT).show()
             view.navigate(R.id.action_signUpStudentFragment_to_signInFragment)
         }
     }

@@ -28,6 +28,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/background_start_page" />
 
+    <ImageView
+        android:id="@+id/profile_edit_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/edit_icon" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="409dp"
         android:layout_height="0dp"
@@ -106,7 +117,7 @@
         <TextView
             android:id="@+id/profile_bio"
             android:layout_width="294dp"
-            android:layout_height="111dp"
+            android:layout_height="90dp"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/poppins"
             android:text=""
@@ -119,14 +130,16 @@
 
         <TextView
             android:id="@+id/profile_posts_title"
-            android:layout_width="356dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="10dp"
             android:fontFamily="@font/poppins"
             android:text="Posts"
             android:textAlignment="textStart"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintHorizontal_bias="0.495"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profile_bio" />
 
@@ -135,6 +148,8 @@
             android:id="@+id/profile_no_posts_text"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="10dp"
             android:text="No posts yet"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -146,6 +161,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profile_posts_title">
 
         </androidx.recyclerview.widget.RecyclerView>
