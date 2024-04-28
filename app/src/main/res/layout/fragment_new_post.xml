@@ -7,15 +7,15 @@
     tools:context=".NewPostFragment">
 
     <ImageView
-    android:id="@+id/new_post_image"
-    android:layout_width="182dp"
-    android:layout_height="168dp"
-    android:layout_gravity="center_horizontal"
-    android:src="@drawable/new_post_icon"
-    app:layout_constraintBottom_toTopOf="@+id/new_post_title"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/new_post_image"
+        android:layout_width="182dp"
+        android:layout_height="168dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/new_post_icon"
+        app:layout_constraintBottom_toTopOf="@+id/new_post_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/new_post_title"
