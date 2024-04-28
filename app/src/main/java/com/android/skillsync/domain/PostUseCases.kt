@@ -60,7 +60,7 @@ class PostUseCases {
         localStorePostRepository.delete(post)
     }
 
-    suspend fun deleteAll() {
+    fun deleteAll() {
         localStorePostRepository.deleteAllPosts()
     }
 
