@@ -152,8 +152,8 @@ class ProfileFragment : Fragment() {
             profileImageBackgroundElement = view.findViewById(R.id.profile_background_image);
 
             if (image != "DEFAULT LOGO" && profileImage != null && profileImageBackgroundElement != null) {
-                Picasso.get().load(image).into(profileImage)
-                Picasso.get().load(image).into(profileImageBackgroundElement)
+//                Picasso.get().load(image).into(profileImage)
+//                Picasso.get().load(image).into(profileImageBackgroundElement)
 
                 // Blur the background image
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
