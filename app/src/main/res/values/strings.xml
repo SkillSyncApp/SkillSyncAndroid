@@ -78,4 +78,6 @@
 
     <string name="edit_company_profile_title">Edit Company Details</string>
     <string name="company_profile">Update Company</string>
+    <string name="back">Back</string>
+    <string name="log_out">Log Out</string>
 </resources>

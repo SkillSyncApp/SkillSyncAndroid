@@ -4,6 +4,7 @@ import android.graphics.RenderEffect
 import android.graphics.Shader
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,9 +12,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.commit
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.skillsync.ViewModel.CompanyViewModel
@@ -59,7 +61,7 @@ class ProfileFragment : Fragment() {
 
         view = inflater.inflate(R.layout.fragment_profile, container, false)
 
-        postAdapter = PostAdapter(mutableListOf())
+        postAdapter = PostAdapter(mutableListOf(), false)
 
         val args = arguments
         val userId = args?.getString("userId") ?: userAuthViewModel.getUserId()
@@ -86,8 +88,12 @@ class ProfileFragment : Fragment() {
             backButton = view.findViewById(R.id.back_button)
             backButton?.setVisibility(View.VISIBLE)
 
+            // TODO - check back in real device
             backButton?.setOnClickListener {
-                findNavController().navigateUp()
+                requireActivity().supportFragmentManager.popBackStack(
+                    "profileBackStack",
+                    FragmentManager.POP_BACK_STACK_INCLUSIVE
+                )
             }
         }
 

@@ -75,7 +75,6 @@ class FireStoreStudentRepository {
         }
     }
 
-
     fun deleteStudent(student: Student, onSuccessCallBack: () -> Unit, onFailureCallBack: () -> Unit){
         apiManager.db.collection(USERS_COLLECTION_PATH).document(student.id).delete()
             .addOnSuccessListener { onSuccessCallBack() }
