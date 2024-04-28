@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -44,6 +45,7 @@ class ProfileFragment : Fragment() {
     private var noPostsWarningTV: TextView? = null
 
     private var editButton: ImageView? = null
+    private var logoutButton: TextView? = null
     private var backButton: ImageView? = null
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -76,7 +78,7 @@ class ProfileFragment : Fragment() {
                 }
             }
 
-            handleEditButton(userId)
+            handleProfileActionButtons(userId)
             fillPosts(userId)
         }
 
@@ -104,19 +106,29 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun handleEditButton(userId: String) {
+    private fun handleProfileActionButtons(userId: String) {
         var connectedUserId = userAuthViewModel.getUserId();
         editButton = view.findViewById(R.id.profile_edit_button);
+        logoutButton = view.findViewById(R.id.logout_button);
 
         if (userId === connectedUserId) {
             editButton?.visibility = View.VISIBLE;
+            logoutButton?.visibility = View.VISIBLE;
 
             // TODO: navigate to edit profile
             // editButton?.setOnClickListener({
             //
             // });
+
+            logoutButton?.setOnClickListener {
+                userAuthViewModel.logOutUser();
+                Navigation.findNavController(it)
+                    .navigate(R.id.action_profileFragment_to_startPageFragment)
+            }
+
         } else {
             editButton?.visibility = View.INVISIBLE;
+            logoutButton?.visibility = View.INVISIBLE;
         }
     }
 
