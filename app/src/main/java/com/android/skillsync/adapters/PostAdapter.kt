@@ -1,12 +1,14 @@
 package com.android.skillsync.adapters
 
 import android.net.Uri
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.android.skillsync.FeedFragment
 import com.android.skillsync.R
@@ -30,6 +32,7 @@ class PostAdapter(var posts: MutableList<Post>, var isFromFeed: Boolean) : Recyc
         val ownerNameLabel: TextView = itemView.findViewById(R.id.ownerName)
         val contentLabel: TextView = itemView.findViewById(R.id.content)
         val image = itemView.findViewById<ImageView>(R.id.imagePost)
+        val edit = itemView.findViewById<ImageView>(R.id.post_edit_button)
 
         init {
             itemView.setOnClickListener {
@@ -37,6 +40,19 @@ class PostAdapter(var posts: MutableList<Post>, var isFromFeed: Boolean) : Recyc
                 if (position != RecyclerView.NO_POSITION && isFromFeed) {
                     listener?.onPostClicked(posts[position])
                     Log.d("onClickPost", posts[position].ownerId)
+                }
+            }
+            if (!isFromFeed) {
+                edit.visibility = View.VISIBLE
+                edit.setOnClickListener {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        val args = Bundle()
+                        args.putString("postId", posts[position].id)
+
+                        Navigation.findNavController(it)
+                            .navigate(R.id.action_profileFragment_to_editPost, args)
+                    }
                 }
             }
         }
