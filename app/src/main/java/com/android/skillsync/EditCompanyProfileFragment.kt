@@ -84,6 +84,11 @@ class EditCompanyProfileFragment : Fragment() {
         return view
     }
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        ActionBarHelper.showActionBarAndBottomNavigationView(requireActivity() as? AppCompatActivity)
+        super.onCreate(savedInstanceState)
+    }
     override fun onDestroy() {
         super.onDestroy()
         _binding = null

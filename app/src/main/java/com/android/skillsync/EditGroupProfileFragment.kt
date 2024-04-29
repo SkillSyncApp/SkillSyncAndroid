@@ -67,6 +67,11 @@ class EditGroupProfileFragment : Fragment() {
         dynamicTextHelper.setTextViewText(R.id.group_name, R.string.user_name_title)
         dynamicTextHelper.setTextViewText(R.id.group_bio, R.string.bio_title)
     }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        ActionBarHelper.showActionBarAndBottomNavigationView(requireActivity() as? AppCompatActivity)
+        super.onCreate(savedInstanceState)
+    }
     private fun setEventListeners() {
         saveBtn = view.findViewById(R.id.save_group_btn)
 
