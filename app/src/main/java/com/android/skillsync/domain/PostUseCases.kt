@@ -36,8 +36,8 @@ class PostUseCases {
         fireStorePostRepository.getPostsByOwnerId(ownerId, callback);
     }
 
-    fun getPostById(id: String) {
-        localStorePostRepository.getPostById(id)
+    fun getPostById(id: String): LiveData<Post> {
+        return localStorePostRepository.getPostById(id)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

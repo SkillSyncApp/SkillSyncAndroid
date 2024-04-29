@@ -38,8 +38,16 @@ class PostViewModel: ViewModel() {
         postsUseCases.getPostsByOwnerId(ownerId, callback);
     }
 
-    fun getPostById(id: String) = viewModelScope.launch (Dispatchers.IO) {
-        postsUseCases.getPostById(id)
+    fun getPostById(id: String, callback: (Post?) -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val postLiveData = postsUseCases.getPostById(id)
+            withContext(Dispatchers.Main) {
+                postLiveData.observeForever { post ->
+                    postLiveData.removeObserver { }
+                    callback(post)
+                }
+            }
+        }
     }
 
    fun addPost(post: Post, callback: (Boolean) -> Unit) {
