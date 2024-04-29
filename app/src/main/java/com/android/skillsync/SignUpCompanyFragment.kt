@@ -229,7 +229,7 @@ class SignUpCompanyFragment : BaseFragment() {
         )
 
         validationResults.add(
-            ValidationHelper.isValidString(bioGroup.editTextField.text.toString())
+            ValidationHelper.isValidField(bioGroup.editTextField.text.toString())
                 .also { isValid ->
                     ValidationHelper.handleValidationResult(isValid, bioGroup, requireContext())
                 }

@@ -3,6 +3,7 @@ package com.android.skillsync.repoistory.Company
 import android.util.Log
 import com.android.skillsync.models.Comapny.Company
 import com.android.skillsync.models.CompanyLocation
+import com.android.skillsync.models.Student.Student
 import com.android.skillsync.models.UserType
 import com.android.skillsync.repoistory.ApiManager
 import com.firebase.geofire.core.GeoHash
@@ -11,6 +12,7 @@ import com.google.firebase.firestore.GeoPoint
 import kotlinx.coroutines.tasks.await
 import com.android.skillsync.models.Type
 import com.android.skillsync.repoistory.Auth.FireStoreAuthRepository.Companion.USER_TYPE_COLLECTION_PATH
+import com.android.skillsync.repoistory.Student.FireStoreStudentRepository
 
 class FireStoreCompanyRepository {
     companion object {
@@ -156,4 +158,13 @@ class FireStoreCompanyRepository {
             GeoHash(latitude, longitude)
         )
     }
+
+    fun updateCompany(company: Company, data: Map<String, Any>, onSuccessCallBack: () -> Unit, onFailureCallBack: () -> Unit){
+        apiManager.db.collection(COMPANIES_COLLECTION_PATH).whereEqualTo("id", company.id).get().addOnSuccessListener {
+            apiManager.db.collection(COMPANIES_COLLECTION_PATH).document(it.documents[0].id).update(data)
+                .addOnSuccessListener { onSuccessCallBack() }
+                .addOnFailureListener { onFailureCallBack() }
+        }
+    }
+
 }
