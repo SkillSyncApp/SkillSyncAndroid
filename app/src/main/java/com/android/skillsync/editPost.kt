@@ -32,4 +32,9 @@ class editPost : Fragment() {
         dynamicTextHelper.setHintForEditText(R.id.project_name, R.string.project_name_hint, R.string.project_name_title)
         dynamicTextHelper.setHintForEditText(R.id.multi_line_project_description, R.string.project_description_hint, R.string.project_description)
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 }

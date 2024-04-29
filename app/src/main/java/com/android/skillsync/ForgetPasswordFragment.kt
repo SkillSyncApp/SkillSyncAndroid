@@ -39,10 +39,6 @@ class ForgetPasswordFragment : BaseFragment() {
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
     private fun resetPassword() {
         val emailGroup = view.findViewById<ConstraintLayout>(R.id.email)
         val email = emailGroup?.findViewById<TextView>(R.id.edit_text_field)?.text.toString()

@@ -25,10 +25,4 @@ interface CompanyDao {
 
     @Update
     fun update(company: Company)
-
-    @Query("SELECT name FROM Company WHERE id =:id")
-    fun getCompanyName(id: String): String
-
-    @Query("SELECT logo FROM Company WHERE id =:id")
-    fun getCompanyLogo(id: String): String
 }

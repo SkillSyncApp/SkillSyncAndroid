@@ -4,7 +4,6 @@ import android.graphics.RenderEffect
 import android.graphics.Shader
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,6 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.commit
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +21,7 @@ import com.android.skillsync.ViewModel.PostViewModel
 import com.android.skillsync.ViewModel.StudentViewModel
 import com.android.skillsync.ViewModel.UserAuthViewModel
 import com.android.skillsync.adapters.PostAdapter
+import com.android.skillsync.databinding.FragmentProfileBinding
 import com.android.skillsync.models.UserInfo
 import com.squareup.picasso.Picasso
 
@@ -34,6 +33,8 @@ class ProfileFragment : Fragment() {
 
     private lateinit var postViewModel: PostViewModel
 
+    private var _binding: FragmentProfileBinding? = null
+    private val binding get() = _binding!!
     private lateinit var view: View
 
     private lateinit var postsRecyclerView: RecyclerView
@@ -59,7 +60,8 @@ class ProfileFragment : Fragment() {
         studentViewModel = StudentViewModel()
         postViewModel = PostViewModel()
 
-        view = inflater.inflate(R.layout.fragment_profile, container, false)
+        _binding = FragmentProfileBinding.inflate(inflater, container, false)
+        view  = binding.root
 
         postAdapter = PostAdapter(mutableListOf(), false)
 
@@ -172,7 +174,7 @@ class ProfileFragment : Fragment() {
         noPostsWarningTV = view.findViewById(R.id.profile_no_posts_text)
 
         postViewModel.getPostsByOwnerId(userId) {
-            if (it.size === 0) {
+            if (it.isEmpty()) {
                 postsRecyclerView.visibility = View.GONE;
                 noPostsWarningTV?.visibility = View.VISIBLE;
             } else {
@@ -185,5 +187,10 @@ class ProfileFragment : Fragment() {
                 postsRecyclerView.adapter = postAdapter
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }
