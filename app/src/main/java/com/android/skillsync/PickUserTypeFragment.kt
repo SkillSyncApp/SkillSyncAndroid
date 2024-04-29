@@ -6,8 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.cardview.widget.CardView
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
+import com.android.skillsync.Navigations.navigate
+import com.android.skillsync.databinding.FragmentPickUserTypeBinding
 
 class PickUserTypeFragment : BaseFragment() {
 
@@ -15,12 +16,14 @@ class PickUserTypeFragment : BaseFragment() {
     private lateinit var studentCard: CardView
 
     private lateinit var view: View
-
+    private var _binding: FragmentPickUserTypeBinding? = null
+    private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        view = inflater.inflate(R.layout.fragment_pick_user_type, container, false)
+        _binding = FragmentPickUserTypeBinding.inflate(inflater, container, false)
+        view = binding.root
         setEventListeners()
 
         return view
@@ -33,11 +36,13 @@ class PickUserTypeFragment : BaseFragment() {
 
 
         backButton.setOnClickListener {
-            findNavController().navigateUp()        }
+            findNavController().navigateUp()
+        }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     private fun setEventListeners() {
@@ -46,11 +51,11 @@ class PickUserTypeFragment : BaseFragment() {
 
         // TODO from navigation
         companyCard.setOnClickListener {
-            Navigation.findNavController(it).navigate(R.id.action_pickUserTypeFragment_to_signUpCompanyFragment)
+            view.navigate(R.id.action_pickUserTypeFragment_to_signUpCompanyFragment)
         }
 
         studentCard.setOnClickListener {
-            Navigation.findNavController(it).navigate(R.id.action_pickUserTypeFragment_to_signUpStudentFragment)
+            view.navigate(R.id.action_pickUserTypeFragment_to_signUpStudentFragment)
         }
     }
 }

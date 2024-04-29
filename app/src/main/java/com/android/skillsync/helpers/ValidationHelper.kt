@@ -66,6 +66,7 @@ object ValidationHelper {
         return pattern.matches(input) && isLengthValid && input.isNotBlank()
 
     }
+
     //general field
     fun isValidField(input: String): Boolean {
         val isLengthValid = input.length >= 3

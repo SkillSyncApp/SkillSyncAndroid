@@ -57,6 +57,8 @@ class PostAdapter(var posts: MutableList<Post>, var isFromFeed: Boolean) : Recyc
             holder.image.setVisibility(View.VISIBLE)
             val imageUri = Uri.parse(post.imagePath)
             loadImage(imageUri, holder.image)
+        } else {
+            holder.image.visibility = View.GONE
         }
         holder.ownerNameLabel.text = post.title
         holder.contentLabel.text = post.content

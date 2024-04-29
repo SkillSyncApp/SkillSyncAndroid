@@ -15,12 +15,6 @@ class CompanyUseCases {
     val fireStoreAuthRepository: FireStoreAuthRepository = FireStoreAuthRepository()
 
     private var executor = Executors.newSingleThreadExecutor()
-    val companies: LiveData<MutableList<Company>>? = null
-
-    fun getAllCompanies(): LiveData<MutableList<Company>> {
-        refreshCompanies()
-        return companies ?: localStoreCompanyRepository.getAllCompanies()
-    }
 
     fun getCompany(companyId: String, callback: (company: Company) -> Unit) {
         fireStoreCompanyRepository.getCompany(companyId, callback);

@@ -1,21 +1,21 @@
 package com.android.skillsync
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.android.skillsync.Navigations.navigate
 import com.android.skillsync.ViewModel.PostViewModel
 import com.android.skillsync.ViewModel.UserAuthViewModel
 import com.android.skillsync.adapters.PostAdapter
@@ -37,6 +37,7 @@ class FeedFragment : Fragment() {
     private var _binding: FragmentFeedBinding? = null
     private val binding get() = _binding!!
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -137,7 +138,6 @@ class FeedFragment : Fragment() {
                                             )
                                             fragmentTransaction.addToBackStack("profileBackStack")
 
-
                                             fragmentTransaction.commit()
                                         }
                                     }
@@ -162,7 +162,6 @@ class FeedFragment : Fragment() {
                                 }
                             }
                             dialog.show()
-
                         }
                     }
                 }
@@ -183,6 +182,7 @@ class FeedFragment : Fragment() {
         setHasOptionsMenu(true)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun reloadData() {
         swipeRefreshLayout.isRefreshing = false
         progressBar.visibility = View.VISIBLE
@@ -191,11 +191,12 @@ class FeedFragment : Fragment() {
 
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onDestroy() {
+        super.onDestroy()
         _binding = null
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onResume() {
         super.onResume()
         reloadData()
