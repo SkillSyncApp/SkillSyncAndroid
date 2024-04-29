@@ -6,22 +6,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".editPost">
 
-    <ImageView
-        android:id="@+id/edit_post_image"
-        android:layout_width="182dp"
-        android:layout_height="168dp"
-        android:layout_gravity="center_horizontal"
-        android:src="@drawable/new_post_icon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/edit_project_details"
         style="@style/AppTextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="50dp"
         android:gravity="center_horizontal|top"
         android:text="@string/edit_project_details"
         android:textAppearance="@style/log_in_text"
@@ -29,7 +19,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_post_image" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/info_project"

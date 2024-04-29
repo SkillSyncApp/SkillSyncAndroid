@@ -38,6 +38,10 @@ class PostViewModel: ViewModel() {
         postsUseCases.getPostsByOwnerId(ownerId, callback);
     }
 
+    fun getPostById(id: String) = viewModelScope.launch (Dispatchers.IO) {
+        postsUseCases.getPostById(id)
+    }
+
    fun addPost(post: Post, callback: (Boolean) -> Unit) {
        viewModelScope.launch(Dispatchers.IO) {
            try {

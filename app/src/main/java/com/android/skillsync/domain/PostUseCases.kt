@@ -36,6 +36,10 @@ class PostUseCases {
         fireStorePostRepository.getPostsByOwnerId(ownerId, callback);
     }
 
+    fun getPostById(id: String) {
+        localStorePostRepository.getPostById(id)
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun refreshPosts() {
         // 1. Get last local update
@@ -64,7 +68,7 @@ class PostUseCases {
         localStorePostRepository.deleteAllPosts()
     }
 
-    suspend fun update(post: Post, data: Map<String,Any>) {
+    fun update(post: Post, data: Map<String,Any>) {
         fireStorePostRepository.updatePost(post.id, data) {
             updateLocalCache(post)
         }
