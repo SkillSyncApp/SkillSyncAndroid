@@ -123,10 +123,30 @@ class ProfileFragment : Fragment() {
             editButton?.visibility = View.VISIBLE;
             logoutButton?.visibility = View.VISIBLE;
 
-            // TODO: navigate to edit profile
-            // editButton?.setOnClickListener({
-            //
-            // });
+            editButton?.setOnClickListener {
+                val args = Bundle()
+                args.putString("userId", userId)
+
+                userAuthViewModel.getInfoOnUser(userId) { userInfo, error ->
+                    when (userInfo) {
+                        is UserInfo.UserStudent -> {
+                            Navigation.findNavController(view).navigate(
+                                R.id.action_profileFragment_to_editGroupProfileFragment,
+                                args
+                            )
+                        }
+                        is UserInfo.UserCompany -> {
+                            Navigation.findNavController(view).navigate(
+                                R.id.action_profileFragment_to_editCompanyProfileFragment,
+                                args
+                            )
+                        }
+                        null -> {
+                            // Handle null case if needed
+                        }
+                    }
+                }
+            }
 
             logoutButton?.setOnClickListener {
                 userAuthViewModel.logOutUser();
