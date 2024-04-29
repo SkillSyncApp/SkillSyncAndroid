@@ -28,10 +28,6 @@ class CompanyViewModel: ViewModel() {
         companyUseCases.getCompany(companyId, callback);
     }
 
-    fun update(company: Company) = viewModelScope.launch(Dispatchers.IO) {
-        companyUseCases.update(company)
-    }
-
     fun refreshCompanies() = viewModelScope.launch(Dispatchers.IO) {
         companyUseCases.refreshCompanies()
     }
