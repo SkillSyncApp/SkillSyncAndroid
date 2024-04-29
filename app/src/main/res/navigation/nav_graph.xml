@@ -56,6 +56,12 @@
         <action
             android:id="@+id/action_profileFragment_to_feedFragment"
             app:destination="@id/feedFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_editGroupProfileFragment"
+            app:destination="@id/editGroupProfileFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_editCompanyProfileFragment"
+            app:destination="@id/editCompanyProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpCompanyFragment"
@@ -132,11 +138,22 @@
     <fragment
         android:id="@+id/editGroupProfileFragment"
         android:name="com.android.skillsync.EditGroupProfileFragment"
-        android:label="fragment_forget_password"
+        android:label="fragment_edit_group_profile"
         tools:layout="@layout/fragment_edit_group_profile">
 
         <action
             android:id="@+id/action_editGroupProfileFragment_to_ProfileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/editCompanyProfileFragment"
+        android:name="com.android.skillsync.EditCompanyProfileFragment"
+        android:label="fragment_edit_company_profile"
+        tools:layout="@layout/fragment_edit_company_profile">
+
+        <action
+            android:id="@+id/action_editCompanyProfileFragment_to_ProfileFragment"
             app:destination="@id/profileFragment" />
     </fragment>
 </navigation>
