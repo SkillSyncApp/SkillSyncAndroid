@@ -115,7 +115,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun handleProfileActionButtons(userId: String) {
-        var connectedUserId = userAuthViewModel.getUserId();
+        val connectedUserId = userAuthViewModel.getUserId();
         editButton = view.findViewById(R.id.profile_edit_button);
         logoutButton = view.findViewById(R.id.logout_button);
 
