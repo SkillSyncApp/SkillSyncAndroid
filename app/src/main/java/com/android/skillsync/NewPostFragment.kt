@@ -14,14 +14,12 @@ import com.android.skillsync.databinding.CustomInputFieldTextBinding
 import com.android.skillsync.databinding.FragmentNewPostBinding
 import com.android.skillsync.helpers.DynamicTextHelper
 import com.android.skillsync.helpers.ImageHelper
-import com.android.skillsync.helpers.ImageUploadListener
 import com.android.skillsync.helpers.ValidationHelper
 import com.android.skillsync.models.Post.Post
 
 class NewPostFragment : Fragment() {
     private lateinit var view: View
     private lateinit var postViewModel: PostViewModel
-    private lateinit var post: Post
     private lateinit var imageView: ImageView
     private lateinit var imageHelper: ImageHelper
     private lateinit var dynamicTextHelper: DynamicTextHelper
@@ -65,47 +63,32 @@ class NewPostFragment : Fragment() {
             val titleGroup = binding.postTitleGroup
             val contentGroup = binding.postDescriptionGroup
 
-            // Check if both title and content are valid
             if (isValidInputs(titleGroup, contentGroup)) {
                 val title = titleGroup.editTextField.text.toString()
                 val content = contentGroup.editTextField.text.toString()
 
-                // Check if the image has been uploaded
-                if (imageHelper.getImageUrl()?.isNotBlank() == true) {
-                    // Get the image URL asynchronously
-                    imageHelper.setImageUploadListener(object : ImageUploadListener {
-                        override fun onImageUploaded(imageUrl: String) {
-                            // Create the post with the image URL
-                            val post = Post(
-                                ownerId = userAuthViewModel.getUserId().toString(),
-                                title = title,
-                                content = content,
-                                imagePath = imageUrl
-                            )
-
-                            // Add the post
-                            addPost(post)
-                        }
-                    })
-
-                    // Trigger the image upload process
-                    imageHelper.uploadImage()
+                // Check if an image has been selected
+                if (imageHelper.isImageSelected()) {
+                    // If an image is selected, create the post with the existing image URL
+                    createPost(title, content, imageHelper.getImageUrl())
                 } else {
-                    // Create the post without an image URL
-                    val post = Post(
-                        ownerId = userAuthViewModel.getUserId().toString(),
-                        title = title,
-                        content = content,
-                        imagePath = ""
-                    )
-
-                    // Add the post
-                    addPost(post)
+                    // If no image is selected, create the post without an image URL
+                    createPost(title, content, "")
                 }
             }
         }
     }
 
+    private fun createPost(title: String, content: String, imageUrl: String?) {
+        val post = Post(
+            ownerId = userAuthViewModel.getUserId().toString(),
+            title = title,
+            content = content,
+            imagePath = imageUrl ?: ""
+        )
+
+        addPost(post)
+    }
 
     private fun addPost(post: Post) {
         postViewModel.addPost(post) { success ->
@@ -113,12 +96,9 @@ class NewPostFragment : Fragment() {
                 Toast.makeText(requireContext(), "Post added successfully", Toast.LENGTH_SHORT).show()
                 binding.postTitleGroup.editTextField.text = null
                 binding.postDescriptionGroup.editTextField.text = null
-            } else {
-                Toast.makeText(requireContext(), "Failed to add post", Toast.LENGTH_SHORT).show()
-            }
+            } else Toast.makeText(requireContext(), "Failed to add post", Toast.LENGTH_SHORT).show()
         }
     }
-
 
     private fun isValidInputs(
         title: CustomInputFieldTextBinding,

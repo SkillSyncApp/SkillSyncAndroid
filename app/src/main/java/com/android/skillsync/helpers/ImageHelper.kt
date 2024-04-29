@@ -30,6 +30,19 @@ class ImageHelper(val fragment: Fragment, private val imageView: ImageView) {
                 }
             }
         }
+    fun isImageSelected(): Boolean {
+        return !imageUrl.isNullOrEmpty()
+    }
+
+    fun getImageUrl(): String? {
+        return imageUrl
+    }
+
+    fun setImageViewClickListener() {
+        imageView.setOnClickListener {
+            uploadImage()
+        }
+    }
 
     private fun uploadImageToFirebaseStorage(imageUri: Uri) {
         val randomKey = UUID.randomUUID().toString()
@@ -54,25 +67,10 @@ class ImageHelper(val fragment: Fragment, private val imageView: ImageView) {
             }
     }
 
-
-    fun setImageUploadListener(listener: ImageUploadListener) {
-        this.uploadListener = listener
-    }
-
-    fun uploadImage() {
+    private fun uploadImage() {
         val intent = Intent()
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
         startForResult.launch(intent)
-    }
-
-    fun getImageUrl(): String? {
-        return imageUrl
-    }
-
-    fun setImageViewClickListener() {
-        imageView.setOnClickListener {
-            uploadImage()
-        }
     }
 }

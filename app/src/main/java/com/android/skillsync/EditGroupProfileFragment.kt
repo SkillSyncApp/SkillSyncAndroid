@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.Group
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.android.skillsync.ViewModel.StudentViewModel
@@ -29,7 +28,6 @@ class EditGroupProfileFragment : Fragment() {
 
     private lateinit var view: View
     private lateinit var saveBtn: Button
-    private lateinit var group: Group
     private lateinit var groupViewModel: StudentViewModel
     private lateinit var dynamicTextHelper: DynamicTextHelper
 
