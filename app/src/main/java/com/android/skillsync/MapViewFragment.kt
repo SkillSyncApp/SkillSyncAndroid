@@ -50,7 +50,7 @@ class MapViewFragment : Fragment(), LocationListener {
 
     private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
         if (isGranted) {
-            // Permission is granted, proceed with your logic
+
             initializeMapView()
             requestLocationUpdates()
         }
