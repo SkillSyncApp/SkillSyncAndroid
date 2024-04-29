@@ -21,11 +21,6 @@ class LocalStoreUserRepository {
     }
 
     @WorkerThread
-    suspend fun deleteStudent(student: Student) {
-        studentDao.deleteStudent(student)
-    }
-
-    @WorkerThread
     suspend fun deleteAllStudents() {
         studentDao.deleteAllStudents()
     }

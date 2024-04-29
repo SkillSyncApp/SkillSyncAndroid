@@ -20,7 +20,6 @@ import com.android.skillsync.models.Post.Post
 class NewPostFragment : Fragment() {
     private lateinit var view: View
     private lateinit var postViewModel: PostViewModel
-    private lateinit var post: Post
     private lateinit var imageView: ImageView
     private lateinit var imageHelper: ImageHelper
     private lateinit var dynamicTextHelper: DynamicTextHelper
@@ -28,7 +27,6 @@ class NewPostFragment : Fragment() {
     private var _binding: FragmentNewPostBinding? = null
     private val binding get() = _binding!!
     private val userAuthViewModel: UserAuthViewModel by activityViewModels()
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,7 +50,7 @@ class NewPostFragment : Fragment() {
 
     private fun setHints() {
         dynamicTextHelper.setHintForEditText(R.id.post_title_group, R.string.project_name_hint, R.string.project_name_title)
-        dynamicTextHelper.setHintForEditText(R.id.post_description_group, R.string.project_name_hint, R.string.project_description)
+        dynamicTextHelper.setHintForEditText(R.id.post_description_group, R.string.project_description_hint, R.string.project_description)
     }
 
     override fun onDestroy() {
@@ -64,32 +62,43 @@ class NewPostFragment : Fragment() {
         binding.postButton.setOnClickListener {
             val titleGroup = binding.postTitleGroup
             val contentGroup = binding.postDescriptionGroup
-            val image = imageHelper.getImageUrl() ?: ""
 
             if (isValidInputs(titleGroup, contentGroup)) {
                 val title = titleGroup.editTextField.text.toString()
                 val content = contentGroup.editTextField.text.toString()
 
-                post = Post(
-                    ownerId = userAuthViewModel.getUserId().toString(),
-                    title = title,
-                    content = content,
-                    imagePath = image
-                )
-
-                postViewModel.addPost(post) { success ->
-                    if (success) {
-                        Toast.makeText(requireContext(), "Post added successfully", Toast.LENGTH_SHORT).show()
-                        titleGroup.editTextField.text = null
-                        contentGroup.editTextField.text = null
-                    } else {
-                        Toast.makeText(requireContext(), "Failed to add post", Toast.LENGTH_SHORT).show()
-                    }
+                // Check if an image has been selected
+                if (imageHelper.isImageSelected()) {
+                    // If an image is selected, create the post with the existing image URL
+                    createPost(title, content, imageHelper.getImageUrl())
+                } else {
+                    // If no image is selected, create the post without an image URL
+                    createPost(title, content, "")
                 }
             }
         }
     }
 
+    private fun createPost(title: String, content: String, imageUrl: String?) {
+        val post = Post(
+            ownerId = userAuthViewModel.getUserId().toString(),
+            title = title,
+            content = content,
+            imagePath = imageUrl ?: ""
+        )
+
+        addPost(post)
+    }
+
+    private fun addPost(post: Post) {
+        postViewModel.addPost(post) { success ->
+            if (success) {
+                Toast.makeText(requireContext(), "Post added successfully", Toast.LENGTH_SHORT).show()
+                binding.postTitleGroup.editTextField.text = null
+                binding.postDescriptionGroup.editTextField.text = null
+            } else Toast.makeText(requireContext(), "Failed to add post", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     private fun isValidInputs(
         title: CustomInputFieldTextBinding,
@@ -97,7 +106,7 @@ class NewPostFragment : Fragment() {
     ): Boolean {
         val validationResults = mutableListOf<Boolean>()
         validationResults.add(
-            ValidationHelper.isValidString(title.editTextField.text.toString()).also { isValid ->
+            ValidationHelper.isValidField(title.editTextField.text.toString()).also { isValid ->
                 ValidationHelper.handleValidationResult(isValid, title, requireContext())
             }
         )

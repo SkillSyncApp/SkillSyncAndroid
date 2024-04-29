@@ -14,8 +14,4 @@ open class BaseFragment : Fragment() {
         // Hide the ActionBar and BottomNavigationView when the fragment is created
         ActionBarHelper.hideActionBarAndBottomNavigationView(requireActivity() as? AppCompatActivity)
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
 }

@@ -1,5 +1,7 @@
 package com.android.skillsync.ViewModel
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -36,19 +38,16 @@ class PostViewModel: ViewModel() {
         postsUseCases.getPostsByOwnerId(ownerId, callback);
     }
 
-   // fun addPost(post: Post) = viewModelScope.launch(Dispatchers.IO) {
-   //     postsUseCases.add(post)
-    //}
    fun addPost(post: Post, callback: (Boolean) -> Unit) {
        viewModelScope.launch(Dispatchers.IO) {
            try {
                postsUseCases.add(post)
                withContext(Dispatchers.Main) {
-                   callback(true) // Call the callback with success on the main thread
+                   callback(true)
                }
            } catch (e: Exception) {
                withContext(Dispatchers.Main) {
-                   callback(false) // Call the callback with failure on the main thread
+                   callback(false)
                }
            }
        }
@@ -63,6 +62,7 @@ class PostViewModel: ViewModel() {
         postsUseCases.deleteAll()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun refreshPosts() {
         viewModelScope.launch(Dispatchers.IO) {
 //            postsListLoadingState.value = LoadingState.LOADING

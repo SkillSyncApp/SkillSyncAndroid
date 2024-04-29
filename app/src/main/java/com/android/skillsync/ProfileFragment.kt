@@ -11,8 +11,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.skillsync.ViewModel.CompanyViewModel
@@ -20,6 +21,7 @@ import com.android.skillsync.ViewModel.PostViewModel
 import com.android.skillsync.ViewModel.StudentViewModel
 import com.android.skillsync.ViewModel.UserAuthViewModel
 import com.android.skillsync.adapters.PostAdapter
+import com.android.skillsync.databinding.FragmentProfileBinding
 import com.android.skillsync.models.UserInfo
 import com.squareup.picasso.Picasso
 
@@ -31,6 +33,8 @@ class ProfileFragment : Fragment() {
 
     private lateinit var postViewModel: PostViewModel
 
+    private var _binding: FragmentProfileBinding? = null
+    private val binding get() = _binding!!
     private lateinit var view: View
 
     private lateinit var postsRecyclerView: RecyclerView
@@ -43,6 +47,8 @@ class ProfileFragment : Fragment() {
     private var additionalInfoTV: TextView? = null
     private var noPostsWarningTV: TextView? = null
 
+    private var editButton: ImageView? = null
+    private var logoutButton: TextView? = null
     private var backButton: ImageView? = null
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -54,9 +60,10 @@ class ProfileFragment : Fragment() {
         studentViewModel = StudentViewModel()
         postViewModel = PostViewModel()
 
-        view = inflater.inflate(R.layout.fragment_profile, container, false)
+        _binding = FragmentProfileBinding.inflate(inflater, container, false)
+        view  = binding.root
 
-        postAdapter = PostAdapter(mutableListOf())
+        postAdapter = PostAdapter(mutableListOf(), false)
 
         val args = arguments
         val userId = args?.getString("userId") ?: userAuthViewModel.getUserId()
@@ -75,6 +82,7 @@ class ProfileFragment : Fragment() {
                 }
             }
 
+            handleProfileActionButtons(userId)
             fillPosts(userId)
         }
 
@@ -82,8 +90,12 @@ class ProfileFragment : Fragment() {
             backButton = view.findViewById(R.id.back_button)
             backButton?.setVisibility(View.VISIBLE)
 
+            // TODO - check back in real device
             backButton?.setOnClickListener {
-                findNavController().navigateUp()
+                requireActivity().supportFragmentManager.popBackStack(
+                    "profileBackStack",
+                    FragmentManager.POP_BACK_STACK_INCLUSIVE
+                )
             }
         }
 
@@ -102,6 +114,32 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    private fun handleProfileActionButtons(userId: String) {
+        var connectedUserId = userAuthViewModel.getUserId();
+        editButton = view.findViewById(R.id.profile_edit_button);
+        logoutButton = view.findViewById(R.id.logout_button);
+
+        if (userId === connectedUserId) {
+            editButton?.visibility = View.VISIBLE;
+            logoutButton?.visibility = View.VISIBLE;
+
+            // TODO: navigate to edit profile
+            // editButton?.setOnClickListener({
+            //
+            // });
+
+            logoutButton?.setOnClickListener {
+                userAuthViewModel.logOutUser();
+                Navigation.findNavController(it)
+                    .navigate(R.id.action_profileFragment_to_startPageFragment)
+            }
+
+        } else {
+            editButton?.visibility = View.INVISIBLE;
+            logoutButton?.visibility = View.INVISIBLE;
+        }
+    }
+
     private fun fillProfileDetails(name: String, bio: String, additionalInfo: String, image: String): Unit {
             nameTV = view.findViewById(R.id.profile_name)
             nameTV?.text = name
@@ -116,8 +154,8 @@ class ProfileFragment : Fragment() {
             profileImageBackgroundElement = view.findViewById(R.id.profile_background_image);
 
             if (image != "DEFAULT LOGO" && profileImage != null && profileImageBackgroundElement != null) {
-                Picasso.get().load(image).into(profileImage)
-                Picasso.get().load(image).into(profileImageBackgroundElement)
+//                Picasso.get().load(image).into(profileImage)
+//                Picasso.get().load(image).into(profileImageBackgroundElement)
 
                 // Blur the background image
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -136,7 +174,7 @@ class ProfileFragment : Fragment() {
         noPostsWarningTV = view.findViewById(R.id.profile_no_posts_text)
 
         postViewModel.getPostsByOwnerId(userId) {
-            if (it.size === 0) {
+            if (it.isEmpty()) {
                 postsRecyclerView.visibility = View.GONE;
                 noPostsWarningTV?.visibility = View.VISIBLE;
             } else {
@@ -149,5 +187,10 @@ class ProfileFragment : Fragment() {
                 postsRecyclerView.adapter = postAdapter
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

@@ -49,7 +49,14 @@
         android:id="@+id/profileFragment"
         android:name="com.android.skillsync.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profileFragment_to_startPageFragment"
+            app:destination="@id/startPageFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_feedFragment"
+            app:destination="@id/feedFragment" />
+    </fragment>
     <fragment
         android:id="@+id/signUpCompanyFragment"
         android:name="com.android.skillsync.SignUpCompanyFragment"
@@ -106,7 +113,7 @@
             app:destination="@id/newPostFragment" />
         <action
             android:id="@+id/action_feedFragment_to_ProfileFragment"
-            app:destination="@id/profileFragment" >
+            app:destination="@id/profileFragment">
             <argument
                 android:name="userId"
                 app:argType="string" />
@@ -121,4 +128,15 @@
         android:name="com.android.skillsync.editPost"
         android:label="fragment_edit_post"
         tools:layout="@layout/fragment_edit_post" />
+
+    <fragment
+        android:id="@+id/editGroupProfileFragment"
+        android:name="com.android.skillsync.EditGroupProfileFragment"
+        android:label="fragment_forget_password"
+        tools:layout="@layout/fragment_edit_group_profile">
+
+        <action
+            android:id="@+id/action_editGroupProfileFragment_to_ProfileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
 </navigation>

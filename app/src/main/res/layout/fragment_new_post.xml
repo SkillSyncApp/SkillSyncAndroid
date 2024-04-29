@@ -6,29 +6,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".NewPostFragment">
 
-    <ImageView
-    android:id="@+id/new_post_image"
-    android:layout_width="182dp"
-    android:layout_height="168dp"
-    android:layout_gravity="center_horizontal"
-    android:src="@drawable/new_post_icon"
-    app:layout_constraintBottom_toTopOf="@+id/new_post_title"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/new_post_title"
         style="@style/AppTextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
         android:gravity="center_horizontal|top"
         android:text="@string/post_new_project_title"
         android:textAppearance="@style/log_in_text"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/new_post_image" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/new_post_description"
@@ -36,7 +27,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal|top"
-        android:text="@string/post_new_project_text"
+        android:text="Tell us more about your project"
         android:textAppearance="@style/sign_in_description"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +39,7 @@
         layout="@layout/custom_input_field_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -67,15 +58,15 @@
 
     <ImageView
         android:id="@+id/image_to_upload"
+        android:layout_width="189dp"
+        android:layout_height="137dp"
         android:contentDescription="@string/image_s_post"
+        android:src="@drawable/company_icon"
         app:layout_constraintBottom_toTopOf="@+id/post_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/post_description_group"
-        app:layout_constraintVertical_bias="0.0"
-        android:src="@drawable/company_icon"
-        android:layout_width="189dp"
-        android:layout_height="137dp" />
+        app:layout_constraintVertical_bias="0.182" />
 
     <Button
         android:id="@+id/post_button"
@@ -90,6 +81,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/post_description_group"
-        app:layout_constraintVertical_bias="0.646" />
+        app:layout_constraintVertical_bias="0.821" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
