@@ -53,14 +53,10 @@ class CompanyUseCases {
         }
     }
 
-    suspend fun update(company: Company) {
-//        fireStoreCompanyRepository.(company)
-    }
-
     suspend fun update(company: Company, data: Map<String, Any>, onSuccessCallBack: () -> Unit, onFailureCallBack: () -> Unit) {
         fireStoreCompanyRepository.updateCompany(company, data, onSuccessCallBack, onFailureCallBack)
- //       localStoreCompanyRepository.updateCompany(company)
     }
+
     fun setCompaniesOnMap(callback: (Company) -> Unit) {
         fireStoreCompanyRepository.setCompaniesOnMap(callback)
     }

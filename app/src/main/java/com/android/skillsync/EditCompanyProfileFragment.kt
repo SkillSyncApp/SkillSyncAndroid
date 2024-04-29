@@ -45,8 +45,6 @@ class EditCompanyProfileFragment : Fragment() {
     private lateinit var dynamicTextHelper: DynamicTextHelper
     private lateinit var email_address: String
 
-
-
     // address
     private lateinit var locationsAdapter: ArrayAdapter<String>
     private lateinit var placesSuggestions: ArrayList<Place>
@@ -115,8 +113,6 @@ class EditCompanyProfileFragment : Fragment() {
                     email = email_address,
                     logo = ""
                 )
-
-
 
                 companyViewModel.update(updatedCompany,updatedCompany.json,
                     onSuccessCallBack = {
@@ -253,7 +249,7 @@ private fun initLocationsAutoComplete() {
                 )
 
                 locationsAdapter.notifyDataSetChanged()
-                addressAutoComplete?.setAdapter(locationsAdapter)
+                addressAutoComplete.setAdapter(locationsAdapter)
             }
         }
     }
