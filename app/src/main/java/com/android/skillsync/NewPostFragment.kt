@@ -50,7 +50,7 @@ class NewPostFragment : Fragment() {
 
     private fun setHints() {
         dynamicTextHelper.setHintForEditText(R.id.post_title_group, R.string.project_name_hint, R.string.project_name_title)
-        dynamicTextHelper.setHintForEditText(R.id.post_description_group, R.string.project_name_hint, R.string.project_description)
+        dynamicTextHelper.setHintForEditText(R.id.post_description_group, R.string.project_description_hint, R.string.project_description)
     }
 
     override fun onDestroy() {
@@ -106,7 +106,7 @@ class NewPostFragment : Fragment() {
     ): Boolean {
         val validationResults = mutableListOf<Boolean>()
         validationResults.add(
-            ValidationHelper.isValidString(title.editTextField.text.toString()).also { isValid ->
+            ValidationHelper.isValidField(title.editTextField.text.toString()).also { isValid ->
                 ValidationHelper.handleValidationResult(isValid, title, requireContext())
             }
         )
