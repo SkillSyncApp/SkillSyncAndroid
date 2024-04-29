@@ -33,6 +33,7 @@ data class Post(
                     ?.putLong(GET_LAST_UPDATED, value)?.apply()
             }
 
+        const val POST_ID = "id"
         const val OWNER_ID_KEY = "ownerId"
         const val TITLE_KEY = "title"
         const val CONTENT_KEY = "content"
@@ -65,6 +66,7 @@ data class Post(
     val json: Map<String, Any>
         get() {
             return hashMapOf(
+                POST_ID to id,
                 OWNER_ID_KEY to ownerId,
                 TITLE_KEY to title,
                 CONTENT_KEY to content,
