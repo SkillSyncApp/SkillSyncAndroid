@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
@@ -22,6 +23,7 @@ import com.android.skillsync.ViewModel.StudentViewModel
 import com.android.skillsync.ViewModel.UserAuthViewModel
 import com.android.skillsync.adapters.PostAdapter
 import com.android.skillsync.databinding.FragmentProfileBinding
+import com.android.skillsync.helpers.ActionBarHelper
 import com.android.skillsync.models.UserInfo
 import com.squareup.picasso.Picasso
 
@@ -100,6 +102,12 @@ class ProfileFragment : Fragment() {
         }
 
         return view
+    }
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        ActionBarHelper.showActionBarAndBottomNavigationView(requireActivity() as? AppCompatActivity)
+        super.onCreate(savedInstanceState)
     }
 
     private fun getCompany(companyId: String): Unit {
