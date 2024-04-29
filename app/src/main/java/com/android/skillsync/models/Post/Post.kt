@@ -54,6 +54,8 @@ data class Post(
                 imagePath = imagePath
             )
 
+            post.id = json[POST_ID].toString()
+
             val timestamp: Timestamp? = json[LAST_UPDATED] as? Timestamp
             timestamp?.let {
                 post.lastUpdated = it.seconds
