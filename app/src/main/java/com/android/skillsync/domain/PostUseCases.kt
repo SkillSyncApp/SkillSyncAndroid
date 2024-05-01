@@ -61,6 +61,7 @@ class PostUseCases {
     }
 
     suspend fun delete(post: Post) {
+        fireStorePostRepository.deletePost(post)
         localStorePostRepository.delete(post)
     }
 

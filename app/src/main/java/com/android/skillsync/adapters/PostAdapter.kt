@@ -12,7 +12,10 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.android.skillsync.FeedFragment
 import com.android.skillsync.R
+import com.android.skillsync.ViewModel.PostViewModel
+import com.android.skillsync.domain.UserUseCases
 import com.android.skillsync.models.Post.Post
+import com.android.skillsync.repoistory.Post.FireStorePostRepository
 import com.squareup.picasso.Picasso
 
 class PostAdapter(var posts: MutableList<Post>, var isFromFeed: Boolean) : RecyclerView.Adapter<PostAdapter.PostHolder>() {
@@ -33,6 +36,7 @@ class PostAdapter(var posts: MutableList<Post>, var isFromFeed: Boolean) : Recyc
         val contentLabel: TextView = itemView.findViewById(R.id.content)
         val image = itemView.findViewById<ImageView>(R.id.imagePost)
         val edit = itemView.findViewById<ImageView>(R.id.post_edit_button)
+        val deletePostButton = itemView.findViewById<ImageView>(R.id.deletePostButton)
 
         init {
             itemView.setOnClickListener {
@@ -69,6 +73,20 @@ class PostAdapter(var posts: MutableList<Post>, var isFromFeed: Boolean) : Recyc
 
     override fun onBindViewHolder(holder: PostHolder, position: Int) {
         val post = posts[position]
+
+        val currentUserID = UserUseCases().getUserId()
+        val isOwner = currentUserID == post.ownerId
+
+        if (isOwner) {
+            holder.deletePostButton.visibility = View.VISIBLE
+            holder.deletePostButton.setOnClickListener {
+                deletePost(post)
+            }
+        } else {
+            holder.deletePostButton.visibility = View.GONE
+        }
+
+
         if (post.imagePath.isNotBlank()) {
             holder.image.setVisibility(View.VISIBLE)
             val imageUri = Uri.parse(post.imagePath)
@@ -93,5 +111,13 @@ class PostAdapter(var posts: MutableList<Post>, var isFromFeed: Boolean) : Recyc
         newPosts.sortByDescending { it.lastUpdated };
         posts.addAll(newPosts)
         notifyDataSetChanged() // Notify the adapter that the data set has changed
+    }
+
+    private fun deletePost(post: Post) {
+        Log.e("PostAdapter", "delete post")
+        PostViewModel().deletePost(post)
+       // val fireStorePostRepository = FireStorePostRepository()
+      //  fireStorePostRepository.deletePost(post)
+
     }
 }
