@@ -66,6 +66,7 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="70dp"
@@ -148,33 +149,36 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/profile_posts_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="400dp"
+            android:isScrollContainer="true"
+            android:nestedScrollingEnabled="false"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profile_posts_title">
+            app:layout_constraintTop_toBottomOf="@+id/profile_no_posts_text">
 
         </androidx.recyclerview.widget.RecyclerView>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/logout_button"
             android:layout_width="fill_parent"
             android:layout_height="45dp"
             android:layout_marginBottom="80dp"
+            android:background="@color/white"
             android:paddingTop="15dp"
             android:text="@string/log_out"
             android:textAlignment="center"
             android:textColor="#D16666"
-            android:visibility="invisible"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/back_button"
