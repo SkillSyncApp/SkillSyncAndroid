@@ -25,7 +25,6 @@ import com.android.skillsync.adapters.PostAdapter
 import com.android.skillsync.databinding.FragmentProfileBinding
 import com.android.skillsync.helpers.ActionBarHelper
 import com.android.skillsync.models.UserInfo
-import com.squareup.picasso.Picasso
 
 class ProfileFragment : Fragment() {
     private val userAuthViewModel: UserAuthViewModel by activityViewModels()
@@ -210,7 +209,9 @@ class ProfileFragment : Fragment() {
                 noPostsWarningTV?.visibility = View.GONE;
 
                 postsRecyclerView.setPadding(0, 0, 0, 250)
-                postAdapter.posts = it.toMutableList()
+                postAdapter.clear()
+                postAdapter.addAll(it.toMutableList());
+//                postAdapter.posts = it.toMutableList()
                 postsRecyclerView.layoutManager = LinearLayoutManager(context)
                 postsRecyclerView.adapter = postAdapter
             }
