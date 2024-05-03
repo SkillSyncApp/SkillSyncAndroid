@@ -78,7 +78,7 @@
         android:layout_width="189dp"
         android:layout_height="137dp"
         android:contentDescription="@string/image_s_post"
-        android:src="@drawable/company_icon"
+        android:src="@drawable/default_post"
         app:layout_constraintBottom_toTopOf="@+id/save_post"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -13,13 +13,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.skillsync.FeedFragment
 import com.android.skillsync.R
 import com.android.skillsync.ViewModel.PostViewModel
+import com.android.skillsync.domain.UserUseCases
 import com.android.skillsync.models.Post.Post
 import com.squareup.picasso.Picasso
 
 class PostAdapter(var posts: MutableList<Post>, var isFromFeed: Boolean) : RecyclerView.Adapter<PostAdapter.PostHolder>() {
 
     var listener: FeedFragment.OnPostClickListener? = null
-
     fun setOnPostClickListener(listener: FeedFragment.OnPostClickListener) {
         this.listener = listener
     }
@@ -33,30 +33,15 @@ class PostAdapter(var posts: MutableList<Post>, var isFromFeed: Boolean) : Recyc
         val ownerNameLabel: TextView = itemView.findViewById(R.id.ownerName)
         val contentLabel: TextView = itemView.findViewById(R.id.content)
         val image = itemView.findViewById<ImageView>(R.id.imagePost)
+
         val editPostButton = itemView.findViewById<ImageView>(R.id.post_edit_button)
         val deletePostButton = itemView.findViewById<ImageView>(R.id.deletePostButton)
-
         init {
             itemView.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION && isFromFeed) {
                     listener?.onPostClicked(posts[position])
                     Log.d("onClickPost", posts[position].ownerId)
-                }
-            }
-            if (!isFromFeed) {
-                editPostButton.visibility = View.VISIBLE
-                deletePostButton.visibility = View.VISIBLE
-
-                editPostButton.setOnClickListener {
-                    val position = adapterPosition
-                    if (position != RecyclerView.NO_POSITION) {
-                        val args = Bundle()
-                        args.putString("postId", posts[position].id)
-
-                        Navigation.findNavController(it)
-                            .navigate(R.id.action_profileFragment_to_editPost, args)
-                    }
                 }
             }
         }
@@ -73,6 +58,28 @@ class PostAdapter(var posts: MutableList<Post>, var isFromFeed: Boolean) : Recyc
 
     override fun onBindViewHolder(holder: PostHolder, position: Int) {
         val post = posts[position]
+
+
+        val currentUserID = UserUseCases().getUserId()
+        val isOwner = currentUserID == post.ownerId
+
+        if (!isFromFeed && isOwner) {
+            holder.editPostButton.visibility = View.VISIBLE
+            holder.deletePostButton.visibility = View.VISIBLE
+
+            holder.editPostButton.setOnClickListener {
+                if (holder.adapterPosition != RecyclerView.NO_POSITION) {
+                    val args = Bundle()
+                    args.putString("postId", posts[position].id)
+
+                    Navigation.findNavController(it)
+                        .navigate(R.id.action_profileFragment_to_editPost, args)
+                }
+            }
+        } else {
+            holder.editPostButton.visibility = View.GONE
+            holder.deletePostButton.visibility = View.GONE
+        }
 
         holder.deletePostButton.setOnClickListener {
             deletePost(post)

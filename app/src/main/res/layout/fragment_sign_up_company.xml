@@ -147,7 +147,7 @@
         android:id="@+id/logo_company"
         android:layout_width="189dp"
         android:layout_height="137dp"
-        android:src="@drawable/company_icon"
+        android:src="@drawable/user_avatar"
         app:layout_constraintBottom_toTopOf="@+id/sign_up_company_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

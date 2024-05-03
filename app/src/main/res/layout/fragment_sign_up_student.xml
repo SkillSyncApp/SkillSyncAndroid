@@ -122,7 +122,7 @@
         android:id="@+id/studentImage"
         android:layout_width="119dp"
         android:layout_height="104dp"
-        android:src="@drawable/student_icon"
+        android:src="@drawable/user_avatar"
         app:layout_constraintBottom_toTopOf="@+id/sign_up_student_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
