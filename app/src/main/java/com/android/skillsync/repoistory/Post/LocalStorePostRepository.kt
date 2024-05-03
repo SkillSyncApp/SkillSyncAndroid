@@ -37,8 +37,4 @@ class LocalStorePostRepository {
     fun getAllPosts(): LiveData<MutableList<Post>> {
         return postDao.getAllPosts()
     }
-
-    fun getPostById(id: String): LiveData<Post> {
-        return postDao.getPostById(id)
-    }
 }

@@ -14,18 +14,19 @@ class FireStorePostRepository {
 
     fun addPost(post: Post) {
         apiManager.db.collection(POSTS_COLLECTION_PATH).add(post.json)
-//            .addOnSuccessListener { callback() }
     }
 
     fun deletePost(post: Post) {
-     //   apiManager.db.collection(POSTS_COLLECTION_PATH).document(postId).delete()
-        apiManager.db.collection(POSTS_COLLECTION_PATH).whereEqualTo("id", post.id).get().addOnSuccessListener {
-            apiManager.db.collection(POSTS_COLLECTION_PATH).document(it.documents[0].id).delete()
-        }
+        apiManager.db.collection(POSTS_COLLECTION_PATH).whereEqualTo("id", post.id).get()
+            .addOnSuccessListener {
+                apiManager.db.collection(POSTS_COLLECTION_PATH).document(it.documents[0].id)
+                    .delete()
+            }
     }
 
     fun updatePost(postId: String, data: Map<String, Any>, callback: (Post?) -> Unit) {
-        val postRef = apiManager.db.collection(POSTS_COLLECTION_PATH).whereEqualTo(Post.POST_ID, postId)
+        val postRef =
+            apiManager.db.collection(POSTS_COLLECTION_PATH).whereEqualTo(Post.POST_ID, postId)
 
         postRef.get()
             .addOnSuccessListener { querySnapshot ->
@@ -58,8 +59,6 @@ class FireStorePostRepository {
             }
     }
 
-
-
     fun getPostsByOwnerId(ownerId: String, callback: (List<Post>) -> Unit) {
         apiManager.db.collection(POSTS_COLLECTION_PATH)
             .whereEqualTo(Post.OWNER_ID_KEY, ownerId)
@@ -73,6 +72,7 @@ class FireStorePostRepository {
                         }
                         callback(posts)
                     }
+
                     false -> callback(listOf())
                 }
             }
@@ -91,8 +91,26 @@ class FireStorePostRepository {
                         }
                         callback(posts)
                     }
+
                     false -> callback(listOf())
                 }
             }
     }
+
+    fun getPostById(postId: String, callback: (post: Post?) -> Unit) {
+        apiManager.db.collection(POSTS_COLLECTION_PATH)
+            .whereEqualTo("id", postId)
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val result = task.result
+                    if (result != null && !result.isEmpty) {
+                        val json = result.documents[0]
+                        val post = json.data?.let { Post.fromJSON(it) }
+                        callback(post)
+                    } else callback(null)
+                } else callback(null)
+            }
+    }
+
 }

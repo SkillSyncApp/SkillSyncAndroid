@@ -2,7 +2,6 @@ package com.android.skillsync
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +21,6 @@ import com.android.skillsync.helpers.DynamicTextHelper
 import com.android.skillsync.helpers.ImageHelper
 import com.android.skillsync.models.Post.Post
 import com.squareup.picasso.Picasso
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -41,7 +39,6 @@ class editPost : Fragment() {
     var detailsConstraintlayout: ConstraintLayout? = null
 
     var postId = ""
-
     var title: TextView? = null
     var details: TextView? = null
     var updatePost: Button? = null
@@ -95,10 +92,9 @@ class editPost : Fragment() {
             content = details?.text.toString(),
                 imagePath = if (imageHelper.isImageSelected()) {
                     imageHelper.getImageUrl() ?: ""
-                } else {
-                    imagePost
-                }
-        )
+                } else imagePost
+            )
+
             updatedPost.id = postId
             lifecycleScope.launch {
                 val result = postViewModel.update(postId, updatedPost.json)
