@@ -142,7 +142,8 @@ class SignUpCompanyFragment : BaseFragment() {
             val bioGroup = binding.bioGroup
             val passwordGroup = binding.passwordCompany
             val address = binding.companySuggestion.text
-            val logo = imageHelper.getImageUrl() ?: "DEFAULT LOGO" // TODO
+            val logo = imageHelper.getImageUrl() ?:
+            "https://firebasestorage.googleapis.com/v0/b/skills-e4dc8.appspot.com/o/images%2FuserAvater.png?alt=media&token=1fa189ff-b5df-4b1a-8673-2f8e11638acc"
 
             if (isValidInputs(emailGroup, passwordGroup, companyNameGroup, address,bioGroup)) {
                 val email = emailGroup.editTextField.text.toString()

@@ -90,7 +90,8 @@ class SignUpStudentFragment : Fragment() {
             val name = binding.nameStudent
             val institution = binding.institution
             val bio = binding.bioStudent
-            val logo = imageHelper.getImageUrl() ?: "DEFAULT LOGO" // TODO
+            val logo = imageHelper.getImageUrl() ?:
+            "https://firebasestorage.googleapis.com/v0/b/skills-e4dc8.appspot.com/o/images%2FuserAvater.png?alt=media&token=1fa189ff-b5df-4b1a-8673-2f8e11638acc"
 
             if (isValidInputs(
                     email,

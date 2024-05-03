@@ -26,6 +26,7 @@ import com.android.skillsync.adapters.PostAdapter
 import com.android.skillsync.databinding.FragmentProfileBinding
 import com.android.skillsync.helpers.ActionBarHelper
 import com.android.skillsync.models.UserInfo
+import com.squareup.picasso.Picasso
 
 class ProfileFragment : Fragment() {
     private val userAuthViewModel: UserAuthViewModel by activityViewModels()
@@ -171,8 +172,8 @@ class ProfileFragment : Fragment() {
             }
 
         } else {
-            editButton?.visibility = View.INVISIBLE;
-            logoutButton?.visibility = View.INVISIBLE;
+            editButton?.visibility = View.GONE;
+            logoutButton?.visibility = View.GONE;
         }
     }
 
@@ -189,9 +190,12 @@ class ProfileFragment : Fragment() {
             profileImage = view.findViewById(R.id.profile_image)
             profileImageBackgroundElement = view.findViewById(R.id.profile_background_image);
 
-            if (image != "DEFAULT LOGO" && profileImage != null && profileImageBackgroundElement != null) {
-//                Picasso.get().load(image).into(profileImage)
-//                Picasso.get().load(image).into(profileImageBackgroundElement)
+            if (profileImage != null && profileImageBackgroundElement != null) {
+                val imageUrl = if (image.isEmpty())
+                    "https://firebasestorage.googleapis.com/v0/b/skills-e4dc8.appspot.com/o/images%2FuserAvater.png?alt=media&token=1fa189ff-b5df-4b1a-8673-2f8e11638acc"
+                else image
+
+                Picasso.get().load(imageUrl).into(profileImage)
 
                 // Blur the background image
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {

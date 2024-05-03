@@ -64,7 +64,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/group_institution" />
 
-
     <Button
         android:id="@+id/save_group_btn"
         style="@style/AppTextStyle"
@@ -84,7 +83,7 @@
         android:id="@+id/studentImage"
         android:layout_width="119dp"
         android:layout_height="104dp"
-        android:src="@drawable/student_icon"
+        android:src="@drawable/user_avatar"
         app:layout_constraintBottom_toTopOf="@+id/save_group_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
