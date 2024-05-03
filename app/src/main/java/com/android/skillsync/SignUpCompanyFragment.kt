@@ -23,6 +23,7 @@ import com.android.skillsync.databinding.FragmentSignUpCompanyBinding
 import com.android.skillsync.helpers.DialogHelper
 import com.android.skillsync.helpers.DynamicTextHelper
 import com.android.skillsync.helpers.ImageHelper
+import com.android.skillsync.helpers.ImageUploadListener
 import com.android.skillsync.helpers.ValidationHelper
 import com.android.skillsync.models.Comapny.Company
 import com.android.skillsync.models.CompanyLocation
@@ -90,8 +91,8 @@ class SignUpCompanyFragment : BaseFragment() {
             ArrayList()
         )
 
-        addressAutoComplete?.setAdapter(locationsAdapter)
-        addressAutoComplete?.setOnItemClickListener { _, _, i, _ ->
+        addressAutoComplete.setAdapter(locationsAdapter)
+        addressAutoComplete.setOnItemClickListener { _, _, i, _ ->
             val selectedPlace = placesSuggestions[i];
             val latitude = selectedPlace.latitude.toDouble()
             val longitude = selectedPlace.longitude.toDouble()
@@ -103,7 +104,7 @@ class SignUpCompanyFragment : BaseFragment() {
             )
         }
 
-        addressAutoComplete?.addTextChangedListener(object : TextWatcher {
+        addressAutoComplete.addTextChangedListener(object : TextWatcher {
             @RequiresApi(Build.VERSION_CODES.O_MR1)
             override fun afterTextChanged(s: Editable?) {
                 if (!s.isNullOrEmpty()) {
@@ -133,7 +134,12 @@ class SignUpCompanyFragment : BaseFragment() {
         signUpCompany = view.findViewById(R.id.sign_up_company_btn)
         imageView = view.findViewById(R.id.logo_company)
 
-        imageHelper = ImageHelper(this, imageView)
+        imageHelper = ImageHelper(this, imageView , object : ImageUploadListener {
+            override fun onImageUploaded(imageUrl: String) {
+                // Perform actions after image upload completes
+                // For example, you can update UI components or process the image URL
+            }
+        })
         imageHelper.setImageViewClickListener()
 
         signUpCompany.setOnClickListener {
