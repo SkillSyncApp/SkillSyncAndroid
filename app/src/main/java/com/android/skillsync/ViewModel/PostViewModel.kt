@@ -40,12 +40,8 @@ class PostViewModel: ViewModel() {
 
     fun getPostById(id: String, callback: (Post?) -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
-            val postLiveData = postsUseCases.getPostById(id)
-            withContext(Dispatchers.Main) {
-                postLiveData.observeForever { post ->
-                    postLiveData.removeObserver { }
-                    callback(post)
-                }
+            postsUseCases.getPostById(id) { post ->
+                callback(post)
             }
         }
     }
