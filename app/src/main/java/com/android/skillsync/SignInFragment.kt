@@ -62,8 +62,6 @@ class SignInFragment : BaseFragment() {
         _binding = null
     }
 
-    // TODO: Implement remember user functionality
-
     private fun setEventsListeners() {
         forgetPassword = view.findViewById(R.id.forget_password_link)
         forgetPassword?.setOnClickListener {

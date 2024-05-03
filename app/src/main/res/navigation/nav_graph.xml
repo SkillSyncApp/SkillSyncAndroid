@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_startPageFragment_to_pickUserTypeFragment"
             app:destination="@id/pickUserTypeFragment" />
+        <action
+            android:id="@+id/action_startPageFragment_to_mapViewFragment"
+            app:destination="@id/mapViewFragment" />
     </fragment>
 
     <fragment
