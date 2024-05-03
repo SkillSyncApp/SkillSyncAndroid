@@ -77,7 +77,8 @@ class SignUpCompanyFragment : BaseFragment() {
 
 
         backButton.setOnClickListener {
-            findNavController().navigateUp()        }
+            findNavController().navigateUp()
+        }
     }
 
     private fun initLocationsAutoComplete() {

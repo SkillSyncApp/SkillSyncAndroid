@@ -70,10 +70,6 @@ class PostViewModel: ViewModel() {
         postsUseCases.delete(post)
     }
 
-    fun deleteAllPosts() = viewModelScope.launch(Dispatchers.IO) {
-        postsUseCases.deleteAll()
-    }
-
     @RequiresApi(Build.VERSION_CODES.O)
     fun refreshPosts() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -83,7 +79,14 @@ class PostViewModel: ViewModel() {
         }
     }
 
-    fun update(post: Post, data: Map<String, Any>) = viewModelScope.launch(Dispatchers.IO) {
-        postsUseCases.update(post, data)
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun update(postId: String, data: Map<String, Any>): Boolean {
+        return try {
+            postsUseCases.update(postId, data)
+            true
+        } catch (e: Exception) {
+            false
+        }
     }
+
 }

@@ -13,9 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.skillsync.FeedFragment
 import com.android.skillsync.R
 import com.android.skillsync.ViewModel.PostViewModel
-import com.android.skillsync.domain.UserUseCases
 import com.android.skillsync.models.Post.Post
-import com.android.skillsync.repoistory.Post.FireStorePostRepository
 import com.squareup.picasso.Picasso
 
 class PostAdapter(var posts: MutableList<Post>, var isFromFeed: Boolean) : RecyclerView.Adapter<PostAdapter.PostHolder>() {
@@ -35,7 +33,7 @@ class PostAdapter(var posts: MutableList<Post>, var isFromFeed: Boolean) : Recyc
         val ownerNameLabel: TextView = itemView.findViewById(R.id.ownerName)
         val contentLabel: TextView = itemView.findViewById(R.id.content)
         val image = itemView.findViewById<ImageView>(R.id.imagePost)
-        val edit = itemView.findViewById<ImageView>(R.id.post_edit_button)
+        val editPostButton = itemView.findViewById<ImageView>(R.id.post_edit_button)
         val deletePostButton = itemView.findViewById<ImageView>(R.id.deletePostButton)
 
         init {
@@ -47,8 +45,10 @@ class PostAdapter(var posts: MutableList<Post>, var isFromFeed: Boolean) : Recyc
                 }
             }
             if (!isFromFeed) {
-                edit.visibility = View.VISIBLE
-                edit.setOnClickListener {
+                editPostButton.visibility = View.VISIBLE
+                deletePostButton.visibility = View.VISIBLE
+
+                editPostButton.setOnClickListener {
                     val position = adapterPosition
                     if (position != RecyclerView.NO_POSITION) {
                         val args = Bundle()
@@ -74,18 +74,9 @@ class PostAdapter(var posts: MutableList<Post>, var isFromFeed: Boolean) : Recyc
     override fun onBindViewHolder(holder: PostHolder, position: Int) {
         val post = posts[position]
 
-        val currentUserID = UserUseCases().getUserId()
-        val isOwner = currentUserID == post.ownerId
-
-        if (isOwner) {
-            holder.deletePostButton.visibility = View.VISIBLE
-            holder.deletePostButton.setOnClickListener {
-                deletePost(post)
-            }
-        } else {
-            holder.deletePostButton.visibility = View.GONE
+        holder.deletePostButton.setOnClickListener {
+            deletePost(post)
         }
-
 
         if (post.imagePath.isNotBlank()) {
             holder.image.setVisibility(View.VISIBLE)

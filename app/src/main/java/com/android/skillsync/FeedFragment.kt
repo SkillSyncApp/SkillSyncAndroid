@@ -25,7 +25,6 @@ import com.android.skillsync.helpers.ActionBarHelper
 import com.android.skillsync.models.Post.Post
 import com.android.skillsync.models.UserInfo
 
-
 class FeedFragment : Fragment() {
     private lateinit var postsRecyclerView: RecyclerView
     private lateinit var postAdapter: PostAdapter
