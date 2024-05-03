@@ -83,7 +83,7 @@ class PostViewModel: ViewModel() {
         }
     }
 
-    fun update(post: Post, data: Map<String, Any>) = viewModelScope.launch(Dispatchers.IO) {
-        postsUseCases.update(post, data)
+    fun update(postId: String, data: Map<String, Any>) = viewModelScope.launch(Dispatchers.IO) {
+        postsUseCases.update(postId, data)
     }
 }

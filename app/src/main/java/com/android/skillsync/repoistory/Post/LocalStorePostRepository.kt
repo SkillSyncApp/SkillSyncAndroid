@@ -4,6 +4,8 @@ import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import com.android.skillsync.dao.AppLocalDatabase
 import com.android.skillsync.models.Post.Post
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class LocalStorePostRepository {
     val appLocalDB = AppLocalDatabase
@@ -15,8 +17,10 @@ class LocalStorePostRepository {
     }
 
     @WorkerThread
-    fun update(post: Post) {
-        postDao.updatePost(post)
+    suspend fun update(post: Post) {
+        withContext(Dispatchers.IO) {
+            postDao.updatePost(post)
+        }
     }
 
     @WorkerThread

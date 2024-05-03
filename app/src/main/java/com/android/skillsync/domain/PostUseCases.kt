@@ -1,25 +1,32 @@
 package com.android.skillsync.domain
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.android.skillsync.models.Post.Post
 import com.android.skillsync.repoistory.Post.FireStorePostRepository
 import com.android.skillsync.repoistory.Post.LocalStorePostRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.time.Instant
 import java.util.concurrent.Executors
 
 class PostUseCases {
-
     val localStorePostRepository: LocalStorePostRepository = LocalStorePostRepository()
     val fireStorePostRepository: FireStorePostRepository = FireStorePostRepository()
+    private val coroutineScope = CoroutineScope(Job())
 
     private var executor = Executors.newSingleThreadExecutor()
     private val _posts: MutableLiveData<List<Post>> = MutableLiveData()
 
     val posts: LiveData<List<Post>> get() = _posts
 
+    interface CacheUpdateListener {
+        fun onUpdateCompleted()
+    }
     init {
         // Initialize posts by observing local storage
         val localPostsLiveData = localStorePostRepository.getAllPosts()
@@ -69,31 +76,37 @@ class PostUseCases {
         localStorePostRepository.deleteAllPosts()
     }
 
-    fun update(post: Post, data: Map<String,Any>) {
-        fireStorePostRepository.updatePost(post.id, data) {
-            updateLocalCache(post)
-        }
-    }
-
-    private fun updateLocalCache(updatedPost: Post) {
-        val currentPosts = localStorePostRepository.getAllPosts().value
-
-        // Check if currentPosts is not null before proceeding
-        currentPosts?.let { posts ->
-            // Find the index of the post to be updated in the list
-            val index = posts.indexOfFirst { it.id == updatedPost.id }
-
-            if (index != -1) {
-                // If the post is found, update it in the local cache
-                posts[index] = updatedPost
-                localStorePostRepository.update(updatedPost)
-            } else {
-                // If the post is not found, insert it into the local cache
-                localStorePostRepository.insert(updatedPost)
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun update(postId: String, data: Map<String,Any>) {
+        fireStorePostRepository.updatePost(postId, data) { updatedPost ->
+            if(updatedPost != null) {
+                updateLocalCache(updatedPost)
             }
-
-            // Update the last updated timestamp in Post singleton
-            Post.lastUpdated = System.currentTimeMillis()
         }
     }
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun updateLocalCache(updatedPost: Post) {
+            val localPostsLiveData = localStorePostRepository.getAllPosts()
+
+        localPostsLiveData.observeForever { localPosts ->
+                // Once the LiveData emits a value, perform your operations inside the observer
+                val index = localPosts.indexOfFirst { it.id == updatedPost.id }
+
+                try {
+                    if (index != -1) {
+                        localPosts[index] = updatedPost
+                        coroutineScope.launch {
+                            localStorePostRepository.update(updatedPost)
+                        }
+                    }
+
+                    Post.lastUpdated = Instant.now().epochSecond
+                } catch(err: Exception) {
+                    println(err.message)
+                    Log.d("Cache", err.message.toString())
+                }
+            }
+        }
 }

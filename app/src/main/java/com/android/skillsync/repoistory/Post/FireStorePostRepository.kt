@@ -24,11 +24,41 @@ class FireStorePostRepository {
         }
     }
 
-    fun updatePost(postId: String, data: Map<String, Any>, callback: () -> Unit) {
-        apiManager.db.collection(POSTS_COLLECTION_PATH).document(postId).update(data)
-            .addOnSuccessListener { callback() }
-//            .addOnCompleteListener { onFailureCallBack() }
+    fun updatePost(postId: String, data: Map<String, Any>, callback: (Post?) -> Unit) {
+        val postRef = apiManager.db.collection(POSTS_COLLECTION_PATH).whereEqualTo(Post.POST_ID, postId)
+
+        postRef.get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    val documentSnapshot = querySnapshot.documents[0]
+                    documentSnapshot.reference.update(data)
+                        .addOnSuccessListener {
+                            documentSnapshot.reference.get()
+                                .addOnSuccessListener { updatedDocumentSnapshot ->
+                                    val updatedPost = updatedDocumentSnapshot.data?.let { it1 ->
+                                        Post.fromJSON(
+                                            it1
+                                        )
+                                    }
+                                    callback(updatedPost)
+                                }
+                                .addOnFailureListener {
+                                    callback(null)
+                                }
+                        }
+                        .addOnFailureListener {
+                            callback(null)
+                        }
+                } else {
+                    callback(null)
+                }
+            }
+            .addOnFailureListener {
+                callback(null)
+            }
     }
+
+
 
     fun getPostsByOwnerId(ownerId: String, callback: (List<Post>) -> Unit) {
         apiManager.db.collection(POSTS_COLLECTION_PATH)
