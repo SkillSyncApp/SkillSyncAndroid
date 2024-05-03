@@ -116,8 +116,5 @@ class PostAdapter(var posts: MutableList<Post>, var isFromFeed: Boolean) : Recyc
     private fun deletePost(post: Post) {
         Log.e("PostAdapter", "delete post")
         PostViewModel().deletePost(post)
-       // val fireStorePostRepository = FireStorePostRepository()
-      //  fireStorePostRepository.deletePost(post)
-
     }
 }

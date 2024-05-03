@@ -14,6 +14,7 @@ class UserUseCases {
     private val postUseCases: PostUseCases = PostUseCases()
 
     fun signInUser(email: String, password: String, onSuccessCallBack: () -> Unit, onFailureCallBack: (String?) -> Unit) {
+        Post.lastUpdated = 0
         fireStoreAuthRepository.signInUser(email, password, onSuccessCallBack, onFailureCallBack)
     }
 
