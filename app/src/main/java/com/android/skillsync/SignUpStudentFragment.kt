@@ -19,6 +19,7 @@ import com.android.skillsync.helpers.ActionBarHelper
 import com.android.skillsync.helpers.DialogHelper
 import com.android.skillsync.helpers.DynamicTextHelper
 import com.android.skillsync.helpers.ImageHelper
+import com.android.skillsync.helpers.ImageUploadListener
 import com.android.skillsync.helpers.ValidationHelper
 import com.android.skillsync.models.Student.Student
 
@@ -79,7 +80,13 @@ class SignUpStudentFragment : Fragment() {
         signUpBtn = view.findViewById(R.id.sign_up_student_btn)
         imageView = view.findViewById(R.id.studentImage)
 
-        imageHelper = ImageHelper(this, imageView)
+        imageHelper = ImageHelper(this, imageView, object : ImageUploadListener {
+            override fun onImageUploaded(imageUrl: String) {
+                // Perform actions after image upload completes
+                // For example, you can update UI components or process the image URL
+            }
+        })
+
         imageHelper.setImageViewClickListener()
 
         studentViewModel = StudentViewModel()

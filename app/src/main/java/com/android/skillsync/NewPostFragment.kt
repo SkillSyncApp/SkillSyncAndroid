@@ -14,6 +14,7 @@ import com.android.skillsync.databinding.CustomInputFieldTextBinding
 import com.android.skillsync.databinding.FragmentNewPostBinding
 import com.android.skillsync.helpers.DynamicTextHelper
 import com.android.skillsync.helpers.ImageHelper
+import com.android.skillsync.helpers.ImageUploadListener
 import com.android.skillsync.helpers.ValidationHelper
 import com.android.skillsync.models.Post.Post
 
@@ -37,7 +38,12 @@ class NewPostFragment : Fragment() {
         imageView = binding.imageToUpload
         dynamicTextHelper = DynamicTextHelper(view)
 
-        imageHelper = ImageHelper(this, imageView)
+        imageHelper = ImageHelper(this, imageView,  object : ImageUploadListener {
+            override fun onImageUploaded(imageUrl: String) {
+                // Perform actions after image upload completes
+                // For example, you can update UI components or process the image URL
+            }
+        })
         imageHelper.setImageViewClickListener()
 
         postViewModel = PostViewModel()

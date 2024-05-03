@@ -14,9 +14,8 @@ interface ImageUploadListener {
     fun onImageUploaded(imageUrl: String)
 }
 
-class ImageHelper(val fragment: Fragment, private val imageView: ImageView) {
+class ImageHelper(val fragment: Fragment, private val imageView: ImageView, private val uploadListener: ImageUploadListener) {
 
-    private var uploadListener: ImageUploadListener? = null
     private var imageUrl: String? = null
     private val storageRef = FirebaseStorage.getInstance().reference
 
@@ -58,7 +57,7 @@ class ImageHelper(val fragment: Fragment, private val imageView: ImageView) {
                     // Load the image using Picasso
                     Picasso.get().load(uri).into(imageView)
 
-                    imageUrl?.let { uploadListener?.onImageUploaded(it) }
+                    imageUrl?.let { uploadListener.onImageUploaded(it) }
 
                 }
             }

@@ -22,6 +22,7 @@ import com.android.skillsync.helpers.ImageHelper
 import com.android.skillsync.models.Post.Post
 import com.squareup.picasso.Picasso
 import androidx.lifecycle.lifecycleScope
+import com.android.skillsync.helpers.ImageUploadListener
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -64,7 +65,14 @@ class editPost : Fragment() {
         imageView = view.findViewById(R.id.edit_image_to_upload)
         updatePost = view.findViewById(R.id.save_post)
 
-        imageHelper = ImageHelper(this, imageView)
+        imageHelper = ImageHelper(this, imageView, object : ImageUploadListener {
+            override fun onImageUploaded(imageUrl: String) {
+                Toast.makeText(requireContext(), "Image added", Toast.LENGTH_SHORT).show()
+
+                // Perform actions after image upload completes
+                // For example, you can update UI components or process the image URL
+            }
+        })
         imageHelper.setImageViewClickListener()
 
         val backButton = view.findViewById<ImageView>(R.id.back_button)
