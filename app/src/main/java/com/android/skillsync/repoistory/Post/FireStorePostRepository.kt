@@ -17,11 +17,11 @@ class FireStorePostRepository {
     }
 
     fun deletePost(post: Post) {
-//        apiManager.db.collection(POSTS_COLLECTION_PATH).whereEqualTo("id", post.id).get()
-//            .addOnSuccessListener {
-//                apiManager.db.collection(POSTS_COLLECTION_PATH).document(it.documents[0].id)
-//                    .delete()
-//            }
+        apiManager.db.collection(POSTS_COLLECTION_PATH).whereEqualTo("id", post.id).get()
+            .addOnSuccessListener {
+                apiManager.db.collection(POSTS_COLLECTION_PATH).document(it.documents[0].id)
+                    .delete()
+            }
     }
 
     fun updatePost(postId: String, data: Map<String, Any>, callback: (Post?) -> Unit) {
