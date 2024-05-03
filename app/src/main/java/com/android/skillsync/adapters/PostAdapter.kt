@@ -112,6 +112,12 @@ class PostAdapter(var posts: MutableList<Post>, var isFromFeed: Boolean) : Recyc
     }
 
     private fun deletePost(post: Post) {
-        PostViewModel().deletePost(post)
+        val position = posts.indexOf(post)
+        if (position != -1) {
+            PostViewModel().deletePost(post)
+            posts.removeAt(position) // Remove from the list
+            notifyItemRemoved(position) // Update UI
+            notifyItemRangeChanged(position, posts.size)
+        }
     }
 }
