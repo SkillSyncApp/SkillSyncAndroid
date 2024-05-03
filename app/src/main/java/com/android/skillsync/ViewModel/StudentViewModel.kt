@@ -1,6 +1,5 @@
 package com.android.skillsync.ViewModel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.skillsync.domain.StudentUseCases
@@ -29,16 +28,13 @@ class StudentViewModel: ViewModel() {
         studentUseCases.addStudent(student)
     }
 
-//    fun update(student: Student) = viewModelScope.launch(Dispatchers.IO) {
-//        studentUseCases.update(student)
-//    }
-fun update(student: Student, data: Map<String, Any>, onSuccessCallBack: () -> Unit, onFailureCallBack: () -> Unit) = viewModelScope.launch(Dispatchers.IO) {
-    try {
-        studentUseCases.update(student, data, onSuccessCallBack, onFailureCallBack)
-    } catch (e: Exception) {
-        onFailureCallBack()
+    fun update(student: Student, data: Map<String, Any>, onSuccessCallBack: () -> Unit, onFailureCallBack: () -> Unit) = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            studentUseCases.update(student, data, onSuccessCallBack, onFailureCallBack)
+        } catch (e: Exception) {
+            onFailureCallBack()
+        }
     }
-}
 
 
 

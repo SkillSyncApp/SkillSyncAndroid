@@ -13,6 +13,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.util.concurrent.Executors
+import androidx.lifecycle.MediatorLiveData
 
 class PostUseCases {
     val localStorePostRepository: LocalStorePostRepository = LocalStorePostRepository()
@@ -23,10 +24,8 @@ class PostUseCases {
     private val _posts: MutableLiveData<List<Post>> = MutableLiveData()
 
     val posts: LiveData<List<Post>> get() = _posts
+    private val mediatorLiveData = MediatorLiveData<List<Post>>()
 
-    interface CacheUpdateListener {
-        fun onUpdateCompleted()
-    }
     init {
         // Initialize posts by observing local storage
         val localPostsLiveData = localStorePostRepository.getAllPosts()
@@ -85,12 +84,19 @@ class PostUseCases {
         }
     }
 
+    private var isUpdatingCache = false
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun updateLocalCache(updatedPost: Post) {
-            val localPostsLiveData = localStorePostRepository.getAllPosts()
+        // Check if cache update is already in progress
+        if (isUpdatingCache) {
+            return
+        }
+        isUpdatingCache = true
 
-        localPostsLiveData.observeForever { localPosts ->
+        val localPostsLiveData = localStorePostRepository.getAllPosts()
+
+        mediatorLiveData.addSource(localPostsLiveData) { localPosts ->
                 // Once the LiveData emits a value, perform your operations inside the observer
                 val index = localPosts.indexOfFirst { it.id == updatedPost.id }
 
@@ -98,11 +104,12 @@ class PostUseCases {
                     if (index != -1) {
                         localPosts[index] = updatedPost
                         coroutineScope.launch {
+                            // Update the post in the local store
                             localStorePostRepository.update(updatedPost)
+                            Post.lastUpdated = Instant.now().epochSecond
+                            isUpdatingCache = false
                         }
                     }
-
-                    Post.lastUpdated = Instant.now().epochSecond
                 } catch(err: Exception) {
                     println(err.message)
                     Log.d("Cache", err.message.toString())
