@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -41,6 +42,8 @@ class MapViewFragment : Fragment(), LocationListener {
     private lateinit var viewModel: CompanyViewModel
     private var companyList: MutableList<Company> = mutableListOf()
 
+    private var loadingOverlay: LinearLayout? = null;
+
     private val timer = Timer()
     private val binding get() = _binding!!
 
@@ -65,6 +68,9 @@ class MapViewFragment : Fragment(), LocationListener {
         view = binding.root
 
         viewModel = ViewModelProvider(this)[CompanyViewModel::class.java]
+
+        loadingOverlay = view.findViewById(R.id.map_loading_overlay);
+        loadingOverlay?.visibility = View.VISIBLE;
         // Initialize the permission launcher
         requestPermissionLauncher
 
@@ -279,6 +285,7 @@ class MapViewFragment : Fragment(), LocationListener {
         val geoPoint = GeoPoint(location.latitude, location.longitude)
         aMapView.controller.setCenter(geoPoint)
         addMarker(geoPoint, hashMapOf("name" to "this is my location", "bio" to "", "address" to ""), "OSMDroid Marker")
+        loadingOverlay?.visibility = View.INVISIBLE;
     }
 
     override fun onResume() {

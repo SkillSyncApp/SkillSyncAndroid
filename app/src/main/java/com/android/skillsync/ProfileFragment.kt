@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -52,6 +53,11 @@ class ProfileFragment : Fragment() {
     private var logoutButton: TextView? = null
     private var backButton: ImageView? = null
 
+    private var loadingOverlay: LinearLayout? = null;
+
+    private var isPostsLoaded: Boolean = false;
+    private var isProfileDataLoaded: Boolean = false;
+
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,6 +71,9 @@ class ProfileFragment : Fragment() {
         view  = binding.root
 
         postAdapter = PostAdapter(mutableListOf(), false)
+
+        loadingOverlay = view.findViewById(R.id.profile_loading_overlay);
+        handleLoading();
 
         val args = arguments
         val userId = args?.getString("userId") ?: userAuthViewModel.getUserId()
@@ -193,6 +202,9 @@ class ProfileFragment : Fragment() {
                     )
                 }
             }
+
+        isProfileDataLoaded = true;
+        handleLoading();
     }
 
 
@@ -215,6 +227,17 @@ class ProfileFragment : Fragment() {
                 postsRecyclerView.layoutManager = LinearLayoutManager(context)
                 postsRecyclerView.adapter = postAdapter
             }
+
+            isPostsLoaded = true;
+            handleLoading();
+        }
+    }
+
+    private fun handleLoading(): Unit {
+        if (isPostsLoaded && isProfileDataLoaded) {
+            loadingOverlay?.visibility = View.INVISIBLE;
+        } else {
+            loadingOverlay?.visibility = View.VISIBLE;
         }
     }
 
