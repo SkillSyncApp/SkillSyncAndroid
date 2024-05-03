@@ -6,37 +6,54 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.navigation.Navigation
+import com.android.skillsync.ViewModel.UserAuthViewModel
+import com.android.skillsync.databinding.FragmentStartPageBinding
+import com.google.firebase.auth.FirebaseAuth
 
 class StartPageFragment : BaseFragment() {
 
-    var signInButton: Button? = null
-    var signUpButton: Button? = null
+    private var userAuthViewModel: UserAuthViewModel? = null
 
+    private var _binding: FragmentStartPageBinding? = null
+    private val binding get() = _binding!!
     private lateinit var view: View
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        view = inflater.inflate(R.layout.fragment_start_page, container, false)
+        _binding = FragmentStartPageBinding.inflate(inflater, container, false)
+        view = binding.root
+        userAuthViewModel = UserAuthViewModel()
 
         setEventListeners()
-
         return view
     }
 
     private fun setEventListeners() {
-        signInButton = view.findViewById(R.id.button_sign_in)
-        signUpButton = view.findViewById(R.id.button_sign_up)
 
-        signInButton?.setOnClickListener {
+        binding.buttonSignIn.setOnClickListener {
             Navigation.findNavController(view)
                 .navigate(R.id.action_startPageFragment_to_signInFragment)
         }
 
-        signUpButton?.setOnClickListener {
+        binding.buttonSignUp.setOnClickListener {
             Navigation.findNavController(view)
                 .navigate(R.id.action_startPageFragment_to_pickUserTypeFragment)
         }
+
+        view.post {
+            val firebaseAuth = FirebaseAuth.getInstance()
+            val currentUser = firebaseAuth.currentUser
+            if (currentUser != null) {
+                userAuthViewModel?.setCurrentUserId()
+                Navigation.findNavController(requireView())
+                    .navigate(R.id.action_startPageFragment_to_mapViewFragment)
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

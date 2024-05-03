@@ -96,6 +96,7 @@ class NewPostFragment : Fragment() {
                 Toast.makeText(requireContext(), "Post added successfully", Toast.LENGTH_SHORT).show()
                 binding.postTitleGroup.editTextField.text = null
                 binding.postDescriptionGroup.editTextField.text = null
+                binding.imageToUpload.setImageResource(R.drawable.company_icon)
             } else Toast.makeText(requireContext(), "Failed to add post", Toast.LENGTH_SHORT).show()
         }
     }

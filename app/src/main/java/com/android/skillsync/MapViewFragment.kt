@@ -143,16 +143,15 @@ class MapViewFragment : Fragment(), LocationListener {
     }
 
     private fun initializeMapView() {
+        val context = context ?: return
         aMapView = binding.map
         aMapView.setTileSource(TileSourceFactory.MAPNIK)
         aMapView.controller.setZoom(17.0)
 
         // Load map configuration
         Configuration.getInstance().load(
-            context?.applicationContext, context?.getSharedPreferences(
-                "locations",
-                AppCompatActivity.MODE_PRIVATE
-            )
+            context.applicationContext,
+            context.getSharedPreferences("locations", AppCompatActivity.MODE_PRIVATE)
         )
     }
 
