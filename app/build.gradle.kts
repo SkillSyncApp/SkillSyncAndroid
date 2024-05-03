@@ -78,4 +78,5 @@ dependencies {
     implementation("com.squareup.retrofit:converter-gson:2.0.0-beta2")
     implementation("org.osmdroid:osmdroid-android:6.1.17")
     implementation("com.firebase:geofire-android-common:3.2.0")
+    implementation("com.airbnb.android:lottie:3.6.0")
 }
