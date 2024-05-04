@@ -71,13 +71,14 @@ class ProfileFragment : Fragment() {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         view  = binding.root
 
-        postAdapter = PostAdapter(mutableListOf(), false)
+        val args = arguments
+        val userId = args?.getString("userId") ?: userAuthViewModel.getUserId()
+
+        val isFromArgs = args != null
+        postAdapter = PostAdapter(mutableListOf(), false, isFromArgs)
 
         loadingOverlay = view.findViewById(R.id.profile_loading_overlay);
         handleLoading();
-
-        val args = arguments
-        val userId = args?.getString("userId") ?: userAuthViewModel.getUserId()
 
         if (userId !== null) {
             userAuthViewModel.getInfoOnUser(userId) { userInfo, error ->

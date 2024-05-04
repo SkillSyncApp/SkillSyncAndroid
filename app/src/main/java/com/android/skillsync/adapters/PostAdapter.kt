@@ -18,7 +18,7 @@ import com.android.skillsync.domain.UserUseCases
 import com.android.skillsync.models.Post.Post
 import com.squareup.picasso.Picasso
 
-class PostAdapter(var posts: MutableList<Post>, var isFromFeed: Boolean) : RecyclerView.Adapter<PostAdapter.PostHolder>() {
+class PostAdapter(var posts: MutableList<Post>, var isFromFeed: Boolean, var containArgs: Boolean = false) : RecyclerView.Adapter<PostAdapter.PostHolder>() {
 
     var listener: FeedFragment.OnPostClickListener? = null
     fun setOnPostClickListener(listener: FeedFragment.OnPostClickListener) {
@@ -66,7 +66,7 @@ class PostAdapter(var posts: MutableList<Post>, var isFromFeed: Boolean) : Recyc
         val currentUserID = UserUseCases().getUserId()
         val isOwner = currentUserID == post.ownerId
 
-        if (!isFromFeed && isOwner) {
+        if (!isFromFeed && isOwner && !containArgs) {
             holder.actionsToolbar.visibility = View.VISIBLE;
 
             holder.editPostButton.setOnClickListener {
