@@ -76,7 +76,6 @@ class SignUpCompanyFragment : BaseFragment() {
 
         val backButton = view.findViewById<ImageView>(R.id.back_button)
 
-
         backButton.setOnClickListener {
             findNavController().navigateUp()
         }
