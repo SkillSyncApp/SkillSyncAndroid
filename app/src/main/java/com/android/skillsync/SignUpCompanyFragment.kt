@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.navigation.fragment.findNavController
@@ -44,6 +45,7 @@ class SignUpCompanyFragment : BaseFragment() {
     private lateinit var userAuthViewModel: UserAuthViewModel
     private lateinit var imageHelper: ImageHelper
     private lateinit var addressAutoComplete: AutoCompleteTextView
+    private  lateinit var loadingOverlay: LinearLayout
 
     private var _binding: FragmentSignUpCompanyBinding? = null
     private val binding get() = _binding!!
@@ -62,6 +64,9 @@ class SignUpCompanyFragment : BaseFragment() {
         companyViewModel = CompanyViewModel()
         userAuthViewModel = UserAuthViewModel()
         dynamicTextHelper = DynamicTextHelper(view)
+
+        loadingOverlay = view.findViewById(R.id.signup_company_loading_overlay);
+        loadingOverlay?.visibility = View.INVISIBLE
 
         initLocationsAutoComplete()
 
@@ -136,10 +141,12 @@ class SignUpCompanyFragment : BaseFragment() {
         imageHelper = ImageHelper(this, imageView , object : ImageUploadListener {
             override fun onImageUploaded(imageUrl: String) {
                 // Perform actions after image upload completes
-                // For example, you can update UI components or process the image URL
+                loadingOverlay?.visibility = View.INVISIBLE
             }
         })
-        imageHelper.setImageViewClickListener {}
+        imageHelper.setImageViewClickListener {
+            loadingOverlay?.visibility = View.VISIBLE
+        }
 
         signUpCompany.setOnClickListener {
             val companyNameGroup = binding.companyNameGroup

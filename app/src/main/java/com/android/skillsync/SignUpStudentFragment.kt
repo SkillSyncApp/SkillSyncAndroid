@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -35,6 +36,7 @@ class SignUpStudentFragment : Fragment() {
     private lateinit var student: Student
     private lateinit var studentViewModel: StudentViewModel
     private lateinit var dynamicTextHelper: DynamicTextHelper
+    private  lateinit var loadingOverlay: LinearLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +45,9 @@ class SignUpStudentFragment : Fragment() {
         _binding = FragmentSignUpStudentBinding.inflate(layoutInflater, container, false)
         view = binding.root
         dynamicTextHelper = DynamicTextHelper(view)
+
+        loadingOverlay = view.findViewById(R.id.signup_student_loading_overlay);
+        loadingOverlay?.visibility = View.INVISIBLE
 
         setHints()
         setEventListeners()
@@ -83,11 +88,13 @@ class SignUpStudentFragment : Fragment() {
         imageHelper = ImageHelper(this, imageView, object : ImageUploadListener {
             override fun onImageUploaded(imageUrl: String) {
                 // Perform actions after image upload completes
-                // For example, you can update UI components or process the image URL
+                loadingOverlay?.visibility = View.INVISIBLE
             }
         })
 
-        imageHelper.setImageViewClickListener {}
+        imageHelper.setImageViewClickListener {
+            loadingOverlay?.visibility = View.VISIBLE
+        }
 
         studentViewModel = StudentViewModel()
 
