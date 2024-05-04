@@ -35,10 +35,9 @@
         android:id="@+id/info_project"
         style="@style/AppTextStyle"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="8dp"
         android:gravity="center_horizontal|top"
-        android:text="@string/add_the_information_about_the_project_that_you_want_to_create"
         android:textAppearance="@style/sign_in_description"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -73,17 +72,63 @@
         app:layout_constraintTop_toBottomOf="@+id/edit_project_name"
         app:layout_constraintVertical_bias="0.0" />
 
-    <ImageView
-        android:id="@+id/edit_image_to_upload"
-        android:layout_width="189dp"
-        android:layout_height="137dp"
-        android:contentDescription="@string/image_s_post"
-        android:src="@drawable/default_post"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="407dp"
+        android:layout_height="130dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         app:layout_constraintBottom_toTopOf="@+id/save_post"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edit_multi_line_project_description"
-        app:layout_constraintVertical_bias="0.744" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_multi_line_project_description"
+        app:layout_constraintVertical_bias="0.129">
+
+        <ImageView
+            android:id="@+id/edit_image_to_upload"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="false"
+            android:contentDescription="@string/image_s_post"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/default_post"
+            tools:layout_editor_absoluteX="20dp" />
+
+        <LinearLayout
+            android:id="@+id/edit_post_loading_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#fff7ff"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="20dp"
+            tools:visibility="visible">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottieAnimationView"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_margin="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.354"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/loading" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Uploading..."
+                android:textAlignment="center" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
         android:id="@+id/save_post"

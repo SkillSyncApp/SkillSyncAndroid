@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
@@ -36,6 +37,8 @@ class PostAdapter(var posts: MutableList<Post>, var isFromFeed: Boolean) : Recyc
 
         val editPostButton = itemView.findViewById<ImageView>(R.id.post_edit_button)
         val deletePostButton = itemView.findViewById<ImageView>(R.id.deletePostButton)
+        val actionsToolbar = itemView.findViewById<LinearLayout>(R.id.post_actions_toolbar);
+
         init {
             itemView.setOnClickListener {
                 val position = adapterPosition
@@ -64,8 +67,7 @@ class PostAdapter(var posts: MutableList<Post>, var isFromFeed: Boolean) : Recyc
         val isOwner = currentUserID == post.ownerId
 
         if (!isFromFeed && isOwner) {
-            holder.editPostButton.visibility = View.VISIBLE
-            holder.deletePostButton.visibility = View.VISIBLE
+            holder.actionsToolbar.visibility = View.VISIBLE;
 
             holder.editPostButton.setOnClickListener {
                 if (holder.adapterPosition != RecyclerView.NO_POSITION) {
@@ -77,8 +79,7 @@ class PostAdapter(var posts: MutableList<Post>, var isFromFeed: Boolean) : Recyc
                 }
             }
         } else {
-            holder.editPostButton.visibility = View.GONE
-            holder.deletePostButton.visibility = View.GONE
+            holder.actionsToolbar.visibility = View.GONE;
         }
 
         holder.deletePostButton.setOnClickListener {

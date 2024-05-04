@@ -2,12 +2,13 @@ package com.android.skillsync.helpers
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Handler
 import android.util.Log
 import android.widget.ImageView
-import androidx.fragment.app.Fragment
 import androidx.activity.result.contract.ActivityResultContracts
-import com.squareup.picasso.Picasso
+import androidx.fragment.app.Fragment
 import com.google.firebase.storage.FirebaseStorage
+import com.squareup.picasso.Picasso
 import java.util.UUID
 
 interface ImageUploadListener {
@@ -37,9 +38,12 @@ class ImageHelper(val fragment: Fragment, private val imageView: ImageView, priv
         return imageUrl
     }
 
-    fun setImageViewClickListener() {
+    fun setImageViewClickListener(callback: () -> Unit) {
         imageView.setOnClickListener {
             uploadImage()
+            Handler().postDelayed({
+                callback()
+            }, 1000)
         }
     }
 
