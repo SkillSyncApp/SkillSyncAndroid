@@ -1,12 +1,13 @@
 package com.android.skillsync
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.android.skillsync.ViewModel.PostViewModel
 import com.android.skillsync.ViewModel.UserAuthViewModel
@@ -24,6 +25,7 @@ class NewPostFragment : Fragment() {
     private lateinit var imageView: ImageView
     private lateinit var imageHelper: ImageHelper
     private lateinit var dynamicTextHelper: DynamicTextHelper
+    private  lateinit var loadingOverlay: LinearLayout
 
     private var _binding: FragmentNewPostBinding? = null
     private val binding get() = _binding!!
@@ -38,13 +40,18 @@ class NewPostFragment : Fragment() {
         imageView = binding.imageToUpload
         dynamicTextHelper = DynamicTextHelper(view)
 
+        loadingOverlay = view.findViewById(R.id.new_post_loading_overlay);
+        loadingOverlay?.visibility = View.INVISIBLE
+
         imageHelper = ImageHelper(this, imageView,  object : ImageUploadListener {
             override fun onImageUploaded(imageUrl: String) {
                 // Perform actions after image upload completes
-                // For example, you can update UI components or process the image URL
+                loadingOverlay?.visibility = View.INVISIBLE
             }
         })
-        imageHelper.setImageViewClickListener()
+        imageHelper.setImageViewClickListener {
+            loadingOverlay?.visibility = View.VISIBLE
+        }
 
         postViewModel = PostViewModel()
 
@@ -102,7 +109,9 @@ class NewPostFragment : Fragment() {
                 Toast.makeText(requireContext(), "Post added successfully", Toast.LENGTH_SHORT).show()
                 binding.postTitleGroup.editTextField.text = null
                 binding.postDescriptionGroup.editTextField.text = null
-                binding.imageToUpload.setImageResource(R.drawable.company_icon)
+                binding.imageToUpload.setImageResource(R.drawable.default_post)
+//                Navigation.findNavController(view)
+//                    .navigate(R.id.action_newPostFragment_to_feedFragment)
             } else Toast.makeText(requireContext(), "Failed to add post", Toast.LENGTH_SHORT).show()
         }
     }

@@ -140,7 +140,7 @@ class SignUpCompanyFragment : BaseFragment() {
                 // For example, you can update UI components or process the image URL
             }
         })
-        imageHelper.setImageViewClickListener()
+        imageHelper.setImageViewClickListener {}
 
         signUpCompany.setOnClickListener {
             val companyNameGroup = binding.companyNameGroup

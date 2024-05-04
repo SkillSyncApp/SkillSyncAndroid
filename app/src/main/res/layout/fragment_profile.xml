@@ -150,7 +150,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/profile_posts_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="450dp"
             android:isScrollContainer="true"
             android:nestedScrollingEnabled="false"
             android:visibility="visible"

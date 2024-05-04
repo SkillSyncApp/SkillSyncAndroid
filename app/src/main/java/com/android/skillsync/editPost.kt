@@ -2,27 +2,28 @@ package com.android.skillsync
 
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.android.skillsync.ViewModel.PostViewModel
 import com.android.skillsync.ViewModel.UserAuthViewModel
 import com.android.skillsync.databinding.FragmentEditPostBinding
 import com.android.skillsync.helpers.DynamicTextHelper
 import com.android.skillsync.helpers.ImageHelper
+import com.android.skillsync.helpers.ImageUploadListener
 import com.android.skillsync.models.Post.Post
 import com.squareup.picasso.Picasso
-import androidx.lifecycle.lifecycleScope
-import com.android.skillsync.helpers.ImageUploadListener
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -34,6 +35,7 @@ class editPost : Fragment() {
     private lateinit var postViewModel: PostViewModel
     private lateinit var imageHelper: ImageHelper
     private lateinit var imageView: ImageView
+    private  lateinit var loadingOverlay: LinearLayout
 
     private val userAuthViewModel: UserAuthViewModel by activityViewModels()
     var titleConstraintLayout: ConstraintLayout? = null
@@ -65,15 +67,20 @@ class editPost : Fragment() {
         imageView = view.findViewById(R.id.edit_image_to_upload)
         updatePost = view.findViewById(R.id.save_post)
 
+        loadingOverlay = view.findViewById(R.id.edit_post_loading_overlay);
+        loadingOverlay?.visibility = View.INVISIBLE
+
         imageHelper = ImageHelper(this, imageView, object : ImageUploadListener {
             override fun onImageUploaded(imageUrl: String) {
-                Toast.makeText(requireContext(), "Image added", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(requireContext(), "Image added", Toast.LENGTH_SHORT).show()
 
                 // Perform actions after image upload completes
-                // For example, you can update UI components or process the image URL
+                loadingOverlay?.visibility = View.INVISIBLE
             }
         })
-        imageHelper.setImageViewClickListener()
+        imageHelper.setImageViewClickListener {
+            loadingOverlay?.visibility = View.VISIBLE
+        }
 
         val backButton = view.findViewById<ImageView>(R.id.back_button)
         backButton.setOnClickListener {

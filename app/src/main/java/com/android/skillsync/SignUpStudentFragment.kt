@@ -87,7 +87,7 @@ class SignUpStudentFragment : Fragment() {
             }
         })
 
-        imageHelper.setImageViewClickListener()
+        imageHelper.setImageViewClickListener {}
 
         studentViewModel = StudentViewModel()
 
