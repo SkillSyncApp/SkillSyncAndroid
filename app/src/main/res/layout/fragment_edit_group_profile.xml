@@ -64,6 +64,62 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/group_institution" />
 
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="189dp"
+        android:layout_height="137dp"
+        app:layout_constraintBottom_toTopOf="@+id/save_group_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/group_bio">
+
+        <ImageView
+            android:id="@+id/studentImage"
+            android:src="@drawable/user_avatar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:contentDescription="@string/user_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="false"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/default_post"
+            tools:layout_editor_absoluteX="20dp"/>
+
+
+        <LinearLayout
+            android:id="@+id/edit_image_loading_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#fff7ff"
+            android:gravity="center"
+            android:orientation="vertical"
+            tools:layout_editor_absoluteX="20dp"
+            tools:visibility="visible">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottieAnimationView"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_margin="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.354"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/loading" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Uploading..."
+                android:textAlignment="center" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <Button
         android:id="@+id/save_group_btn"
         style="@style/AppTextStyle"
@@ -79,14 +135,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/group_bio"
         app:layout_constraintVertical_bias="0.805" />
-    <ImageView
-        android:id="@+id/studentImage"
-        android:layout_width="119dp"
-        android:layout_height="104dp"
-        android:src="@drawable/user_avatar"
-        app:layout_constraintBottom_toTopOf="@+id/save_group_btn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/group_bio"
-        android:contentDescription="@string/user_image" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
