@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +27,8 @@ import com.android.skillsync.databinding.FragmentEditCompanyProfileBinding
 import com.android.skillsync.helpers.ActionBarHelper
 import com.android.skillsync.helpers.DialogHelper
 import com.android.skillsync.helpers.DynamicTextHelper
+import com.android.skillsync.helpers.ImageHelper
+import com.android.skillsync.helpers.ImageUploadListener
 import com.android.skillsync.helpers.ValidationHelper
 import com.android.skillsync.models.Comapny.Company
 import com.android.skillsync.models.CompanyLocation
@@ -33,6 +36,7 @@ import com.android.skillsync.models.serper.Place
 import com.android.skillsync.services.PlacesApiCall
 import com.firebase.geofire.core.GeoHash
 import com.google.firebase.firestore.GeoPoint
+import com.squareup.picasso.Picasso
 
 class EditCompanyProfileFragment : Fragment() {
     private val userAuthViewModel: UserAuthViewModel by activityViewModels()
@@ -58,6 +62,14 @@ class EditCompanyProfileFragment : Fragment() {
         GeoHash(0.0, 0.0)
     )
 
+
+    //allow update image
+    private lateinit var profileImageUrl: String
+    private lateinit var imageHelper: ImageHelper
+    private lateinit var imageView: ImageView
+    private  lateinit var loadingOverlay: LinearLayout
+
+    private var profileImage: ImageView? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -65,6 +77,11 @@ class EditCompanyProfileFragment : Fragment() {
         _binding = FragmentEditCompanyProfileBinding.inflate(layoutInflater, container, false)
         view = binding.root
         dynamicTextHelper = DynamicTextHelper(view)
+
+
+        loadingOverlay = view.findViewById(R.id.edit_image_loading_overlay);
+        loadingOverlay?.visibility = View.INVISIBLE
+
 
         initLocationsAutoComplete()
 
@@ -103,6 +120,19 @@ class EditCompanyProfileFragment : Fragment() {
 
         companyViewModel = CompanyViewModel()
 
+        //allow update image
+        imageView = view.findViewById(R.id.companyImage)
+
+        imageHelper = ImageHelper(this, imageView, object : ImageUploadListener {
+            override fun onImageUploaded(imageUrl: String) {
+                loadingOverlay?.visibility = View.INVISIBLE
+            }
+        })
+
+        imageHelper.setImageViewClickListener {
+            loadingOverlay?.visibility = View.VISIBLE
+        }
+
         saveBtn.setOnClickListener {
             val companyName = binding.companyName
             val address = binding.companySuggestion.text
@@ -118,7 +148,7 @@ class EditCompanyProfileFragment : Fragment() {
                     location = companyLocation,
                     bio = bio,
                     email = email_address,
-                    logo = ""
+                    logo = imageHelper.getImageUrl() ?:profileImageUrl
                 )
 
                 companyViewModel.update(updatedCompany,updatedCompany.json,
@@ -179,6 +209,21 @@ class EditCompanyProfileFragment : Fragment() {
             binding.companySuggestion.setText(company.location.address)
             binding.companyBio.editTextField.setText(company.bio)
             email_address = company.email
+
+            profileImageUrl = company.logo
+
+
+            profileImage = view.findViewById(R.id.companyImage)
+
+            if (profileImage != null) {
+                val profileImageUrl = if (company.logo.isEmpty())
+                    "https://firebasestorage.googleapis.com/v0/b/skills-e4dc8.appspot.com/o/images%2FuserAvater.png?alt=media&token=1fa189ff-b5df-4b1a-8673-2f8e11638acc"
+                else company.logo
+
+                Picasso.get().load(profileImageUrl).into(profileImage)
+
+            }
+
         }
     }
 
