@@ -111,6 +111,13 @@ class ProfileFragment : Fragment() {
             }
         }
 
+
+        val mapButton = view.findViewById<TextView>(R.id.explore_companies)
+        mapButton.setOnClickListener {
+            Navigation.findNavController(it)
+                .navigate(R.id.action_profileFragment_to_mapFragment)
+        }
+
         return view
     }
 

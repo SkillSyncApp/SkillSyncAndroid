@@ -41,7 +41,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/edit_company_profile_title" />
-
+<!--
     <TextView
         android:id="@+id/input_suggestions"
         style="@style/AppTextStyle"
@@ -94,6 +94,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/add_edit_text_line" />
 
+-->
     <include
         android:id="@+id/company_bio"
         layout="@layout/custom_input_field_text"
@@ -103,7 +104,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/add_error_message" />
+        app:layout_constraintTop_toBottomOf="@id/company_name" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="189dp"

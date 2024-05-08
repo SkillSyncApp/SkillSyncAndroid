@@ -50,9 +50,10 @@ class EditCompanyProfileFragment : Fragment() {
     private lateinit var companyViewModel: CompanyViewModel
     private lateinit var dynamicTextHelper: DynamicTextHelper
     private lateinit var email_address: String
+    private lateinit var companyLocation: CompanyLocation
 
     // address
-    private lateinit var locationsAdapter: ArrayAdapter<String>
+   /* private lateinit var locationsAdapter: ArrayAdapter<String>
     private lateinit var placesSuggestions: ArrayList<Place>
     private lateinit var company: Company
     private lateinit var addressAutoComplete: AutoCompleteTextView
@@ -61,7 +62,7 @@ class EditCompanyProfileFragment : Fragment() {
         GeoPoint(0.0, 0.0),
         GeoHash(0.0, 0.0)
     )
-
+*/
 
     //allow update image
     private lateinit var profileImageUrl: String
@@ -83,7 +84,7 @@ class EditCompanyProfileFragment : Fragment() {
         loadingOverlay?.visibility = View.INVISIBLE
 
 
-        initLocationsAutoComplete()
+  //      initLocationsAutoComplete()
 
         setHints()
         setUserData()
@@ -135,10 +136,10 @@ class EditCompanyProfileFragment : Fragment() {
 
         saveBtn.setOnClickListener {
             val companyName = binding.companyName
-            val address = binding.companySuggestion.text
+          //  val address = binding.companySuggestion.text
             val companyBio = binding.companyBio
 
-            if (isValidInputs(companyName, address,companyBio)) {
+            if (isValidInputs(companyName,companyBio)) {
                 val name = companyName.editTextField.text.toString()
                 val bio = companyBio.editTextField.text.toString()
 
@@ -168,7 +169,6 @@ class EditCompanyProfileFragment : Fragment() {
 
     private fun isValidInputs(
         companyName: CustomInputFieldTextBinding,
-        companyLocation: Editable,
         bioGroup: CustomInputFieldTextBinding
     ): Boolean {
         val validationResults = mutableListOf<Boolean>()
@@ -188,17 +188,6 @@ class EditCompanyProfileFragment : Fragment() {
                 }
         )
 
-        validationResults.add(
-            ValidationHelper.isValidAddress(companyLocation)
-                .also { isValid ->
-                    ValidationHelper.handleValidationResult(
-                        isValid,
-                        binding.addEditTextLine,
-                        binding.inputSuggestions,
-                        requireContext()
-                    )
-                }
-        )
         return validationResults.all { it }
     }
 
@@ -206,10 +195,10 @@ class EditCompanyProfileFragment : Fragment() {
         val userId = userAuthViewModel.getUserId().toString()
         compViewModel.getCompany(userId) { company ->
             binding.companyName.editTextField.setText(company.name)
-            binding.companySuggestion.setText(company.location.address)
+          //binding.companySuggestion.setText(company.location.address)
             binding.companyBio.editTextField.setText(company.bio)
             email_address = company.email
-
+            companyLocation = company.location
             profileImageUrl = company.logo
 
 
@@ -229,6 +218,7 @@ class EditCompanyProfileFragment : Fragment() {
 
 
 //address
+    /*
 private fun initLocationsAutoComplete() {
     addressAutoComplete = view.findViewById(R.id.companySuggestion)
 
@@ -263,6 +253,8 @@ private fun initLocationsAutoComplete() {
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
     })
 }
+
+
 
     private val onError: (String?) -> Unit = {
         val dialogHelper = DialogHelper("Sorry", requireContext(), it)
@@ -305,4 +297,6 @@ private fun initLocationsAutoComplete() {
             }
         }
     }
+
+     */
 }

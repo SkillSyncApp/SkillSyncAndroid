@@ -119,11 +119,26 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profile_additional_info" />
 
+
+        <TextView
+            android:id="@+id/explore_companies"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="10dp"
+            android:fontFamily="@font/poppins"
+            android:text="Explore Companies"
+            android:textAlignment="textStart"
+            android:textSize="17sp"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/profile_bio" />
         <TextView
             android:id="@+id/profile_posts_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="35dp"
             android:layout_marginEnd="10dp"
             android:fontFamily="@font/poppins"
             android:text="Posts"
@@ -132,7 +147,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profile_bio" />
+            app:layout_constraintTop_toBottomOf="@+id/explore_companies" />
 
 
         <TextView

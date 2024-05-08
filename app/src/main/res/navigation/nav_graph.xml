@@ -72,6 +72,9 @@
                 android:name="postId"
                 app:argType="string" />
         </action>
+        <action
+            android:id="@+id/action_profileFragment_to_mapFragment"
+            app:destination="@id/mapViewFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpCompanyFragment"
