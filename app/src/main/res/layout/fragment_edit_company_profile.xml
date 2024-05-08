@@ -41,60 +41,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/edit_company_profile_title" />
-<!--
-    <TextView
-        android:id="@+id/input_suggestions"
-        style="@style/AppTextStyle"
-        android:layout_width="0dp"
-        android:layout_height="25dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:gravity="top"
-        android:text="@string/address"
-        android:textColor="@color/Dark_Gray"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/company_name"/>
 
-    <AutoCompleteTextView
-        android:id="@+id/companySuggestion"
-        style="@style/AppTextStyle"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        app:layout_constraintBottom_toTopOf="@+id/add_error_message"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input_suggestions" />
-
-    <View
-        android:id="@+id/add_edit_text_line"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="8dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:background="@color/Light_Gray"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/companySuggestion" />
-    <TextView
-        android:id="@+id/add_error_message"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text=""
-        android:textColor="@color/red"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_edit_text_line" />
-
--->
     <include
         android:id="@+id/company_bio"
         layout="@layout/custom_input_field_text"
