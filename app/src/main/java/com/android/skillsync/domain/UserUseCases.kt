@@ -3,9 +3,6 @@ package com.android.skillsync.domain
 import com.android.skillsync.models.Post.Post
 import com.android.skillsync.models.UserInfo
 import com.android.skillsync.repoistory.Auth.FireStoreAuthRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class UserUseCases {
     private val fireStoreAuthRepository: FireStoreAuthRepository = FireStoreAuthRepository()
@@ -20,10 +17,6 @@ class UserUseCases {
 
     fun logOutUser() {
         fireStoreAuthRepository.logOutUser()
-        Post.lastUpdated = 0
-        CoroutineScope(Dispatchers.IO).launch {
-            postUseCases.deleteAll();
-        }
     }
 
     fun resetPassword(email: String, onSuccessCallBack: () -> Unit, onFailureCallBack: (String?) -> Unit) {

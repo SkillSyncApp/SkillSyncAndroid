@@ -125,7 +125,7 @@ class EditCompanyProfileFragment : Fragment() {
 
                 companyViewModel.update(updatedCompany,updatedCompany.json,
                     onSuccessCallBack = {
-                        Toast.makeText(context, "The data has been successfully updated", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Company Details have been updated successfully", Toast.LENGTH_SHORT).show()
                         Log.d("EditProfilePage", "Success in update")
                     },
                     onFailureCallBack = {

@@ -54,8 +54,8 @@
         app:layout_constraintTop_toBottomOf="@id/company_name" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="189dp"
-        android:layout_height="137dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/save_group_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -64,16 +64,19 @@
         <ImageView
             android:id="@+id/companyImage"
             android:src="@drawable/user_avatar"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             android:contentDescription="@string/user_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="false"
-            android:scaleType="centerCrop"
+            app:layout_constraintDimensionRatio="1:1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerInside"
             app:srcCompat="@drawable/default_post"
-            tools:layout_editor_absoluteX="20dp"/>
-
+            tools:layout_editor_absoluteX="20dp"
+            app:layout_constraintWidth_percent="0.6"
+            />
 
         <LinearLayout
             android:id="@+id/edit_image_loading_overlay"

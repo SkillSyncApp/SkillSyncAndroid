@@ -34,7 +34,7 @@ import org.osmdroid.views.overlay.OverlayItem
 import java.util.Timer
 import java.util.TimerTask
 
-class MapViewFragment : Fragment(), LocationListener {
+class MapViewFragment : BaseFragment(), LocationListener {
 
     private lateinit var aMapView: MapView
     private lateinit var locationManager: LocationManager
@@ -122,7 +122,6 @@ class MapViewFragment : Fragment(), LocationListener {
     }
 
     private fun reloadData() {
-        // TODO loading
         viewModel.setCompaniesOnMap { company ->
             val (address, location) = company.location
             val latitude = location.latitude

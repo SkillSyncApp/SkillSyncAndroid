@@ -11,7 +11,7 @@
     <string name="sign_up">Sign up</string>
     <string name="Sign_in">Sign in</string>
 
-    <string name="post_new_project_title">Post a new project</string>
+    <string name="post_new_project_title">Share a project</string>
     <string name="post_new_project_text">Add the information about the project that you want to create</string>
     <string name="post">Post</string>
     <string name="project_name_title">Project Title</string>
@@ -80,5 +80,5 @@
     <string name="company_profile">Update Company</string>
     <string name="back">Back</string>
     <string name="log_out">Log Out</string>
-    <string name="explore_companies">Explore Companies</string>
+    <string name="explore_companies">Back to Map</string>
 </resources>

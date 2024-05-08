@@ -107,7 +107,6 @@ class SignInFragment : BaseFragment() {
     }
 
     private val onError: (String?) -> Unit = {
-        // TODO - remove hardcoded text to strings.xml
         errorMessage?.text = "One or more of the credentials you entered are incorrect. Please try again."
         errorMessage?.visibility = View.VISIBLE
     }
