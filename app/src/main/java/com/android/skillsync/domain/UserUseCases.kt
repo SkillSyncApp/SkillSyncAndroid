@@ -20,10 +20,6 @@ class UserUseCases {
 
     fun logOutUser() {
         fireStoreAuthRepository.logOutUser()
-        Post.lastUpdated = 0
-        CoroutineScope(Dispatchers.IO).launch {
-            postUseCases.deleteAll();
-        }
     }
 
     fun resetPassword(email: String, onSuccessCallBack: () -> Unit, onFailureCallBack: (String?) -> Unit) {
