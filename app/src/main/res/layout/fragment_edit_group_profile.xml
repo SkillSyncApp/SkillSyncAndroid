@@ -66,8 +66,8 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="189dp"
-        android:layout_height="137dp"
+        android:layout_width="200dp"
+        android:layout_height="180dp"
         app:layout_constraintBottom_toTopOf="@+id/save_group_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -75,17 +75,13 @@
 
         <ImageView
             android:id="@+id/studentImage"
-            android:src="@drawable/user_avatar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             android:contentDescription="@string/user_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:adjustViewBounds="false"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/default_post"
+            app:srcCompat="@drawable/user_avatar"
             tools:layout_editor_absoluteX="20dp"/>
-
 
         <LinearLayout
             android:id="@+id/edit_image_loading_overlay"
