@@ -120,15 +120,12 @@
             app:layout_constraintTop_toBottomOf="@+id/profile_additional_info" />
 
 
-        <TextView
+        <Button
             android:id="@+id/explore_companies"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="10dp"
-            android:fontFamily="@font/poppins"
-            android:text="Explore Companies"
-            android:textAlignment="textStart"
+            style="@style/AppTextStyle"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:text="@string/explore_companies"
             android:textSize="17sp"
             android:textStyle="normal"
             app:layout_constraintEnd_toEndOf="parent"
