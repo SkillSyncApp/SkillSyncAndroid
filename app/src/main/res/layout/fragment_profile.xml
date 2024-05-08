@@ -41,7 +41,7 @@
         app:layout_constraintTop_toTopOf="@+id/profile_background_image">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/card_view"
+            android:id="@+id/card_view_image"
             android:layout_width="110dp"
             android:layout_height="110dp"
             android:background="@drawable/ic_launcher_background"
@@ -90,7 +90,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/card_view" />
+            app:layout_constraintTop_toBottomOf="@+id/card_view_image" />
 
         <TextView
             android:id="@+id/profile_additional_info"
@@ -119,11 +119,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profile_additional_info" />
 
+
+        <Button
+            android:id="@+id/explore_companies"
+            style="@style/AppTextStyle"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:text="@string/explore_companies"
+            android:textSize="17sp"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/profile_bio" />
         <TextView
             android:id="@+id/profile_posts_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="35dp"
             android:layout_marginEnd="10dp"
             android:fontFamily="@font/poppins"
             android:text="Posts"
@@ -132,7 +144,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profile_bio" />
+            app:layout_constraintTop_toBottomOf="@+id/explore_companies" />
 
 
         <TextView

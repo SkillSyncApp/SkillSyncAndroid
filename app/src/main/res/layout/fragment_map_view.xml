@@ -27,20 +27,10 @@
             android:layout_weight="1" />
 
         <!-- ConstraintLayout for additional UI elements -->
-
-        <!-- ConstraintLayout for additional UI elements -->
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/feed_constraint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-            <!--            <androidx.viewpager.widget.ViewPager-->
-            <!--                android:id="@+id/viewPager"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="100dp"-->
-            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toTopOf="parent" />-->
 
             <!-- MaterialButton -->
             <com.google.android.material.button.MaterialButton
@@ -50,9 +40,9 @@
                 android:layout_height="wrap_content"
                 android:background="#009688"
                 android:text="@string/feed"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>

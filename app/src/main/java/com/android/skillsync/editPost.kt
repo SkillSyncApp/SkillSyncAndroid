@@ -68,18 +68,17 @@ class editPost : Fragment() {
         updatePost = view.findViewById(R.id.save_post)
 
         loadingOverlay = view.findViewById(R.id.edit_post_loading_overlay);
-        loadingOverlay?.visibility = View.INVISIBLE
+        loadingOverlay.visibility = View.INVISIBLE
 
         imageHelper = ImageHelper(this, imageView, object : ImageUploadListener {
             override fun onImageUploaded(imageUrl: String) {
-//                Toast.makeText(requireContext(), "Image added", Toast.LENGTH_SHORT).show()
 
                 // Perform actions after image upload completes
-                loadingOverlay?.visibility = View.INVISIBLE
+                loadingOverlay.visibility = View.INVISIBLE
             }
         })
         imageHelper.setImageViewClickListener {
-            loadingOverlay?.visibility = View.VISIBLE
+            loadingOverlay.visibility = View.VISIBLE
         }
 
         val backButton = view.findViewById<ImageView>(R.id.back_button)

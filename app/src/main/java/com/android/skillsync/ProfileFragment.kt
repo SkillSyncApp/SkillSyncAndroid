@@ -4,6 +4,7 @@ import android.graphics.RenderEffect
 import android.graphics.Shader
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -71,6 +72,8 @@ class ProfileFragment : Fragment() {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         view  = binding.root
 
+        ActionBarHelper.showActionBarAndBottomNavigationView(requireActivity() as? AppCompatActivity)
+
         val args = arguments
         val userId = args?.getString("userId") ?: userAuthViewModel.getUserId()
 
@@ -90,7 +93,7 @@ class ProfileFragment : Fragment() {
                         getCompany(userId);
                     }
 
-                    null -> TODO()
+                    null -> Log.d("UserInfo", "we have identify unknown user")
                 }
             }
 
@@ -102,12 +105,24 @@ class ProfileFragment : Fragment() {
             backButton = view.findViewById(R.id.back_button)
             backButton?.setVisibility(View.VISIBLE)
 
-            // TODO - check back in real device
             backButton?.setOnClickListener {
                 requireActivity().supportFragmentManager.popBackStack(
                     "profileBackStack",
                     FragmentManager.POP_BACK_STACK_INCLUSIVE
                 )
+            }
+        }
+        val mapButton = view.findViewById<TextView>(R.id.explore_companies)
+
+        if(args?.getString("userId") != null) {
+            mapButton.visibility = View.GONE
+        } else {
+            mapButton.visibility = View.VISIBLE
+            mapButton.setOnClickListener {
+                val args = Bundle()
+                args.putBoolean("showFeed", false)
+                Navigation.findNavController(it)
+                    .navigate(R.id.action_profileFragment_to_mapFragment, args)
             }
         }
 
@@ -228,7 +243,6 @@ class ProfileFragment : Fragment() {
                 postsRecyclerView.setPadding(0, 0, 0, 250)
                 postAdapter.clear()
                 postAdapter.addAll(it.toMutableList());
-//                postAdapter.posts = it.toMutableList()
                 postsRecyclerView.layoutManager = LinearLayoutManager(context)
                 postsRecyclerView.adapter = postAdapter
             }

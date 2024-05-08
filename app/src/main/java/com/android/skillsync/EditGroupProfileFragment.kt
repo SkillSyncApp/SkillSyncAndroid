@@ -1,9 +1,5 @@
 package com.android.skillsync
 
-import android.graphics.RenderEffect
-import android.graphics.Shader
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -183,7 +179,6 @@ class EditGroupProfileFragment : Fragment() {
 
             emailAddress = student.email
             profileImageUrl = student.image
-
 
             profileImage = view.findViewById(R.id.studentImage)
 

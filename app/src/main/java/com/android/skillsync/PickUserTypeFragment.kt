@@ -48,7 +48,6 @@ class PickUserTypeFragment : BaseFragment() {
         companyCard = view.findViewById(R.id.company_card)
         studentCard = view.findViewById(R.id.student_card)
 
-        // TODO from navigation
         companyCard.setOnClickListener {
             view.navigate(R.id.action_pickUserTypeFragment_to_signUpCompanyFragment)
         }

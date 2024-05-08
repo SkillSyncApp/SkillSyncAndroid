@@ -26,7 +26,7 @@ class StudentUseCases {
         fireStoreStudentRepository.addStudent(student) { studentId ->
             fireStoreStudentRepository.setStudentInUserTypeDB(studentId)
         }
-        localStoreStudentRepository.addStudent(student) // todo maybe remove
+        localStoreStudentRepository.addStudent(student)
     }
 
     suspend fun update(student: Student, data: Map<String, Any>, onSuccessCallBack: () -> Unit, onFailureCallBack: () -> Unit) {

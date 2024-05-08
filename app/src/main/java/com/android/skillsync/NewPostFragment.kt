@@ -41,16 +41,16 @@ class NewPostFragment : Fragment() {
         dynamicTextHelper = DynamicTextHelper(view)
 
         loadingOverlay = view.findViewById(R.id.new_post_loading_overlay);
-        loadingOverlay?.visibility = View.INVISIBLE
+        loadingOverlay.visibility = View.INVISIBLE
 
         imageHelper = ImageHelper(this, imageView,  object : ImageUploadListener {
             override fun onImageUploaded(imageUrl: String) {
                 // Perform actions after image upload completes
-                loadingOverlay?.visibility = View.INVISIBLE
+                loadingOverlay.visibility = View.INVISIBLE
             }
         })
         imageHelper.setImageViewClickListener {
-            loadingOverlay?.visibility = View.VISIBLE
+            loadingOverlay.visibility = View.VISIBLE
         }
 
         postViewModel = PostViewModel()
@@ -110,8 +110,6 @@ class NewPostFragment : Fragment() {
                 binding.postTitleGroup.editTextField.text = null
                 binding.postDescriptionGroup.editTextField.text = null
                 binding.imageToUpload.setImageResource(R.drawable.default_post)
-//                Navigation.findNavController(view)
-//                    .navigate(R.id.action_newPostFragment_to_feedFragment)
             } else Toast.makeText(requireContext(), "Failed to add post", Toast.LENGTH_SHORT).show()
         }
     }
