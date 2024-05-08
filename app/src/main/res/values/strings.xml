@@ -11,12 +11,12 @@
     <string name="sign_up">Sign up</string>
     <string name="Sign_in">Sign in</string>
 
-    <string name="post_new_project_title">Share a project</string>
+    <string name="post_new_project_title">Share a post</string>
     <string name="post_new_project_text">Add the information about the project that you want to create</string>
     <string name="post">Post</string>
-    <string name="project_name_title">Project Title</string>
-    <string name="project_description">Project Description</string>
-    <string name="project_name_hint">Enter the project name here</string>
+    <string name="project_name_title">Post Title</string>
+    <string name="project_description">Post Description</string>
+    <string name="project_name_hint">Enter the post title here</string>
     <string name="project_description_hint">Enter the description here</string>
     <string name="project_deadline_title">Set the expected deadline</string>
     <string name="project__availability_title">What is your availability?</string>
