@@ -66,7 +66,7 @@ class FeedFragment : Fragment() {
                     (activity as MainActivity).setProfile("COMPANY")
                 }
 
-                null -> TODO()
+                null -> Log.d("InfoUser", "we have identify unknown user")
             }
         }
 
@@ -173,7 +173,6 @@ class FeedFragment : Fragment() {
 
         return view
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         ActionBarHelper.showActionBarAndBottomNavigationView(requireActivity() as? AppCompatActivity)

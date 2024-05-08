@@ -42,58 +42,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/edit_company_profile_title" />
 
-    <TextView
-        android:id="@+id/input_suggestions"
-        style="@style/AppTextStyle"
-        android:layout_width="0dp"
-        android:layout_height="25dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:gravity="top"
-        android:text="@string/address"
-        android:textColor="@color/Dark_Gray"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/company_name"/>
-
-    <AutoCompleteTextView
-        android:id="@+id/companySuggestion"
-        style="@style/AppTextStyle"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        app:layout_constraintBottom_toTopOf="@+id/add_error_message"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input_suggestions" />
-
-    <View
-        android:id="@+id/add_edit_text_line"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="8dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:background="@color/Light_Gray"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/companySuggestion" />
-    <TextView
-        android:id="@+id/add_error_message"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text=""
-        android:textColor="@color/red"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_edit_text_line" />
-
     <include
         android:id="@+id/company_bio"
         layout="@layout/custom_input_field_text"
@@ -103,11 +51,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/add_error_message" />
+        app:layout_constraintTop_toBottomOf="@id/company_name" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="200dp"
-        android:layout_height="180dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/save_group_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -115,13 +63,20 @@
 
         <ImageView
             android:id="@+id/companyImage"
+            android:src="@drawable/user_avatar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             android:contentDescription="@string/user_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="false"
-            android:scaleType="centerCrop"
-            app:srcCompat="@drawable/user_avatar"
-            tools:layout_editor_absoluteX="20dp"/>
+            app:layout_constraintDimensionRatio="1:1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/default_post"
+            tools:layout_editor_absoluteX="20dp"
+            app:layout_constraintWidth_percent="0.6"
+            />
 
         <LinearLayout
             android:id="@+id/edit_image_loading_overlay"

@@ -19,8 +19,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.android.skillsync.Navigations.navigate
 import com.android.skillsync.ViewModel.CompanyViewModel
 import com.android.skillsync.databinding.FragmentMapViewBinding
@@ -34,7 +34,7 @@ import org.osmdroid.views.overlay.OverlayItem
 import java.util.Timer
 import java.util.TimerTask
 
-class MapViewFragment : Fragment(), LocationListener {
+class MapViewFragment : BaseFragment(), LocationListener {
 
     private lateinit var aMapView: MapView
     private lateinit var locationManager: LocationManager
@@ -67,6 +67,9 @@ class MapViewFragment : Fragment(), LocationListener {
         _binding = FragmentMapViewBinding.inflate(layoutInflater, container, false)
         view = binding.root
 
+        val args = arguments
+        val showFeed = args?.getString("showFeed") ?: true
+
         viewModel = ViewModelProvider(this)[CompanyViewModel::class.java]
 
         loadingOverlay = view.findViewById(R.id.map_loading_overlay);
@@ -84,9 +87,20 @@ class MapViewFragment : Fragment(), LocationListener {
     }
 
     private fun setEventListeners() {
+        val args = arguments
+        val showFeed = args?.getBoolean("showFeed", true) ?: true
+
+        if (showFeed) {
+            binding.feedBtn.text = "Feed"
+        } else {
+            binding.feedBtn.text = "Back to Profile"
+        }
+
         binding.feedBtn.setOnClickListener {
             clearMapOverlays()
-            view.navigate(R.id.action_mapViewFragment_to_feedFragment)
+            if (showFeed) view.navigate(R.id.action_mapViewFragment_to_feedFragment)
+            else findNavController().navigateUp()
+
         }
     }
 
@@ -122,7 +136,6 @@ class MapViewFragment : Fragment(), LocationListener {
     }
 
     private fun reloadData() {
-        // TODO loading
         viewModel.setCompaniesOnMap { company ->
             val (address, location) = company.location
             val latitude = location.latitude

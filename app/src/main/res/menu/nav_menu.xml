@@ -9,10 +9,6 @@
         android:icon="@android:drawable/ic_menu_add"
         android:title="@string/add_post" />
     <item
-        android:id="@+id/mapViewFragment"
-        android:icon="@android:drawable/ic_menu_add"
-        android:title="@string/map"/>
-    <item
         android:id="@+id/profileFragment"
         android:icon="@android:drawable/ic_menu_my_calendar"
         android:title="@string/profile" />
