@@ -212,6 +212,7 @@ class ProfileFragment : Fragment() {
                 else image
 
                 Picasso.get().load(imageUrl).into(profileImage)
+                Picasso.get().load(imageUrl).into(profileImageBackgroundElement)
 
                 // Blur the background image
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
