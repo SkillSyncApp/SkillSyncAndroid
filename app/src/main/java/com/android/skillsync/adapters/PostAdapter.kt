@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.android.skillsync.FeedFragment
@@ -84,6 +85,7 @@ class PostAdapter(var posts: MutableList<Post>, var isFromFeed: Boolean, var con
 
         holder.deletePostButton.setOnClickListener {
             deletePost(post)
+            Toast.makeText(it.context, "Post has been deleted successfully", Toast.LENGTH_SHORT).show()
         }
 
         if (post.imagePath.isNotBlank()) {
