@@ -4,16 +4,17 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.android.skillsync.models.Post.Post
 import com.android.skillsync.repoistory.Post.FireStorePostRepository
 import com.android.skillsync.repoistory.Post.LocalStorePostRepository
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.util.concurrent.Executors
-import androidx.lifecycle.MediatorLiveData
 
 class PostUseCases {
     val localStorePostRepository: LocalStorePostRepository = LocalStorePostRepository()
@@ -62,6 +63,17 @@ class PostUseCases {
 
                 // 4. Update local data
                 Post.lastUpdated = Instant.now().epochSecond
+            }
+
+            syncPosts();
+        }
+    }
+
+    private fun syncPosts() {
+        fireStorePostRepository.getPosts(0) { posts ->
+            val postsIdentifiers = posts.map { post -> post.id }
+            CoroutineScope(Dispatchers.IO).launch {
+                localStorePostRepository.deleteUnavailablePosts(postsIdentifiers)
             }
         }
     }

@@ -29,4 +29,7 @@ interface PostDao {
 
     @Query("DELETE FROM post")
     fun deleteAllPosts()
+
+    @Query("DELETE FROM post WHERE id NOT IN (:ids)")
+    fun deleteUnavailablePosts(ids: List<String>)
 }

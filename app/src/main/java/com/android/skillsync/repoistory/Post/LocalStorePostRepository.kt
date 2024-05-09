@@ -37,4 +37,11 @@ class LocalStorePostRepository {
     fun getAllPosts(): LiveData<MutableList<Post>> {
         return postDao.getAllPosts()
     }
+
+    @WorkerThread
+    suspend fun deleteUnavailablePosts(ids: List<String>) {
+        withContext(Dispatchers.IO) {
+            postDao.deleteUnavailablePosts(ids)
+        }
+    }
 }

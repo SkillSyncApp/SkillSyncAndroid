@@ -41,6 +41,8 @@ class FeedFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+//        Post.lastUpdated = 0;
+
         _binding = FragmentFeedBinding.inflate(inflater, container, false)
         val view = binding.root
 
